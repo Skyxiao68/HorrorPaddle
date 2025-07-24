@@ -4,7 +4,8 @@ public class Movement : MonoBehaviour
 {
     public float moveSpeed;
     private Rigidbody rb;
-
+    public CharacterController controller;
+    public Transform cam;
 
     private void Start()
     {
@@ -19,9 +20,13 @@ public class Movement : MonoBehaviour
         float z = Input.GetAxisRaw("Vertical");
 
 
-        Vector3 move = new Vector3 (x,0,z); 
+        Vector3 move =(transform.right* x + transform.forward * z);
 
-        rb.MovePosition(transform.position +move * moveSpeed *Time.deltaTime);
+
+       controller.Move(move*moveSpeed*Time.deltaTime);
+
+        transform.rotation = cam.rotation;
+
     }
 }
 
