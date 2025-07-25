@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Movement : MonoBehaviour
 {
@@ -20,31 +21,36 @@ public class Movement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
     }
-    
+
 
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if (isGrounded && velocity.y <0 )
+        if (isGrounded && velocity.y < 0)
         {
 
             velocity.y = -2f;
         }
-        
+
         float x = Input.GetAxisRaw("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
 
 
-        Vector3 move =(transform.right* x + transform.forward * z);
+        Vector3 move = (transform.right * x + transform.forward * z);
         moveSpeed = Mathf.Lerp(z, moveSpeed, moveSpeed);
 
-       controller.Move(move*moveSpeed*Time.deltaTime);
+        controller.Move(move * moveSpeed * Time.deltaTime);
 
         velocity.y += gravity * Time.deltaTime;
-        controller.Move (velocity*Time.deltaTime);
+        controller.Move(velocity * Time.deltaTime);
         transform.rotation = cam.rotation;
 
+        
     }
 }
+
+    
+
+
 
