@@ -17,8 +17,8 @@ public class bounce : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        bouncer = new Vector3(bounceForce, 0, bounceForce);
-        hitter = new Vector3 (hitForce, 0, hitForce);
+        bouncer = new Vector3(bounceForce, 30, bounceForce);
+        hitter = new Vector3 (hitForce, 4, hitForce);
 
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && canHit == true)
@@ -41,7 +41,7 @@ public class bounce : MonoBehaviour
 
         public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Ball"))
+        if (other.CompareTag("Player"))
         {
             canHit = true;
         }
@@ -49,7 +49,7 @@ public class bounce : MonoBehaviour
 
     public void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Ball"))
+        if (other.CompareTag("Player"))
         {
             canHit = false;
         }
