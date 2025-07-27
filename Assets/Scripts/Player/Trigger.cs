@@ -16,6 +16,7 @@ public class ThrowableObject : MonoBehaviour
             if (throwToTarget && target != null)
             {
                 ThrowObjectToTarget(target.position);
+                Debug.Log("Target in Aight");
             }
             else
             {
