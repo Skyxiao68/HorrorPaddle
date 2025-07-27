@@ -4,6 +4,9 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - Ball
+  serializedVersion: 3
+  tags:
   - ThrowTrigger
   layers:
   - Default
@@ -12,6 +15,7 @@ TagManager:
   - 
   - Water
   - UI
+  - Ground
   - enviroment
   - 'Ball '
   - Player
