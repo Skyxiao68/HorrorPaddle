@@ -8,7 +8,7 @@ public class stevePlayer : MonoBehaviour
     private CharacterController steve;
     public Rigidbody ball;
     public float moveSpeed;
-
+    public float prediction;
     public float hitBall;
 
     private Vector3 ballHit;
@@ -35,10 +35,13 @@ public class stevePlayer : MonoBehaviour
     void Update()
     {
 
-        ballHit = new Vector3 (hitBall,0, hitBall);
 
-        if (onMySide == true)
-        {
+
+
+
+              ballHit = new Vector3 (hitBall,0, hitBall);
+
+        
 
             float currentPosX = transform.position.x;
             float ballPosX = ball.position.x;
@@ -46,12 +49,14 @@ public class stevePlayer : MonoBehaviour
             float finalX = Mathf.MoveTowards(currentPosX, ballPosX, moveSpeed * Time.deltaTime);
 
             float currentPosZ = transform.position.z;
-            float ballPosZ = ball.position.z;
+         
+            float ballVelocity = ball.linearVelocity.z;
+            float predictionTime = prediction;
+            float predictedBall = ball.position.z +(ballVelocity * predictionTime);
+            float finalZ = Mathf.MoveTowards(currentPosZ, predictedBall, moveSpeed * Time.deltaTime);
 
-            float finalZ = Mathf.MoveTowards(currentPosZ, ballPosZ, moveSpeed * Time.deltaTime);
-
-            transform.position = new Vector3(finalX, 3, finalZ);
-        }
+            transform.position = new Vector3(finalX, 0, finalZ);
+        
 
         if (onMySide == false)
         
@@ -59,10 +64,7 @@ public class stevePlayer : MonoBehaviour
 
             float patrolX = Random.Range(minX, maxX);
             float patrolz = Random.Range(minZ, maxZ);
-            
-
-
-
+           
             transform.position = new Vector3 (patrolX,3,patrolz);
 
 
@@ -77,7 +79,7 @@ public class stevePlayer : MonoBehaviour
     {
         if (other.CompareTag("Ball"))
         {
-            ball.AddForce(ballHit *hitBall, ForceMode.Impulse);
+            //wball.AddForce(ballHit *hitBall, ForceMode.Impulse);
         }
     }
 }

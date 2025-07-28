@@ -1,23 +1,29 @@
+using NUnit;
 using System.Collections;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
 public class ThrowableObject : MonoBehaviour
 {
-    public float throwForce ;
-    public float throwHeight;
+    public float throwForce ;//player
+   
     public bool throwToTarget = false; //Aight gonn cook here lol this bool is always going to sit at false ma duddeeeeeeeeee 
-    public float launchAngle;
+  
     public Transform target;
-
-
-    public float hitDistance;
-
+    public Transform enemyTarget;
+    private Rigidbody rb;
+    public bool enemyCanHit;
+    public float hitDistance;//enemy
+     public float throwHeight;//enemy
+    public float launchAngle; //ignore
 
     private void Start()
     {
-        Rigidbody rb = GetComponent<Rigidbody>();
+         rb = GetComponent<Rigidbody>();
         Physics.gravity = new Vector3(0, -14f, 0);
         
     }
@@ -35,8 +41,12 @@ public class ThrowableObject : MonoBehaviour
             }
             else
             {
-                ThrowObject();
+               // ThrowObject();
             }
+        }
+        if (other .CompareTag("Enemy"))
+        {
+            enemyCanHit = true;
         }
     }
 
@@ -47,11 +57,16 @@ public class ThrowableObject : MonoBehaviour
             ThrowObjectToTarget(target.position);
             Debug.Log("Target in Aight");
         }
+        if (enemyCanHit == true)
+        {
+            EnemyHit(enemyTarget.position);
+        }
     }
 
     private void OnTriggerExit()
     {
         throwToTarget = false; 
+        enemyCanHit = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -90,7 +105,7 @@ public class ThrowableObject : MonoBehaviour
     {
         float gravity = Physics.gravity.magnitude;
         float horizontalDistance = Vector3.Distance(new Vector3(start.x, 0, start.z), new Vector3(end.x, 0, end.z));
-        float effectiveDistance = Mathf.Min(horizontalDistance, hitDistance);
+        float effectiveDistance = Mathf.Min(horizontalDistance, throwForce);
         float velocity = effectiveDistance/ (Mathf.Sin(2 * angle * Mathf.Deg2Rad) / gravity);
          velocity = Mathf.Clamp(velocity,5f, 30f); //Come back here for ball launch speeds if shit gets slow 
         Debug.Log($"Raw Distance: {horizontalDistance} | Capped Distance: {effectiveDistance}");
@@ -109,6 +124,30 @@ public class ThrowableObject : MonoBehaviour
         Debug.Log($"Calculated Velocity: {velocity} | From Distance: {horizontalDistance} | Angle: {angle}°");
         return launchVelocity;
     }
+    public Vector3 EnemyHitVelocity(Vector3 startE, Vector3 endE,float angleE)
+    {
+        float gravity = Physics.gravity.magnitude;
+        float horizontalDistance = Vector3.Distance(new Vector3(startE.x, 0, startE.z), new Vector3(endE.x, 0, endE.z));
+        float effectiveDistance = Mathf.Min(horizontalDistance, hitDistance);
+        float velocity = effectiveDistance / (Mathf.Sin(2 * angleE * Mathf.Deg2Rad) / gravity);
+        velocity = Mathf.Clamp(velocity, 5f, 30f); //Come back here for ball launch speeds if shit gets slow 
 
-  
+
+        Vector3 direction = endE - startE;
+        direction.y = 0;
+        direction.Normalize();
+
+        Vector3 launchVelocity = direction * velocity * Mathf.Cos(angleE * Mathf.Deg2Rad);
+        launchVelocity.y = velocity * Mathf.Sin(angleE * Mathf.Deg2Rad);
+
+        launchVelocity = launchVelocity.normalized * Mathf.Clamp(velocity, 5f, 30f);
+        return launchVelocity;
+    }
+    public void EnemyHit(Vector3 enemyTarget)
+    {
+        Vector3 velocity = EnemyHitVelocity(transform.position, enemyTarget,throwHeight);
+        rb.linearVelocity = velocity;
+        rb.isKinematic = false;
+        rb.useGravity = true;
+    }
 }
