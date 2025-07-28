@@ -2045,6 +2045,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2031043298}
     - target: {fileID: 739567413521615913, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: ballCol
+      value: 
+      objectReference: {fileID: 2100000, guid: 961ccee7828ba6440a80699794ea2c63, type: 2}
+    - target: {fileID: 739567413521615913, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
       propertyPath: throwForce
       value: 30
       objectReference: {fileID: 0}

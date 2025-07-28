@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 public class ThrowableObject : MonoBehaviour
 {
     public float throwForce ;//player
-   
+    public Material ballCol;
     public bool throwToTarget = false; //Aight gonn cook here lol this bool is always going to sit at false ma duddeeeeeeeeee 
   
     public Transform target;
@@ -33,6 +33,7 @@ public class ThrowableObject : MonoBehaviour
         {
 
             throwToTarget = true;
+            ballCol.SetColor ("_BaseColor", Color.red);
 
             if (throwToTarget && Input.GetKeyDown(KeyCode.Mouse0) == true)
             {
@@ -67,6 +68,7 @@ public class ThrowableObject : MonoBehaviour
     {
         throwToTarget = false; 
         enemyCanHit = false;
+        ballCol.SetColor("_BaseColor",Color.green);
     }
 
     private void OnCollisionEnter(Collision collision)
