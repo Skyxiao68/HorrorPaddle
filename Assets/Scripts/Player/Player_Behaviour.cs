@@ -18,6 +18,7 @@ public class Player_Behaviour : MonoBehaviour
     private Vector3 velocity;
     private bool isGrounded;
     private float currentSpeed;
+    public Transform cam;
 
     void Start()
     {
@@ -28,7 +29,7 @@ public class Player_Behaviour : MonoBehaviour
 
     void Update()
     {
-        
+        transform.rotation = cam.rotation;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)

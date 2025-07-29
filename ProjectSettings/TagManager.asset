@@ -4,7 +4,9 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - Ball
   - ThrowTrigger
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -12,10 +14,10 @@ TagManager:
   - 
   - Water
   - UI
+  - Ground
   - enviroment
   - 'Ball '
   - Player
-  - 
   - 
   - 
   - 
