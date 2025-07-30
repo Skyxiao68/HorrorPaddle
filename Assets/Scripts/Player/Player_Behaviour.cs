@@ -15,10 +15,11 @@ public class Player_Behaviour : MonoBehaviour
     public LayerMask groundMask;
 
     private CharacterController controller;
-    private Vector3 velocity;
+    private Vector3 dir;
+    private Vector3 velocity; 
     private bool isGrounded;
     private float currentSpeed;
-    public Transform cam;
+    private float xMove, yMove; 
 
     void Start()
     {
@@ -29,7 +30,7 @@ public class Player_Behaviour : MonoBehaviour
 
     void Update()
     {
-        transform.rotation = cam.rotation;
+        
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
@@ -38,9 +39,10 @@ public class Player_Behaviour : MonoBehaviour
         }
 
       
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-
+         xMove = Input.GetAxis("Horizontal") * walkSpeed;
+         yMove = Input.GetAxis("Vertical") * walkSpeed;
+        
+        dir = transform.forward * yMove + transform.right * xMove; 
       
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
@@ -51,8 +53,8 @@ public class Player_Behaviour : MonoBehaviour
             currentSpeed = walkSpeed;
         }
 
-        Vector3 move = transform.right * x + transform.forward * z;
-        controller.Move(move * currentSpeed * Time.deltaTime);
+        
+        controller.Move(dir * Time.deltaTime);
 
        
         if (Input.GetButtonDown("Jump") && isGrounded)

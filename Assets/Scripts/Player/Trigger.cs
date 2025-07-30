@@ -123,7 +123,7 @@ public class ThrowableObject : MonoBehaviour
         launchVelocity.y = velocity * Mathf.Sin(angle * Mathf.Deg2Rad);
 
         launchVelocity = launchVelocity.normalized * Mathf.Clamp(velocity, 5f, 30f);
-        Debug.Log($"Calculated Velocity: {velocity} | From Distance: {horizontalDistance} | Angle: {angle}°");
+        Debug.Log($"Calculated Velocity: {velocity} | From Distance: {horizontalDistance} | Angle: {angle}?");
         return launchVelocity;
     }
     public Vector3 EnemyHitVelocity(Vector3 startE, Vector3 endE,float angleE)
