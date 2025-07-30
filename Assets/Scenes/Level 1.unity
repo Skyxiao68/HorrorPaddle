@@ -279,6 +279,75 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1966835701}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &227313665
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2339092957302770716, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_Name
+      value: TennisBall
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843348152865247073, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843348152865247073, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.147
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843348152865247073, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.978
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843348152865247073, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843348152865247073, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843348152865247073, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843348152865247073, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843348152865247073, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843348152865247073, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843348152865247073, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8671774534184450517, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_Drag
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8671774534184450517, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_Mass
+      value: 0.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 8671774534184450517, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: m_AngularDrag
+      value: 0.83
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
 --- !u!1 &268443110
 GameObject:
   m_ObjectHideFlags: 0
@@ -840,7 +909,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!135 &429396091
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1170,7 +1239,7 @@ GameObject:
   - component: {fileID: 896934245}
   m_Layer: 0
   m_Name: Steve (1)
-  m_TagString: Untagged
+  m_TagString: ThrowTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1187,7 +1256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fafc04425e15a54a87b8422697a3703, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 429396095}
+  ball: {fileID: 1387577626}
   moveSpeed: 20.4
   hitBall: 5
   onMySide: 0
@@ -1806,7 +1875,7 @@ GameObject:
   - component: {fileID: 1138513777}
   m_Layer: 0
   m_Name: Steve
-  m_TagString: Untagged
+  m_TagString: ThrowTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1823,7 +1892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fafc04425e15a54a87b8422697a3703, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 429396095}
+  ball: {fileID: 1387577626}
   moveSpeed: 20.67
   hitBall: 3.91
   onMySide: 0
@@ -2374,6 +2443,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1387577626 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8671774534184450517, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+  m_PrefabInstance: {fileID: 227313665}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1537528923
 GameObject:
   m_ObjectHideFlags: 0
@@ -3215,3 +3289,4 @@ SceneRoots:
   - {fileID: 896934244}
   - {fileID: 1664360522}
   - {fileID: 1663809738}
+  - {fileID: 227313665}
