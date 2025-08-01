@@ -19,13 +19,14 @@ public class ThrowableObject : MonoBehaviour
     public bool enemyCanHit;
     public float hitDistance;//enemy
      public float throwHeight;//enemy
-    public float launchAngle; //ignore
+    public float launchAngle; //ignore   // ps dont ignore
+    private score scoreBoard;
 
     private void Start()
     {
          rb = GetComponent<Rigidbody>();
         Physics.gravity = new Vector3(0, -14f, 0);
-        
+        scoreBoard = GameObject.FindGameObjectWithTag("Ball").GetComponent<score>();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -48,6 +49,16 @@ public class ThrowableObject : MonoBehaviour
         if (other .CompareTag("Enemy"))
         {
             enemyCanHit = true;
+        }
+
+        if (other.CompareTag("PlayerWall"))
+        {
+            PlayerScored();
+        }
+
+        if (other.CompareTag("OpponentWall"))
+        {
+            OpponentScored();
         }
     }
 
@@ -151,5 +162,17 @@ public class ThrowableObject : MonoBehaviour
         rb.linearVelocity = velocity;
         rb.isKinematic = false;
         rb.useGravity = true;
+    }
+
+
+    void PlayerScored()
+    {
+        scoreBoard.AddScoreP();
+        //particles and effects and sounds 
+    }
+
+    void OpponentScored()
+    {
+        scoreBoard.AddScoreO();
     }
 }
