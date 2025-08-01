@@ -55,12 +55,12 @@ public class ThrowableObject : MonoBehaviour
 
         if (other.CompareTag("PlayerWall"))
         {
-            PlayerScored();
+            OpponentScored();
         }
 
         if (other.CompareTag("OpponentWall"))
         {
-            OpponentScored();
+            PlayerScored();
         }
     }
 
@@ -177,7 +177,7 @@ public class ThrowableObject : MonoBehaviour
         //Spawn eeefects and shi
 
         ball.transform.position = new Vector3 (6,1,-21);
-   
+        rb.isKinematic =true;
         ball.SetActive (true);
         
         
