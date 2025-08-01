@@ -9,12 +9,13 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(Collider))]
 public class ThrowableObject : MonoBehaviour
 {
+    public GameObject ball;
     public float throwForce ;//player
     public Material ballCol;
     public bool throwToTarget = false; //Aight gonn cook here lol this bool is always going to sit at false ma duddeeeeeeeeee 
   
-    public Transform target;
-    public Transform enemyTarget;
+    public Transform target ;
+    public Transform[] enemyTarget;
     private Rigidbody rb;
     public bool enemyCanHit;
     public float hitDistance;//enemy
@@ -27,6 +28,7 @@ public class ThrowableObject : MonoBehaviour
          rb = GetComponent<Rigidbody>();
         Physics.gravity = new Vector3(0, -14f, 0);
         scoreBoard = GameObject.FindGameObjectWithTag("Ball").GetComponent<score>();
+        rb.isKinematic = true;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -64,6 +66,9 @@ public class ThrowableObject : MonoBehaviour
 
     private void Update()
     {
+        int randomTargets = Random.Range (0, enemyTarget.Length);
+        Vector3 finalTarget = enemyTarget[randomTargets].position;
+
         if (throwToTarget && Input.GetKeyDown(KeyCode.Mouse0) == true)
         {
             ThrowObjectToTarget(target.position);
@@ -71,7 +76,7 @@ public class ThrowableObject : MonoBehaviour
         }
         if (enemyCanHit == true)
         {
-            EnemyHit(enemyTarget.position);
+            EnemyHit(finalTarget);
         }
     }
 
@@ -167,12 +172,25 @@ public class ThrowableObject : MonoBehaviour
 
     void PlayerScored()
     {
+        ball.SetActive(false);
         scoreBoard.AddScoreP();
-        //particles and effects and sounds 
+        //Spawn eeefects and shi
+
+        ball.transform.position = new Vector3 (6,1,-21);
+   
+        ball.SetActive (true);
+        
+        
     }
 
     void OpponentScored()
     {
+        ball.SetActive(false);
         scoreBoard.AddScoreO();
+
+        ball.transform.position = new Vector3(6, 1, -21);
+        rb.isKinematic = true;
+        ball.SetActive(true);
+
     }
 }
