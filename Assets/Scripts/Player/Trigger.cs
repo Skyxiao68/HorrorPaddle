@@ -112,8 +112,9 @@ public class ThrowableObject : MonoBehaviour
     {
         Rigidbody rb = GetComponent<Rigidbody>();
         GetComponent<Collider>().isTrigger = false;
-
-        Vector3 velocity = CalculateLaunchVelocity(transform.position, targetPosition, launchAngle);
+        Vector3 idkTarget = (rb.position - targetPosition).normalized;
+        Vector3 trueTarget = transform.position + idkTarget; 
+        Vector3 velocity = CalculateLaunchVelocity(trueTarget, targetPosition, launchAngle);
         rb.linearVelocity = velocity;
         rb.isKinematic = false;
         rb.useGravity = true;
@@ -178,6 +179,7 @@ public class ThrowableObject : MonoBehaviour
 
         ball.transform.position = new Vector3 (6,1,-21);
         rb.isKinematic =true;
+        throwToTarget = false;
         ball.SetActive (true);
         
         
@@ -190,6 +192,7 @@ public class ThrowableObject : MonoBehaviour
 
         ball.transform.position = new Vector3(6, 1, -21);
         rb.isKinematic = true;
+        throwToTarget = false;
         ball.SetActive(true);
 
     }

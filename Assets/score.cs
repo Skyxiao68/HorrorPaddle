@@ -30,6 +30,7 @@ public class score : MonoBehaviour
     {
         pScore += 1;
         playerScore.text = "Your Score:   " + pScore.ToString();
+        Debug.Log($"AddScoreP called (Current Score: {pScore})");
     }
 
     public void AddScoreO() 
