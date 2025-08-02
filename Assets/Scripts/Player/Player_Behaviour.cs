@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem; 
 
 [RequireComponent(typeof(CharacterController))]
 public class Player_Behaviour : MonoBehaviour
