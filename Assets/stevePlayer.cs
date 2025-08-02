@@ -17,8 +17,7 @@ public class stevePlayer : MonoBehaviour
     public Material aiMaterial;
    
     public bool stanceSwitch;
-
-
+    private ThrowableObject theBallStuck;
 
     [Header ("Aggresive")]
         public float moveSpeedA;
@@ -44,7 +43,7 @@ public class stevePlayer : MonoBehaviour
     private void Awake()
     {
         steve = GetComponent<CharacterController>();
-     
+        theBallStuck = FindFirstObjectByType<ThrowableObject>();
         GetComponent <NavMeshAgent>().enabled = true;
         stance = 1;
         stanceSwitch = false;
@@ -58,7 +57,7 @@ public class stevePlayer : MonoBehaviour
         {
             switch (stance) { 
                 
-                case 1: Aggreseive();
+                case 1: Aggreseive(); //Only seeing this now htf did i speel all this wrong but the sameeee goddamnit bruhhhhhhhhh
                      
                       break;
 
@@ -80,6 +79,11 @@ public class stevePlayer : MonoBehaviour
 
     void Update()
     {
+       // if (theBallStuck.onMySide ==true)
+        //{
+          //  Vector3.MoveTowards(transform.position,ball.position,moveSpeedA *Time.deltaTime);
+           // Debug.Log("Yes the ball is stuck over there u idiot");
+       // }
 
         if (stance == 1) 
         {
@@ -150,6 +154,11 @@ public class stevePlayer : MonoBehaviour
          // finalY = Mathf.MoveTowards(currentPosY,ballPosY, jump *Time.deltaTime);
        // }  Im experimentign 
         transform.position = new Vector3(finalX, finalY, finalZ);
+
+
+
+
+        //Reminder to code a ball stuck contingency because the ball gets stuck alot on this phase 
    
 
     }

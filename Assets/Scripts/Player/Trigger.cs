@@ -22,13 +22,26 @@ public class ThrowableObject : MonoBehaviour
      public float throwHeight;//enemy
     public float launchAngle; //ignore   // ps dont ignore
     private score scoreBoard;
+    private stevePlayer steveAi;
+    public bool onMySide;
 
+
+    [Header("Aggressive")]
+    public float hitForceAggressive;
+    public float aggressiveArc;
+    public Transform[] aggroTargets;
+    [Header("Defensive")]
+    public float hitForceDefensive;
+    public float defensiveArc;
+    public Transform[] defTargets;
     private void Start()
     {
          rb = GetComponent<Rigidbody>();
         Physics.gravity = new Vector3(0, -14f, 0);
         scoreBoard = GameObject.FindGameObjectWithTag("Ball").GetComponent<score>();
         rb.isKinematic = true;
+        steveAi = FindFirstObjectByType<stevePlayer>();
+        
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -66,9 +79,6 @@ public class ThrowableObject : MonoBehaviour
 
     private void Update()
     {
-        int randomTargets = Random.Range (0, enemyTarget.Length);
-        Vector3 finalTarget = enemyTarget[randomTargets].position;
-
         if (throwToTarget && Input.GetKeyDown(KeyCode.Mouse0) == true)
         {
             ThrowObjectToTarget(target.position);
@@ -76,7 +86,15 @@ public class ThrowableObject : MonoBehaviour
         }
         if (enemyCanHit == true)
         {
-            EnemyHit(finalTarget);
+            StanceDetector();
+        }
+        if (rb.linearVelocity.z < 0.5)
+        {
+            onMySide = true;
+        }
+        else
+        {
+            onMySide= false;
         }
     }
 
@@ -162,9 +180,49 @@ public class ThrowableObject : MonoBehaviour
         launchVelocity = launchVelocity.normalized * Mathf.Clamp(velocity, 5f, 30f);
         return launchVelocity;
     }
-    public void EnemyHit(Vector3 enemyTarget)
+
+
+
+    public void StanceDetector()
+    {
+        if (steveAi == null) return;
+        Debug.Log("The ball stances are working");
+
+        if (steveAi.stance == 1)
+        {
+            int randomTargetA = Random.Range(0, aggroTargets.Length);
+            Aggressive(aggroTargets [randomTargetA].position );
+
+            Debug.Log("Ball is Aggressive ");
+        }
+        if (steveAi.stance == 2)    
+        {
+            int randomTargetD = Random.Range(0,defTargets.Length);
+            Defensive(defTargets[randomTargetD].position);
+            Debug.Log("Ball is Defensive");
+        }
+    }
+    public void EnemyHit(Vector3 enemyTarget) //yeah no sphagetti g=cooooding GGGGEZ Its not even been 2 weeks aahhhhhhhhhhhhhbhhhh scared to remove this lol
     {
         Vector3 velocity = EnemyHitVelocity(transform.position, enemyTarget,throwHeight);
+        rb.linearVelocity = velocity;
+        rb.isKinematic = false;
+        rb.useGravity = true;
+    }
+
+    public void Aggressive(Vector3 aggroTarget)
+    {
+        hitDistance = hitForceAggressive;
+        Vector3 velocity = EnemyHitVelocity(transform.position, aggroTarget, aggressiveArc);
+        rb.linearVelocity = velocity;
+        rb.isKinematic = false;
+        rb.useGravity = true;
+    }
+
+    public void Defensive(Vector3 defTarget)
+    {
+        hitDistance = hitForceDefensive;
+        Vector3 velocity = EnemyHitVelocity(transform.position, defTarget, defensiveArc);
         rb.linearVelocity = velocity;
         rb.isKinematic = false;
         rb.useGravity = true;
