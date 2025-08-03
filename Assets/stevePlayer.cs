@@ -7,13 +7,28 @@ public class stevePlayer : MonoBehaviour
 
     private CharacterController steve;
     public Rigidbody ball;
-    public float moveSpeed;
-    public float prediction;
-    public float hitBall;
-
+    
+   
+   
+    public int stance ;
+    public float stanceTimer; 
+    private float lastSwitch = Mathf.Infinity;
     private Vector3 ballHit;
+    public Material aiMaterial;
+   
+    public bool stanceSwitch;
+    private ThrowableObject theBallStuck;
 
-    public bool onMySide; //Might use later man i wanted to make them have boundaries but i seem to have done that with a nav mesh so i think we good 
+    [Header ("Aggresive")]
+        public float moveSpeedA;
+    public float apredictionZ;
+    public float apredictionX;
+    [Header("Defensive")]
+    public float moveSpeedD;
+    public float dpredictionX;
+    public float dpredictionZ;
+
+   // public float jump;
 
     [Header("Clamp Setting")] //HAhahahaha Im dumb time for NavMESH AGAIN Sat here for 2 hours building a box for this idiot 
 
@@ -28,58 +43,125 @@ public class stevePlayer : MonoBehaviour
     private void Awake()
     {
         steve = GetComponent<CharacterController>();
-        onMySide = true;
+        theBallStuck = FindFirstObjectByType<ThrowableObject>();
         GetComponent <NavMeshAgent>().enabled = true;
+        stance = 1;
+        stanceSwitch = false;
+        lastSwitch =Time.time;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Ball")&& stanceSwitch)
+           
+        {
+            switch (stance) { 
+                
+                case 1: Aggreseive(); //Only seeing this now htf did i speel all this wrong but the sameeee goddamnit bruhhhhhhhhh
+                     
+                      break;
+
+                case 2: Defensive();
+                  break;
+
+            }
+
+
+        stance = (stance == 1) ? 2 : 1;
+        lastSwitch = Time.time;
+        stanceSwitch =false;
+
+        }
+
+
+
     }
 
     void Update()
     {
+       // if (theBallStuck.onMySide ==true)
+        //{
+          //  Vector3.MoveTowards(transform.position,ball.position,moveSpeedA *Time.deltaTime);
+           // Debug.Log("Yes the ball is stuck over there u idiot");
+       // }
 
-
-
-
-
-              ballHit = new Vector3 (hitBall,0, hitBall);
-
-        
-
-            float currentPosX = transform.position.x;
-            float ballPosX = ball.position.x;
-
-            float finalX = Mathf.MoveTowards(currentPosX, ballPosX, moveSpeed * Time.deltaTime);
-
-            float currentPosZ = transform.position.z;
-         
-            float ballVelocity = ball.linearVelocity.z;
-            float predictionTime = prediction;
-            float predictedBall = ball.position.z +(ballVelocity * predictionTime);
-            float finalZ = Mathf.MoveTowards(currentPosZ, predictedBall, moveSpeed * Time.deltaTime);
-
-            transform.position = new Vector3(finalX, 0, finalZ);
-        
-
-        if (onMySide == false)
-        
+        if (stance == 1) 
         {
+           Aggreseive ();
+            
+        }
+        if (stance == 2)
+        {
+            Defensive(); 
+        }
 
-            float patrolX = Random.Range(minX, maxX);
-            float patrolz = Random.Range(minZ, maxZ);
-           
-            transform.position = new Vector3 (patrolX,3,patrolz);
-
-
-        
-        
+        if (stanceSwitch == false && Time.time > lastSwitch + stanceTimer)
+        {
+            stanceSwitch = true;
+      
+            Debug.Log($"StanceSwitch: {stanceSwitch} | Time Left: {lastSwitch + stanceTimer - Time.time}");
         }
     }
 
-
-
-    private void OnTriggerEnter(Collider other)
+    void Aggreseive()
     {
-        if (other.CompareTag("Ball"))
-        {
-            //wball.AddForce(ballHit *hitBall, ForceMode.Impulse);
-        }
+        aiMaterial.SetColor("_BaseColor", Color.red);
+
+        float currentPosX = transform.position.x;
+        float ballPosX = ball.position.x;
+       
+      
+        float finalX = Mathf.MoveTowards(currentPosX, ballPosX, moveSpeedA * Time.deltaTime);
+
+        float currentPosZ = transform.position.z;
+
+        float ballposZ = ball.position.z;
+        float predictionTimeZ = apredictionZ;
+         float ballVelocityZ = ball.linearVelocity.z;
+        float predictedBallZ = ball.position.z + (ballVelocityZ * predictionTimeZ);
+        float finalZ = Mathf.MoveTowards(currentPosZ, predictedBallZ, moveSpeedA * Time.deltaTime);
+
+        transform.position = new Vector3(finalX, 0, finalZ);
+       
     }
+       
+         
+    void Defensive()
+    {
+        aiMaterial.SetColor("_BaseColor",Color.blue);
+
+        float currentPosX = transform.position.x;
+        float ballPosX = ball.position.x ;
+        float ballVelocityX = ball.linearVelocity.x;
+        float predictionTimeX = dpredictionX;
+        float predictedBallX = ball.position.x + (ballVelocityX * predictionTimeX);
+
+        float finalX = Mathf.MoveTowards(currentPosX, predictedBallX, moveSpeedD * Time.deltaTime);
+
+        float currentPosZ = transform.position.z;
+
+        float ballVelocityZ = ball.linearVelocity.z - currentPosZ;
+        float predictionTimeZ = dpredictionZ;
+        float predictedBallZ = ball.position.z + (ballVelocityZ * predictionTimeZ);
+        float finalZ = Mathf.MoveTowards(currentPosZ, predictedBallZ, moveSpeedD * Time.deltaTime);
+
+
+        //float currentPosY= transform.position.y;
+        //float ballPosY = ball.position.y;
+        float finalY = 0;
+        //if (ballPosY < 4) 
+       // { 
+         // finalY = Mathf.MoveTowards(currentPosY,ballPosY, jump *Time.deltaTime);
+       // }  Im experimentign 
+        transform.position = new Vector3(finalX, finalY, finalZ);
+
+
+
+
+        //Reminder to code a ball stuck contingency because the ball gets stuck alot on this phase 
+   
+
+    }
+
+
 }

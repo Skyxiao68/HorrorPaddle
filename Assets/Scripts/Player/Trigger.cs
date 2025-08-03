@@ -10,18 +10,31 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Collider))]
 public class ThrowableObject : MonoBehaviour
 {
+    public GameObject ball;
     public float throwForce ;//player
     public Material ballCol;
     public bool throwToTarget = false; //Aight gonn cook here lol this bool is always going to sit at false ma duddeeeeeeeeee 
   
-    public Transform target;
-    public Transform enemyTarget;
+    public Transform target ;
+    public Transform[] enemyTarget;
     private Rigidbody rb;
     public bool enemyCanHit;
     public float hitDistance;//enemy
      public float throwHeight;//enemy
-    public float launchAngle; //ignore
+    public float launchAngle; //ignore   // ps dont ignore
+    private score scoreBoard;
+    private stevePlayer steveAi;
+    public bool onMySide;
 
+
+    [Header("Aggressive")]
+    public float hitForceAggressive;
+    public float aggressiveArc;
+    public Transform[] aggroTargets;
+    [Header("Defensive")]
+    public float hitForceDefensive;
+    public float defensiveArc;
+    public Transform[] defTargets;
     public PlayerInputController inputControl;
     public float inputFire;
 
@@ -43,6 +56,9 @@ public class ThrowableObject : MonoBehaviour
     {
          rb = GetComponent<Rigidbody>();
         Physics.gravity = new Vector3(0, -14f, 0);
+        scoreBoard = GameObject.FindGameObjectWithTag("Ball").GetComponent<score>();
+        rb.isKinematic = true;
+        steveAi = FindFirstObjectByType<stevePlayer>();
         
     }
     private void OnTriggerEnter(Collider other)
@@ -67,6 +83,16 @@ public class ThrowableObject : MonoBehaviour
         {
             enemyCanHit = true;
         }
+
+        if (other.CompareTag("PlayerWall"))
+        {
+            OpponentScored();
+        }
+
+        if (other.CompareTag("OpponentWall"))
+        {
+            PlayerScored();
+        }
     }
 
     void Update()
@@ -80,7 +106,15 @@ public class ThrowableObject : MonoBehaviour
         }
         if (enemyCanHit == true)
         {
-            EnemyHit(enemyTarget.position);
+            StanceDetector();
+        }
+        if (rb.linearVelocity.z < 0.5)
+        {
+            onMySide = true;
+        }
+        else
+        {
+            onMySide= false;
         }
 
 
@@ -118,8 +152,9 @@ public class ThrowableObject : MonoBehaviour
     {
         Rigidbody rb = GetComponent<Rigidbody>();
         GetComponent<Collider>().isTrigger = false;
-
-        Vector3 velocity = CalculateLaunchVelocity(transform.position, targetPosition, launchAngle);
+        Vector3 idkTarget = (rb.position - targetPosition).normalized;
+        Vector3 trueTarget = transform.position + idkTarget; 
+        Vector3 velocity = CalculateLaunchVelocity(trueTarget, targetPosition, launchAngle);
         rb.linearVelocity = velocity;
         rb.isKinematic = false;
         rb.useGravity = true;
@@ -167,11 +202,78 @@ public class ThrowableObject : MonoBehaviour
         launchVelocity = launchVelocity.normalized * Mathf.Clamp(velocity, 5f, 30f);
         return launchVelocity;
     }
-    public void EnemyHit(Vector3 enemyTarget)
+
+
+
+    public void StanceDetector()
+    {
+        if (steveAi == null) return;
+        Debug.Log("The ball stances are working");
+
+        if (steveAi.stance == 1)
+        {
+            int randomTargetA = Random.Range(0, aggroTargets.Length);
+            Aggressive(aggroTargets [randomTargetA].position );
+
+            Debug.Log("Ball is Aggressive ");
+        }
+        if (steveAi.stance == 2)    
+        {
+            int randomTargetD = Random.Range(0,defTargets.Length);
+            Defensive(defTargets[randomTargetD].position);
+            Debug.Log("Ball is Defensive");
+        }
+    }
+    public void EnemyHit(Vector3 enemyTarget) //yeah no sphagetti g=cooooding GGGGEZ Its not even been 2 weeks aahhhhhhhhhhhhhbhhhh scared to remove this lol
     {
         Vector3 velocity = EnemyHitVelocity(transform.position, enemyTarget,throwHeight);
         rb.linearVelocity = velocity;
         rb.isKinematic = false;
         rb.useGravity = true;
+    }
+
+    public void Aggressive(Vector3 aggroTarget)
+    {
+        hitDistance = hitForceAggressive;
+        Vector3 velocity = EnemyHitVelocity(transform.position, aggroTarget, aggressiveArc);
+        rb.linearVelocity = velocity;
+        rb.isKinematic = false;
+        rb.useGravity = true;
+    }
+
+    public void Defensive(Vector3 defTarget)
+    {
+        hitDistance = hitForceDefensive;
+        Vector3 velocity = EnemyHitVelocity(transform.position, defTarget, defensiveArc);
+        rb.linearVelocity = velocity;
+        rb.isKinematic = false;
+        rb.useGravity = true;
+    }
+
+
+    void PlayerScored()
+    {
+        ball.SetActive(false);
+        scoreBoard.AddScoreP();
+        //Spawn eeefects and shi
+
+        ball.transform.position = new Vector3 (6,1,-21);
+        rb.isKinematic =true;
+        throwToTarget = false;
+        ball.SetActive (true);
+        
+        
+    }
+
+    void OpponentScored()
+    {
+        ball.SetActive(false);
+        scoreBoard.AddScoreO();
+
+        ball.transform.position = new Vector3(6, 1, -21);
+        rb.isKinematic = true;
+        throwToTarget = false;
+        ball.SetActive(true);
+
     }
 }
