@@ -4,6 +4,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
@@ -21,6 +22,23 @@ public class ThrowableObject : MonoBehaviour
      public float throwHeight;//enemy
     public float launchAngle; //ignore
 
+    public PlayerInputController inputControl;
+    public float inputFire;
+
+    private void Awake()
+    {
+        inputControl = new PlayerInputController();
+    }
+
+    private void OnEnable()
+    {
+        inputControl.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputControl.Disable();
+    }
     private void Start()
     {
          rb = GetComponent<Rigidbody>();
@@ -35,7 +53,7 @@ public class ThrowableObject : MonoBehaviour
             throwToTarget = true;
             ballCol.SetColor ("_BaseColor", Color.red);
 
-            if (throwToTarget && Input.GetKeyDown(KeyCode.Mouse0) == true)
+            if (throwToTarget && inputFire == 1)
             {
                 ThrowObjectToTarget(target.position);
                 Debug.Log("Target in Aight");
@@ -51,9 +69,11 @@ public class ThrowableObject : MonoBehaviour
         }
     }
 
-    private void Update()
+    void Update()
     {
-        if (throwToTarget && Input.GetKeyDown(KeyCode.Mouse0) == true)
+        inputFire = inputControl.Gameplay.Fire.ReadValue<float>(); 
+
+        if (throwToTarget && inputFire == 1)
         {
             ThrowObjectToTarget(target.position);
             Debug.Log("Target in Aight");
@@ -62,6 +82,8 @@ public class ThrowableObject : MonoBehaviour
         {
             EnemyHit(enemyTarget.position);
         }
+
+
     }
 
     private void OnTriggerExit()

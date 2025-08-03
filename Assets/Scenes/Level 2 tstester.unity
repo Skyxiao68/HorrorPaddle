@@ -1124,9 +1124,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf2af7e72c1cd1d469cf20a9140c4a80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSens: 100
+  mouseSens: 20
   player: {fileID: 2001601103}
   xRotation: 0
+  inputLook: {x: 0, y: 0}
 --- !u!1 &1077448807
 GameObject:
   m_ObjectHideFlags: 0
@@ -1755,9 +1756,13 @@ MonoBehaviour:
   inputDirection: {x: 0, y: 0}
   inputRun: 0
   walkSpeed: 5
-  runSpeed: 8
-  jumpHeight: 2
   gravity: -9.81
+  runSpeed: 8
+  runStam: 100
+  maxStam: 100
+  stamDeplete: 20
+  stamRecover: 15
+  isRunning: 0
   groundCheck: {fileID: 339600375}
   groundDistance: 0.4
   groundMask:
@@ -1996,6 +2001,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 961ccee7828ba6440a80699794ea2c63, type: 2}
     - target: {fileID: 739567413521615913, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: inputFire
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 739567413521615913, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
       propertyPath: throwForce
       value: 30
       objectReference: {fileID: 0}
@@ -2098,8 +2107,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 2001601103}
   - {fileID: 1077448810}
-  - {fileID: 4128547222871108193}
   - {fileID: 1711852495682544093}
   - {fileID: 587125445}
   - {fileID: 1793265263}
   - {fileID: 1005356836}
+  - {fileID: 4128547222871108193}
