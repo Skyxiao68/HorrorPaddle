@@ -1,5 +1,8 @@
+using System.Collections;
 using System.Diagnostics.Eventing.Reader;
+using UnityEditor.Build;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 
@@ -11,6 +14,8 @@ public class PlayerController : MonoBehaviour
     [Header("Debug")]
     public Vector2 inputDirection;
     public float inputRun;
+    public float inputDash;
+
 
     [Header("Moving")]
     public float walkSpeed = 5f;
@@ -24,6 +29,11 @@ public class PlayerController : MonoBehaviour
     public float stamRecover = 15f;
     public bool isRunning = false;
 
+    [Header("Dash")]
+    public float dashDistance = 3f;
+    public float dashCooldown = 3f;
+    private float dashTimer;
+    public float playerHeight = 2f;
 
     [Header("GroundCHeck")]
     public Transform groundCheck;
@@ -62,6 +72,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+
+
+
+
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
@@ -102,15 +116,78 @@ public class PlayerController : MonoBehaviour
         else
         {
             runStam += stamRecover * Time.deltaTime;
-            runStam = Mathf.Min(maxStam, runStam); 
-   
+            runStam = Mathf.Min(maxStam, runStam);
+
         }
 
+        inputDash = inputControl.Gameplay.Dash.ReadValue<float>();
 
+
+        if (inputDash == 1 && Time.time > dashTimer + dashCooldown)
+        {
+            Vector3 inputDir = new Vector3((xMove), 0f, yMove).normalized;
+
+            if (inputDir == Vector3.zero)
+            {
+                inputDir = transform.forward;
+            }
+            else
+            {
+                inputDir = transform.TransformDirection(inputDir);
+            }
+
+
+            DashDirection(inputDir);
+        }
+
+        void DashDirection(Vector3 direction)
+        {
+            Vector3 dashPosition = transform.position + direction * dashDistance;
+            StartCoroutine(ExecuteDash(dashPosition));
+
+
+
+
+
+            IEnumerator ExecuteDash(Vector3 targetPosition)
+            {
+
+                
+                yield return new WaitForSeconds(0.1f);
+
+                
+                if (CC != null)
+                {
+                    CC.enabled = false;
+                }
+
+               
+                transform.position = targetPosition;
+
+               
+                if (CC != null)
+                {
+                    CC.enabled = true;
+                }
+
+
+
+                
+                dashTimer = Time.time;
+            }
+
+        }
     }
-
-
 }
+
+   
+    
+
+
+
+
+
+
   
    
        

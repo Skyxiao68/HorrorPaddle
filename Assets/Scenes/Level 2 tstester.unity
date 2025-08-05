@@ -688,7 +688,7 @@ GameObject:
   - component: {fileID: 769857313}
   - component: {fileID: 769857312}
   - component: {fileID: 769857311}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -845,7 +845,7 @@ GameObject:
   - component: {fileID: 882722722}
   - component: {fileID: 882722721}
   - component: {fileID: 882722720}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1137,7 +1137,7 @@ GameObject:
   - component: {fileID: 968051818}
   - component: {fileID: 968051817}
   - component: {fileID: 968051816}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2507,7 +2507,7 @@ GameObject:
   - component: {fileID: 2000064107}
   - component: {fileID: 2000064106}
   - component: {fileID: 2000064105}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2649,6 +2649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputDirection: {x: 0, y: 0}
   inputRun: 0
+  inputDash: 0
   walkSpeed: 5
   gravity: -9.81
   runSpeed: 8
@@ -2657,6 +2658,9 @@ MonoBehaviour:
   stamDeplete: 20
   stamRecover: 15
   isRunning: 0
+  dashDistance: 5
+  dashCooldown: 1
+  playerHeight: 2
   groundCheck: {fileID: 1444299965}
   groundDistance: 0.4
   groundMask:
@@ -2772,6 +2776,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputDirection: {x: 0, y: 0}
   inputRun: 0
+  inputDash: 0
   walkSpeed: 5
   gravity: -9.81
   runSpeed: 8
@@ -2780,6 +2785,9 @@ MonoBehaviour:
   stamDeplete: 20
   stamRecover: 15
   isRunning: 0
+  dashDistance: 3
+  dashCooldown: 1
+  playerHeight: 2
   groundCheck: {fileID: 339600375}
   groundDistance: 0.4
   groundMask:
@@ -3015,7 +3023,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: d2f1fd632bd9e1f46bf8bb646354a20d, type: 2}
     - target: {fileID: 1141271949919097520, guid: 834509610d6fb0146ae5b3bbce1345eb, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1630693697772072964, guid: 834509610d6fb0146ae5b3bbce1345eb, type: 3}
       propertyPath: m_Enabled
@@ -3051,11 +3059,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6764173412408685732, guid: 834509610d6fb0146ae5b3bbce1345eb, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7375919429112506737, guid: 834509610d6fb0146ae5b3bbce1345eb, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7389168800879034702, guid: 834509610d6fb0146ae5b3bbce1345eb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -3071,7 +3079,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8237352787527354484, guid: 834509610d6fb0146ae5b3bbce1345eb, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8237352787527354484, guid: 834509610d6fb0146ae5b3bbce1345eb, type: 3}
       propertyPath: m_TagString
@@ -3095,7 +3103,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8922506757464519578, guid: 834509610d6fb0146ae5b3bbce1345eb, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8922506757464519578, guid: 834509610d6fb0146ae5b3bbce1345eb, type: 3}
       propertyPath: m_TagString
