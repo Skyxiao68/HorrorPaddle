@@ -95,7 +95,7 @@ public class ThrowableObject : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         inputFire = inputControl.Gameplay.Fire.ReadValue<float>(); 
 
