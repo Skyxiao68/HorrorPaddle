@@ -108,16 +108,14 @@ public class ThrowableObject : MonoBehaviour
         {
             StanceDetector();
         }
-        if (rb.linearVelocity.z < 0.5)
-        {
-            onMySide = true;
-        }
-        else
-        {
-            onMySide= false;
-        }
-
-
+       // if (rb.linearVelocity.z < 0.5)
+        //{
+           // onMySide = true;
+       // }
+       // else
+       // {
+        //    onMySide= false;
+        //}  Im working on it 
     }
 
     private void OnTriggerExit()
