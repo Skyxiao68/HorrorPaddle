@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class menuController : MonoBehaviour
 {
     public PlayerInputController inputControl;
@@ -7,15 +8,18 @@ public class menuController : MonoBehaviour
     public GameObject pauseMenu;
     public GameObject scoreBoard;
     public GameObject pauseButton;
+    public GameObject settingsMenu;
+    public GameObject paddleBat;
 
    public float pause;
     private CharacterController CC;
     private void Awake()
     {
-      
+        Time.timeScale = 1f;
         pauseMenu.SetActive(false);
         scoreBoard.SetActive(true);
         pauseButton.SetActive(true);
+        settingsMenu.SetActive(false);
         inputControl = new PlayerInputController();
         CC = gameObject.GetComponent<CharacterController>();
     }
@@ -46,7 +50,7 @@ public class menuController : MonoBehaviour
             pauseMenu.SetActive(true);
             scoreBoard.SetActive(false);
             pauseButton.SetActive(false);
-
+            paddleBat.SetActive(false);
             Time.timeScale = 0f;
         
     }
@@ -58,7 +62,28 @@ public class menuController : MonoBehaviour
         pauseMenu.SetActive(false);
         scoreBoard.SetActive(true);
         pauseButton.SetActive(true);
-
+        paddleBat.SetActive(true) ;
+        Time.timeScale = 1f;
+    }
+    public void MainMenu()
+    {
+        SceneManager.LoadSceneAsync(0);
+    }
+    
+    public void Settings()
+    {
+        scoreBoard.SetActive(false);
+        pauseMenu.SetActive(false );
+        settingsMenu.SetActive(true);
+    }
+   public void SettingsBack()
+    {
+        pauseMenu.SetActive(true );
+        settingsMenu.SetActive(false);
+    }
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
     }
 }

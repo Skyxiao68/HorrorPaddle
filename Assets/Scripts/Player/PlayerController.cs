@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     [Header("Dash")]
     public float dashDistance = 3f;
     public float dashCooldown = 3f;
+    public float dashSmoother = 5f;
     private float dashTimer;
     public float playerHeight = 2f;
 
@@ -143,6 +144,7 @@ public class PlayerController : MonoBehaviour
         void DashDirection(Vector3 direction)
         {
             Vector3 dashPosition = transform.position + direction * dashDistance;
+            
             StartCoroutine(ExecuteDash(dashPosition));
 
 

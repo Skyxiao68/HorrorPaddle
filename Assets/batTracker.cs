@@ -12,6 +12,7 @@ public class batTracker : MonoBehaviour
 
     public float maxSwingDisX;
     public float maxSwingDisY;
+    public float maxSwingDisZ;
 
     public bool batCanSwing;
     public float inputSwing;
@@ -56,7 +57,8 @@ public class batTracker : MonoBehaviour
 
         Vector3 swingDis = transform.localPosition + transform.forward * swingDistance;
         swingDis.x = Mathf.Clamp(swingDis.x, batCurrentPos.x - maxSwingDisX, batCurrentPos.x + maxSwingDisX);
-        swingDis.y = Mathf.Clamp(-swingDis.y, batCurrentPos.y - maxSwingDisY, batCurrentPos.y + maxSwingDisY);
+        swingDis.y = Mathf.Clamp(swingDis.y, batCurrentPos.y - maxSwingDisY, batCurrentPos.y + maxSwingDisY);
+        swingDis.z = Mathf.Clamp(swingDis.z, batCurrentPos.z - maxSwingDisZ, batCurrentPos.z + maxSwingDisZ);
         Vector3 finalSwing = swingDis;
         transform.localPosition = Vector3.MoveTowards(transform.localPosition, finalSwing, swingSpeed);
         batCanSwing = false;
