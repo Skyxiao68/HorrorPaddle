@@ -2,9 +2,11 @@ using System.Collections;
 using System.Diagnostics.Eventing.Reader;
 using UnityEditor.Build;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
+using TMPro;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -28,6 +30,8 @@ public class PlayerController : MonoBehaviour
     public float stamDeplete = 20f;
     public float stamRecover = 15f;
     public bool isRunning = false;
+    
+    //values for the stamina bar
 
     [Header("Dash")]
     public float dashDistance = 3f;
@@ -67,13 +71,13 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         currentSpeed = walkSpeed;
-
+       
     }
 
 
     void Update()
     {
-
+   
 
 
 

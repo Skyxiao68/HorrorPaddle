@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Camera : MonoBehaviour
 {
@@ -13,8 +14,9 @@ public class Camera : MonoBehaviour
     public Transform player;
 
     public float xRotation;
-    public Vector2 inputLook; 
+    public Vector2 inputLook;
 
+    public Slider senSlider;
 
     public void Awake()
     {
@@ -35,7 +37,7 @@ public class Camera : MonoBehaviour
 {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        
+        senSlider.value = mouseSens;
 
 
 }
@@ -54,7 +56,10 @@ public class Camera : MonoBehaviour
         transform.localRotation= Quaternion.Euler(xRotation,0 ,0);
        
     }
-
+    public void AdjustSens(float newSpeed)
+    {
+        mouseSens = newSpeed * 18;
+    }
 
 }
 
