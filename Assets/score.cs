@@ -12,6 +12,7 @@ public class score : MonoBehaviour
     {
         if (collision.CompareTag("PlayerWall"))
         {
+
         }
         if (collision.CompareTag("OpponentWall"))
         {

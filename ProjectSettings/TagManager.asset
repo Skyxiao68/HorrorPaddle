@@ -9,6 +9,8 @@ TagManager:
   - Enemy
   - PlayerWall
   - OpponentWall
+  - Movement
+  - Welcome
   layers:
   - Default
   - TransparentFX
