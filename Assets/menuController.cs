@@ -2,28 +2,43 @@ using UnityEngine;
 using UnityEngine.UI;
 public class menuController : MonoBehaviour
 {
+    public PlayerInputController inputControl;
+
     public GameObject pauseMenu;
     public GameObject scoreBoard;
     public GameObject pauseButton;
 
-
-    private void Start()
+   public float pause;
+    private CharacterController CC;
+    private void Awake()
     {
+      
         pauseMenu.SetActive(false);
         scoreBoard.SetActive(true);
         pauseButton.SetActive(true);
+        inputControl = new PlayerInputController();
+        CC = gameObject.GetComponent<CharacterController>();
+    }
+    private void OnEnable()
+    {
+        inputControl.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputControl.Disable();
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Pause();
-        }
+
+        pause = inputControl.UI.Pause.ReadValue<float>();
+
+        if (pause == 1) { Pause(); }
     }
 
     public void Pause()
     {
-        
+       
         
             Cursor.lockState = CursorLockMode.Confined;
              Cursor.visible = true;
