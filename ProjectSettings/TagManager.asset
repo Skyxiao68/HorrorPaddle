@@ -11,6 +11,8 @@ TagManager:
   - OpponentWall
   - Movement
   - Welcome
+  - BatPickup
+  - PlayWithBall
   layers:
   - Default
   - TransparentFX
