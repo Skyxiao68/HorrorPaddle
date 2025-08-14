@@ -159,6 +159,8 @@ public class stevePlayer : MonoBehaviour
 
 
         //Reminder to code a ball stuck contingency because the ball gets stuck alot on this phase 
+
+        // update im leaving the green stuff in coz why not but its fixed weeeeeeeeeee
    
 
     }
