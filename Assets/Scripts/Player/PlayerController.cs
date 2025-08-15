@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     public float stamDeplete = 20f;
     public float stamRecover = 15f;
     public bool isRunning = false;
-    
+
     //values for the stamina bar
 
     [Header("Dash")]
@@ -39,11 +39,13 @@ public class PlayerController : MonoBehaviour
     public float dashSmoother = 5f;
     private float dashTimer;
     public float playerHeight = 2f;
+    public LayerMask obsticaleLayers;
 
     [Header("GroundCHeck")]
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
+    public float groundCheckDistance = 0.2f;
 
     private CharacterController CC;
     private float currentSpeed;
@@ -71,13 +73,13 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         currentSpeed = walkSpeed;
-       
+
     }
 
 
     void Update()
     {
-   
+
 
 
 
@@ -112,6 +114,7 @@ public class PlayerController : MonoBehaviour
 
 
         velocity.y += gravity * Time.deltaTime;
+        CC.Move(velocity * Time.deltaTime);
 
         if (isRunning)
         {
@@ -148,43 +151,57 @@ public class PlayerController : MonoBehaviour
         void DashDirection(Vector3 direction)
         {
             Vector3 dashPosition = transform.position + direction * dashDistance;
-            
-            StartCoroutine(ExecuteDash(dashPosition));
 
-
-
-
-
-            IEnumerator ExecuteDash(Vector3 targetPosition)
+            if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, direction, dashDistance, obsticaleLayers))
             {
 
-                
-                yield return new WaitForSeconds(0.1f);
 
-                
-                if (CC != null)
-                {
-                    CC.enabled = false;
-                }
+                StartCoroutine(ExecuteDash(dashPosition));
+            }
+            else
+            {
+                Debug.Log("Obsticales in the way, cannot dash");
+            }       
+        }
+        
+       
 
-               
-                transform.position = targetPosition;
-
-               
-                if (CC != null)
-                {
-                    CC.enabled = true;
-                }
+        IEnumerator ExecuteDash(Vector3 targetPosition)
+        {
 
 
+            yield return new WaitForSeconds(0.1f);
 
-                
-                dashTimer = Time.time;
+
+            if (CC != null)
+            {
+                CC.enabled = false;
             }
 
+
+            transform.position = targetPosition;
+
+
+            if (CC != null)
+            {
+                CC.enabled = true;
+            }
+
+
+
+
+            dashTimer = Time.time;
         }
     }
 }
+        
+        
+
+        
+    
+
+
+
 
    
     
