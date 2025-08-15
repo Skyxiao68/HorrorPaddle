@@ -16,7 +16,7 @@ public class batTracker : MonoBehaviour
 
     public bool batCanSwing;
     public float inputSwing;
-
+    public ParticleSystem hitParticle;
     void Awake()
     {
 
@@ -26,7 +26,13 @@ public class batTracker : MonoBehaviour
         ThrowableObject throwbool = GetComponent<ThrowableObject>();
 
     }
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Ball"))
+        {
+            SpawnBallEffects();
+        }
+    }
     private void OnEnable()
     {
         inputControl.Enable();
@@ -68,5 +74,8 @@ public class batTracker : MonoBehaviour
         transform.localPosition = Vector3.MoveTowards(transform.localPosition, batCurrentPos, swingBackSpeed);
         batCanSwing = true;
     }
-
+    void SpawnBallEffects()
+    {
+        Instantiate (hitParticle, transform.position, Quaternion.identity);
+    }
 }
