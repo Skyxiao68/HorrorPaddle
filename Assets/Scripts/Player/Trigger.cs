@@ -14,7 +14,8 @@ public class ThrowableObject : MonoBehaviour
     public float throwForce ;//player
     public Material ballCol;
     public bool throwToTarget = false; //Aight gonn cook here lol this bool is always going to sit at false ma duddeeeeeeeeee 
-  
+    public ParticleSystem playerScorePar;
+    public ParticleSystem enemyScorePar;
     public Transform target ;
     public Transform[] enemyTarget;
     private Rigidbody rb;
@@ -22,7 +23,7 @@ public class ThrowableObject : MonoBehaviour
     public float hitDistance;//enemy
      public float throwHeight;//enemy
     public float launchAngle; //ignore   // ps dont ignore
-    private score scoreBoard;
+    private ScoreManager scoreBoard;
     private stevePlayer steveAi;
     public bool onMySide;
 
@@ -56,7 +57,7 @@ public class ThrowableObject : MonoBehaviour
     {
          rb = GetComponent<Rigidbody>();
         Physics.gravity = new Vector3(0, -14f, 0);
-        scoreBoard = GameObject.FindGameObjectWithTag("Ball").GetComponent<score>();
+        scoreBoard = GameObject.FindGameObjectWithTag("Ball").GetComponent<ScoreManager>();
         rb.isKinematic = true;
         steveAi = FindFirstObjectByType<stevePlayer>();
         
@@ -251,11 +252,14 @@ public class ThrowableObject : MonoBehaviour
 
     void PlayerScored()
     {
+
+        Instantiate(playerScorePar,transform.position,transform.rotation);
+
         ball.SetActive(false);
         scoreBoard.AddScoreP();
-        //Spawn eeefects and shi
+     
 
-        ball.transform.position = new Vector3 (6,1,-21);
+        ball.transform.position = new Vector3 (10,1,-21);
         rb.isKinematic =true;
         throwToTarget = false;
         ball.SetActive (true);
@@ -265,10 +269,12 @@ public class ThrowableObject : MonoBehaviour
 
     void OpponentScored()
     {
+        Instantiate(enemyScorePar, transform.position, transform.rotation);
+        ballCol.SetColor("_BaseColor", Color.green);
         ball.SetActive(false);
         scoreBoard.AddScoreO();
 
-        ball.transform.position = new Vector3(6, 1, -21);
+        ball.transform.position = new Vector3(9, 1, -21);
         rb.isKinematic = true;
         throwToTarget = false;
         ball.SetActive(true);

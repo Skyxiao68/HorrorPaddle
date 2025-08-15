@@ -10,12 +10,15 @@ public class menuController : MonoBehaviour
     public GameObject pauseButton;
     public GameObject settingsMenu;
     public GameObject paddleBat;
+    public GameObject winScreen;
+    public GameObject loseScreen;
 
    public float pause;
     private CharacterController CC;
     private void Awake()
     {
         Time.timeScale = 1f;
+        
         pauseMenu.SetActive(false);
         scoreBoard.SetActive(true);
         pauseButton.SetActive(true);
@@ -86,4 +89,5 @@ public class menuController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
     }
+   
 }

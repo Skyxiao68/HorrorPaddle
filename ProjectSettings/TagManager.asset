@@ -13,6 +13,9 @@ TagManager:
   - Welcome
   - BatPickup
   - PlayWithBall
+  - Rules
+  - NextLevel
+  - LastMin
   layers:
   - Default
   - TransparentFX
