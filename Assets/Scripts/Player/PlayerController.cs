@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Moving")]
     public float walkSpeed = 5f;
-    public float gravity = -9.81f;
+    public float gravity = 0;
 
     [Header("Running")]
     public float runSpeed = 8f;
@@ -53,6 +53,20 @@ public class PlayerController : MonoBehaviour
     private Vector3 dir;
     private Vector3 velocity;
     private bool isGrounded;
+
+    [Header("Head bob controls")]
+
+    [SerializeField] private bool activateFeature = true;
+
+    [SerializeField, Range(0, 50f)] private float amplitude = 1.0f;
+    [SerializeField, Range(0, 100f)] private float frequency = 10.0f;
+
+    [SerializeField] private Transform camera;
+    [SerializeField] private Transform camHolder;
+
+    private float toggleSpeed = 3.0f;
+    private Vector3 startPos;
+    private CharacterController controller;
 
 
     private void Awake()
@@ -146,6 +160,12 @@ public class PlayerController : MonoBehaviour
 
 
             DashDirection(inputDir);
+
+            if (!activateFeature) return;
+
+            CheckMotion();
+            ResetPosition();
+            camera.LookAt(FocusTarget());
         }
 
         void DashDirection(Vector3 direction)
@@ -193,7 +213,40 @@ public class PlayerController : MonoBehaviour
             dashTimer = Time.time;
         }
     }
+    private void PlayMotion(Vector3 motion)
+    {
+        camera.localPosition += motion * Time.deltaTime;
+    }
+    private void CheckMotion()
+    {
+        float speed = new Vector3(controller.velocity.x, 0, controller.velocity.z).magnitude;
+        //ground check here
+        if (speed < toggleSpeed) return;
+
+
+        PlayMotion(FootStepMotion());
+    }
+    private void ResetPosition()
+    {
+        if (camera.localPosition == startPos) return;
+        camera.localPosition = Vector3.Lerp(camera.localPosition, startPos, 1 * Time.deltaTime);
+    }
+    private Vector3 FootStepMotion()
+    {
+        Vector3 pos = Vector3.zero;
+        pos.y += Mathf.Sin(Time.time * frequency) * amplitude;
+        pos.x += Mathf.Cos(Time.time * frequency / 2) * amplitude * 2;
+        return pos;
+    }
+    private Vector3 FocusTarget()
+    {
+        Vector3 pos = new Vector3(transform.position.x, transform.position.y + camHolder.localPosition.y, transform.position.z);
+        pos += camHolder.forward * 15.0f;
+        return pos;
+    }
 }
+
+
         
         
 
