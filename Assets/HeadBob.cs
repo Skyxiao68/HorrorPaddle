@@ -12,22 +12,24 @@ public class HeadBob : MonoBehaviour
     [SerializeField] private Transform camera;
     [SerializeField] private Transform camHolder;
 
-    private float toggleSpeed = 3.0f;
+    private float toggleSpeed = 4f;
     private Vector3 startPos;
-    private CharacterController controller;
+    private PlayerController playerController;
+
     void Awake()
     {
-        controller = GetComponent<CharacterController>();
+        playerController = GetComponent<PlayerController>();
         startPos = camera.localPosition;
     }
 
     // Update is called once per frame
     void Update()
-    { 
-       if (!activateFeature) return;
+    {
+        
+        if (!activateFeature) return;
        
        CheckMotion();
-       ResetPosition();
+        ResetPosition();
         camera.LookAt(FocusTarget());
 
         //Aded a running fearture 
@@ -38,9 +40,11 @@ public class HeadBob : MonoBehaviour
     }
     private void CheckMotion()
     {
-        float speed = new Vector3(controller.velocity.x, 0, controller.velocity.z).magnitude;
-        //ground check here
-        if (speed < toggleSpeed) return;
+        float speed = playerController.CurrentMovementSpeed;
+
+        if (speed < toggleSpeed) 
+            
+        return; 
       
 
         PlayMotion(FootStepMotion());

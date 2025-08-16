@@ -16,6 +16,7 @@ public class batTracker : MonoBehaviour
 
     public bool batCanSwing;
     public float inputSwing;
+    public Rigidbody rb;
     public ParticleSystem hitParticle;
     void Awake()
     {
@@ -76,6 +77,13 @@ public class batTracker : MonoBehaviour
     }
     void SpawnBallEffects()
     {
-        Instantiate (hitParticle, transform.position, Quaternion.identity);
+        if (rb.isKinematic)
+        {
+            return;
+        }
+        else
+        {
+            Instantiate(hitParticle, transform.position, Quaternion.identity);
+        }
     }
 }

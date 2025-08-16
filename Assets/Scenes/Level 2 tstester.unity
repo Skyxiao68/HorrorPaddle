@@ -2490,7 +2490,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1288237079
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3139,10 +3139,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -4294,6 +4294,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 74064787613808103, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 312426421861880884, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -4306,6 +4310,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 1660399374197505636, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 345
+      objectReference: {fileID: 0}
+    - target: {fileID: 2125959468946202103, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -61
+      objectReference: {fileID: 0}
     - target: {fileID: 3222893960653677488, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -4317,6 +4329,10 @@ PrefabInstance:
     - target: {fileID: 3222893960653677488, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: m_AnchorMin.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3346351788517832438, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 345
       objectReference: {fileID: 0}
     - target: {fileID: 3673178215353988324, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4363,6 +4379,10 @@ PrefabInstance:
       value: 62.9
       objectReference: {fileID: 0}
     - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: walkSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: groundCheck
       value: 
       objectReference: {fileID: 339600375}
@@ -4380,16 +4400,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4163661477548608543, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: amplitude
-      value: 7.5
+      value: 1.7
       objectReference: {fileID: 0}
     - target: {fileID: 4163661477548608543, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: frequency
-      value: 21.6
+      value: 9.8
       objectReference: {fileID: 0}
     - target: {fileID: 4163661477548608543, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: activateFeature
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4692609479142496533, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 622170778}
     - target: {fileID: 4692609479142496533, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: hitParticle
       value: 
@@ -4469,6 +4493,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 1744060821490988815, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+    - {fileID: 8215880542496933403, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7982400183413955380, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       insertIndex: -1

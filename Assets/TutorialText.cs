@@ -45,8 +45,5 @@ public class TutorialText : MonoBehaviour
         }
     }
 
-    public void OnTriggerExit(Collider other)
-    {
-        tutTextObj.SetActive(false);
-    }
+  
 }

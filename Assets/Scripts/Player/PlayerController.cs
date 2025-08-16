@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     [Header("Moving")]
     public float walkSpeed = 5f;
     public float gravity = 0;
-
+    public float CurrentMovementSpeed { get; private set; }
     [Header("Running")]
     public float runSpeed = 8f;
     public float runStam = 100f;
@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
 
 
 
+        CurrentMovementSpeed = dir.magnitude;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
