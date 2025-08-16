@@ -1,3 +1,9 @@
+//Unity Quick Guide - FPS Head Bob + Stabilization
+//Hero 3D 
+// 1St August 2025
+// Version 3
+// https://youtu.be/5MbR2qJK8Tc?si=y9nO3w1yfmbKK0AN
+
 using UnityEngine;
 using System;
 public class HeadBob : MonoBehaviour

@@ -1,3 +1,5 @@
+//Wrote this by ourself 
+
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,4 +18,8 @@ public class sceneManager : MonoBehaviour
     {
         Application.Quit ();
     }  
+    public void endless()
+    {
+        SceneManager.LoadSceneAsync (3);    
+    }
 }

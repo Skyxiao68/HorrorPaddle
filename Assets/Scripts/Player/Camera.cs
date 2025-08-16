@@ -1,3 +1,14 @@
+//FIRST PERSON MOVEMENT in Unity - FPS Controller
+// Brackeys 
+// 23 July 2025
+//Version 4
+//https://youtu.be/_QajrabyTJc?si=r9QYDLhjzeqO89ci
+
+//FIRST PERSON MOVEMENT in 10 MINUTES - Unity Tutorial
+// Dave /GameDevelopement
+// 23 July 2035
+// Version 4
+//https://youtu.be/f473C43s8nE?si=Jjp9O05Qddu9J2Hs
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;

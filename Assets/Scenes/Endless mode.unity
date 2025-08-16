@@ -156,6 +156,11 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!4 &339600375 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8413718983443067296, guid: 834509610d6fb0146ae5b3bbce1345eb, type: 3}
+  m_PrefabInstance: {fileID: 1711852495682544093}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &403181422 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6854988469818966217, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
@@ -2266,6 +2271,10 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: groundCheck
+      value: 
+      objectReference: {fileID: 339600375}
     - target: {fileID: 5447479533512628407, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: m_Name
       value: Player

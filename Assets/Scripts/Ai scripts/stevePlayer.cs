@@ -1,3 +1,9 @@
+// Wrote this mostly by myself yayyyy
+//Used last semester's scripts for pointers and this video for pointers as well on the 25 July 2025
+// https://youtu.be/jvtFUfJ6CP8?si=v7R0Yft9adPUVVS 
+
+
+
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -152,7 +158,7 @@ public class stevePlayer : MonoBehaviour
         //if (ballPosY < 4) 
        // { 
          // finalY = Mathf.MoveTowards(currentPosY,ballPosY, jump *Time.deltaTime);
-       // }  Im experimentign 
+       // }  Im experimentign with a jump for the ai 
         transform.position = new Vector3(finalX, finalY, finalZ);
 
 
