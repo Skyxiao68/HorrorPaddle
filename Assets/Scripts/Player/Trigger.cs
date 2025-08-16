@@ -11,22 +11,28 @@ using UnityEngine.InputSystem;
 public class ThrowableObject : MonoBehaviour
 {
     public GameObject ball;
-    public float throwForce ;//player
+    public float throwForce;//player
     public Material ballCol;
     public bool throwToTarget = false; //Aight gonn cook here lol this bool is always going to sit at false ma duddeeeeeeeeee 
     public ParticleSystem playerScorePar;
     public ParticleSystem enemyScorePar;
-    public Transform target ;
+    public Transform target;
     public Transform[] enemyTarget;
     private Rigidbody rb;
     public bool enemyCanHit;
     public float hitDistance;//enemy
-     public float throwHeight;//enemy
+    public float throwHeight;//enemy
     public float launchAngle; //ignore   // ps dont ignore
     private ScoreManager scoreBoard;
     private stevePlayer steveAi;
     public bool onMySide;
+    public float minVelocity = 0.5f;
 
+    [Header("Sounds")]
+    public AudioClip hitSound;
+    private AudioSource hitAud;
+    public AudioClip bouceSound;
+    private AudioSource bouceAud;
 
     [Header("Aggressive")]
     public float hitForceAggressive;
@@ -55,12 +61,14 @@ public class ThrowableObject : MonoBehaviour
     }
     private void Start()
     {
-         rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         Physics.gravity = new Vector3(0, -14f, 0);
         scoreBoard = GameObject.FindGameObjectWithTag("Ball").GetComponent<ScoreManager>();
         rb.isKinematic = true;
         steveAi = FindFirstObjectByType<stevePlayer>();
-        
+        hitAud = GetComponent<AudioSource>();
+        bouceAud = GetComponent<AudioSource>();
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -68,19 +76,20 @@ public class ThrowableObject : MonoBehaviour
         {
 
             throwToTarget = true;
-            ballCol.SetColor ("_BaseColor", Color.red);
+            ballCol.SetColor("_BaseColor", Color.red);
 
             if (throwToTarget && inputFire == 1)
             {
+
                 ThrowObjectToTarget(target.position);
                 Debug.Log("Target in Aight");
             }
             else
             {
-               // ThrowObject();
+                // ThrowObject();
             }
         }
-        if (other .CompareTag("Enemy"))
+        if (other.CompareTag("Enemy"))
         {
             enemyCanHit = true;
         }
@@ -98,37 +107,54 @@ public class ThrowableObject : MonoBehaviour
 
     void FixedUpdate()
     {
-        inputFire = inputControl.Gameplay.Fire.ReadValue<float>(); 
+        inputFire = inputControl.Gameplay.Fire.ReadValue<float>();
 
         if (throwToTarget && inputFire == 1)
         {
+            
+
             ThrowObjectToTarget(target.position);
+            hitAud.PlayOneShot(hitSound);
             Debug.Log("Target in Aight");
         }
         if (enemyCanHit == true)
         {
             StanceDetector();
         }
-       // if (rb.linearVelocity.z < 0.5)
+        // if (rb.linearVelocity.z < 0.5)
         //{
-           // onMySide = true;
-       // }
-       // else
-       // {
+        // onMySide = true;
+        // }
+        // else
+        // {
         //    onMySide= false;
         //}  Im working on it 
     }
 
     private void OnTriggerExit()
     {
-        throwToTarget = false; 
+        throwToTarget = false;
         enemyCanHit = false;
-        ballCol.SetColor("_BaseColor",Color.green);
+        ballCol.SetColor("_BaseColor", Color.green);
+
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-       //make a bounce meethod
+        //make a bounce meethod
+        PlayBouceSound(collision.relativeVelocity.magnitude);
+
+    }
+
+    void PlayBouceSound(float impactVelocity)
+    {
+
+        if (impactVelocity > minVelocity && bouceSound != null)
+        {
+            bouceAud.PlayOneShot(bouceSound);
+        }
+
+
     }
 
     public void ThrowObject()

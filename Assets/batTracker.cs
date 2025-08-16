@@ -10,6 +10,8 @@ public class batTracker : MonoBehaviour
     public float swingBackSpeed;
     private Vector3 batCurrentPos;
 
+    
+
     public float maxSwingDisX;
     public float maxSwingDisY;
     public float maxSwingDisZ;
@@ -25,7 +27,7 @@ public class batTracker : MonoBehaviour
         batCurrentPos = transform.localPosition;
         inputControl = new PlayerInputController();
         ThrowableObject throwbool = GetComponent<ThrowableObject>();
-
+        
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -61,6 +63,8 @@ public class batTracker : MonoBehaviour
     void SwingBatOut()
     {
 
+        
+       
 
         Vector3 swingDis = transform.localPosition + transform.forward * swingDistance;
         swingDis.x = Mathf.Clamp(swingDis.x, batCurrentPos.x - maxSwingDisX, batCurrentPos.x + maxSwingDisX);
@@ -69,6 +73,8 @@ public class batTracker : MonoBehaviour
         Vector3 finalSwing = swingDis;
         transform.localPosition = Vector3.MoveTowards(transform.localPosition, finalSwing, swingSpeed);
         batCanSwing = false;
+
+       
     }
     void SwingBatIn()
     {
