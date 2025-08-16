@@ -280,7 +280,7 @@ public class ThrowableObject : MonoBehaviour
     {
 
         Instantiate(playerScorePar,transform.position,transform.rotation);
-
+        bouceAud.PlayOneShot(bouceSound);
         ball.SetActive(false);
         scoreBoard.AddScoreP();
      
@@ -296,6 +296,7 @@ public class ThrowableObject : MonoBehaviour
     void OpponentScored()
     {
         Instantiate(enemyScorePar, transform.position, transform.rotation);
+        bouceAud.PlayOneShot(bouceSound);
         ballCol.SetColor("_BaseColor", Color.green);
         ball.SetActive(false);
         scoreBoard.AddScoreO();
