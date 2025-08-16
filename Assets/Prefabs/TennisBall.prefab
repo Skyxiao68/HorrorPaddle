@@ -14,9 +14,11 @@ GameObject:
   - component: {fileID: 4752458707457376234}
   - component: {fileID: 8671774534184450517}
   - component: {fileID: 739567413521615913}
+  - component: {fileID: 743557530321956346}
+  - component: {fileID: 3987091244654840381}
   m_Layer: 7
   m_Name: TennisBall
-  m_TagString: Untagged
+  m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,8 +121,8 @@ Rigidbody:
   m_GameObject: {fileID: 2339092957302770716}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 1.73
-  m_AngularDrag: 1.26
+  m_Drag: 0.7
+  m_AngularDrag: 1
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -135,8 +137,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 4
-  m_CollisionDetection: 2
+  m_Constraints: 0
+  m_CollisionDetection: 1
 --- !u!114 &739567413521615913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,8 +151,150 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8037734424d4974da92e2f4023be588, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwForce: 0.29
-  throwHeight: 0.01
+  ball: {fileID: 2339092957302770716}
+  throwForce: 3
+  ballCol: {fileID: 2100000, guid: 961ccee7828ba6440a80699794ea2c63, type: 2}
   throwToTarget: 0
-  reboundDelay: 7
+  playerScorePar: {fileID: 5865594945906694870, guid: 9d21ad0e322856c4b91d30987eed2613, type: 3}
+  enemyScorePar: {fileID: 7355020599401852258, guid: bb52802eb2b951c4fa9c6446cecd0639, type: 3}
   target: {fileID: 0}
+  enemyTarget:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  enemyCanHit: 0
+  hitDistance: 1000
+  throwHeight: 20
+  launchAngle: 20
+  onMySide: 0
+  minVelocity: 0.5
+  hitSound: {fileID: 8300000, guid: 294c7d7809e89cd4db39b3ee12b6ce37, type: 3}
+  bouceSound: {fileID: 8300000, guid: 38cd1bab2d3f601439c89c4af9c875d3, type: 3}
+  hitForceAggressive: 70
+  aggressiveArc: 17
+  aggroTargets:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  hitForceDefensive: 50
+  defensiveArc: 25
+  defTargets:
+  - {fileID: 0}
+  - {fileID: 0}
+  inputFire: 0
+--- !u!114 &743557530321956346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2339092957302770716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7495df1359b1f854092ac8cf15f3f46d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerScore: {fileID: 0}
+  opponentScore: {fileID: 0}
+  winScreen: {fileID: 0}
+  loseScreen: {fileID: 0}
+  player: {fileID: 0}
+  pScore: 0
+  oScore: 0
+--- !u!82 &3987091244654840381
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2339092957302770716}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

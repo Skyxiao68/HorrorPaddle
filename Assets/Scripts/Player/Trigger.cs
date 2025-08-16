@@ -1,31 +1,79 @@
+
+
+
+
+
 using NUnit;
 using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
 public class ThrowableObject : MonoBehaviour
 {
-    public float throwForce ;//player
+    public GameObject ball;
+    public float throwForce;//player
     public Material ballCol;
     public bool throwToTarget = false; //Aight gonn cook here lol this bool is always going to sit at false ma duddeeeeeeeeee 
-  
+    public ParticleSystem playerScorePar;
+    public ParticleSystem enemyScorePar;
     public Transform target;
-    public Transform enemyTarget;
+    public Transform[] enemyTarget;
     private Rigidbody rb;
     public bool enemyCanHit;
     public float hitDistance;//enemy
-     public float throwHeight;//enemy
-    public float launchAngle; //ignore
+    public float throwHeight;//enemy
+    public float launchAngle; //ignore   // ps dont ignore
+    private ScoreManager scoreBoard;
+    private stevePlayer steveAi;
+    public bool onMySide;
+    public float minVelocity = 0.5f;
 
+    [Header("Sounds")]
+    public AudioClip hitSound;
+    private AudioSource hitAud;
+    public AudioClip bouceSound;
+    private AudioSource bouceAud;
+
+    [Header("Aggressive")]
+    public float hitForceAggressive;
+    public float aggressiveArc;
+    public Transform[] aggroTargets;
+    [Header("Defensive")]
+    public float hitForceDefensive;
+    public float defensiveArc;
+    public Transform[] defTargets;
+    public PlayerInputController inputControl;
+    public float inputFire;
+
+    private void Awake()
+    {
+        inputControl = new PlayerInputController();
+    }
+
+    private void OnEnable()
+    {
+        inputControl.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputControl.Disable();
+    }
     private void Start()
     {
-         rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         Physics.gravity = new Vector3(0, -14f, 0);
-        
+        scoreBoard = GameObject.FindGameObjectWithTag("Ball").GetComponent<ScoreManager>();
+        rb.isKinematic = true;
+        steveAi = FindFirstObjectByType<stevePlayer>();
+        hitAud = GetComponent<AudioSource>();
+        bouceAud = GetComponent<AudioSource>();
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -33,47 +81,85 @@ public class ThrowableObject : MonoBehaviour
         {
 
             throwToTarget = true;
-            ballCol.SetColor ("_BaseColor", Color.red);
+            ballCol.SetColor("_BaseColor", Color.red);
 
-            if (throwToTarget && Input.GetKeyDown(KeyCode.Mouse0) == true)
+            if (throwToTarget && inputFire == 1)
             {
+
                 ThrowObjectToTarget(target.position);
                 Debug.Log("Target in Aight");
             }
             else
             {
-               // ThrowObject();
+                // ThrowObject();
             }
         }
-        if (other .CompareTag("Enemy"))
+        if (other.CompareTag("Enemy"))
         {
             enemyCanHit = true;
         }
+
+        if (other.CompareTag("PlayerWall"))
+        {
+            OpponentScored();
+        }
+
+        if (other.CompareTag("OpponentWall"))
+        {
+            PlayerScored();
+        }
     }
 
-    private void Update()
+    void FixedUpdate()
     {
-        if (throwToTarget && Input.GetKeyDown(KeyCode.Mouse0) == true)
+        inputFire = inputControl.Gameplay.Fire.ReadValue<float>();
+
+        if (throwToTarget && inputFire == 1)
         {
+            
+
             ThrowObjectToTarget(target.position);
+            hitAud.PlayOneShot(hitSound);
             Debug.Log("Target in Aight");
         }
         if (enemyCanHit == true)
         {
-            EnemyHit(enemyTarget.position);
+            StanceDetector();
         }
+        // if (rb.linearVelocity.z < 0.5)
+        //{
+        // onMySide = true;
+        // }
+        // else
+        // {
+        //    onMySide= false;
+        //}  Im working on it 
     }
 
     private void OnTriggerExit()
     {
-        throwToTarget = false; 
+        throwToTarget = false;
         enemyCanHit = false;
-        ballCol.SetColor("_BaseColor",Color.green);
+        ballCol.SetColor("_BaseColor", Color.green);
+
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-       //make a bounce meethod
+        //make a bounce meethod
+        PlayBouceSound(collision.relativeVelocity.magnitude);
+
+    }
+
+    void PlayBouceSound(float impactVelocity)
+    {
+
+        if (impactVelocity > minVelocity && bouceSound != null)
+        {
+            bouceAud.PlayOneShot(bouceSound);
+        }
+
+
     }
 
     public void ThrowObject()
@@ -96,8 +182,9 @@ public class ThrowableObject : MonoBehaviour
     {
         Rigidbody rb = GetComponent<Rigidbody>();
         GetComponent<Collider>().isTrigger = false;
-
-        Vector3 velocity = CalculateLaunchVelocity(transform.position, targetPosition, launchAngle);
+        Vector3 idkTarget = (rb.position - targetPosition).normalized;
+        Vector3 trueTarget = transform.position + idkTarget; 
+        Vector3 velocity = CalculateLaunchVelocity(trueTarget, targetPosition, launchAngle);
         rb.linearVelocity = velocity;
         rb.isKinematic = false;
         rb.useGravity = true;
@@ -145,11 +232,84 @@ public class ThrowableObject : MonoBehaviour
         launchVelocity = launchVelocity.normalized * Mathf.Clamp(velocity, 5f, 30f);
         return launchVelocity;
     }
-    public void EnemyHit(Vector3 enemyTarget)
+
+
+
+    public void StanceDetector()
+    {
+        if (steveAi == null) return;
+        Debug.Log("The ball stances are working");
+
+        if (steveAi.stance == 1)
+        {
+            int randomTargetA = Random.Range(0, aggroTargets.Length);
+            Aggressive(aggroTargets [randomTargetA].position );
+
+            Debug.Log("Ball is Aggressive ");
+        }
+        if (steveAi.stance == 2)    
+        {
+            int randomTargetD = Random.Range(0,defTargets.Length);
+            Defensive(defTargets[randomTargetD].position);
+            Debug.Log("Ball is Defensive");
+        }
+    }
+    public void EnemyHit(Vector3 enemyTarget) //yeah no sphagetti g=cooooding GGGGEZ Its not even been 2 weeks aahhhhhhhhhhhhhbhhhh scared to remove this lol
     {
         Vector3 velocity = EnemyHitVelocity(transform.position, enemyTarget,throwHeight);
         rb.linearVelocity = velocity;
         rb.isKinematic = false;
         rb.useGravity = true;
+    }
+
+    public void Aggressive(Vector3 aggroTarget)
+    {
+        hitDistance = hitForceAggressive;
+        Vector3 velocity = EnemyHitVelocity(transform.position, aggroTarget, aggressiveArc);
+        rb.linearVelocity = velocity;
+        rb.isKinematic = false;
+        rb.useGravity = true;
+    }
+
+    public void Defensive(Vector3 defTarget)
+    {
+        hitDistance = hitForceDefensive;
+        Vector3 velocity = EnemyHitVelocity(transform.position, defTarget, defensiveArc);
+        rb.linearVelocity = velocity;
+        rb.isKinematic = false;
+        rb.useGravity = true;
+    }
+
+
+    void PlayerScored()
+    {
+
+        Instantiate(playerScorePar,transform.position,transform.rotation);
+        bouceAud.PlayOneShot(bouceSound);
+        ball.SetActive(false);
+        scoreBoard.AddScoreP();
+     
+
+        ball.transform.position = new Vector3 (10,1,-21);
+        rb.isKinematic =true;
+        throwToTarget = false;
+        ball.SetActive (true);
+        
+        
+    }
+
+    void OpponentScored()
+    {
+        Instantiate(enemyScorePar, transform.position, transform.rotation);
+        bouceAud.PlayOneShot(bouceSound);
+        ballCol.SetColor("_BaseColor", Color.green);
+        ball.SetActive(false);
+        scoreBoard.AddScoreO();
+
+        ball.transform.position = new Vector3(9, 1, -21);
+        rb.isKinematic = true;
+        throwToTarget = false;
+        ball.SetActive(true);
+
     }
 }

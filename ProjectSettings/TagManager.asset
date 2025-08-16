@@ -7,6 +7,16 @@ TagManager:
   - Ball
   - ThrowTrigger
   - Enemy
+  - PlayerWall
+  - OpponentWall
+  - Movement
+  - Welcome
+  - BatPickup
+  - PlayWithBall
+  - Rules
+  - NextLevel
+  - LastMin
+  - Removed
   layers:
   - Default
   - TransparentFX
