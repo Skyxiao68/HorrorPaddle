@@ -1,6 +1,18 @@
+//FIRST PERSON MOVEMENT in Unity - FPS Controller
+// Brackeys 
+// 23 July 2025
+//Version 4
+//https://youtu.be/_QajrabyTJc?si=r9QYDLhjzeqO89ci
+
+//FIRST PERSON MOVEMENT in 10 MINUTES - Unity Tutorial
+// Dave /GameDevelopement
+// 23 July 2035
+// Version 4
+//https://youtu.be/f473C43s8nE?si=Jjp9O05Qddu9J2Hs
+
 using System.Collections;
 using System.Diagnostics.Eventing.Reader;
-using UnityEditor.Build;
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
@@ -21,8 +33,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Moving")]
     public float walkSpeed = 5f;
-    public float gravity = -9.81f;
-
+    public float gravity = 0;
+    public float CurrentMovementSpeed { get; private set; }
     [Header("Running")]
     public float runSpeed = 8f;
     public float runStam = 100f;
@@ -54,6 +66,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 velocity;
     private bool isGrounded;
 
+   
 
     private void Awake()
     {
@@ -83,6 +96,7 @@ public class PlayerController : MonoBehaviour
 
 
 
+        CurrentMovementSpeed = dir.magnitude;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
@@ -146,6 +160,7 @@ public class PlayerController : MonoBehaviour
 
 
             DashDirection(inputDir);
+
         }
 
         void DashDirection(Vector3 direction)
@@ -193,7 +208,10 @@ public class PlayerController : MonoBehaviour
             dashTimer = Time.time;
         }
     }
+ 
 }
+
+
         
         
 

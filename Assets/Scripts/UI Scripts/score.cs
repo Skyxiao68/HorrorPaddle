@@ -1,3 +1,10 @@
+//SCORE & UI - How to make a Video Game in Unity (E07)
+//Brackeys
+// 25 July 2025
+// Version 2
+//https://youtu.be/TAGZxRMloyU?si=kx5MgXld_n3wJiKO
+
+
 using TMPro;
 using UnityEngine;
 
@@ -23,8 +30,6 @@ public class ScoreManager : MonoBehaviour
     {
         pScore++;
         UpdateScoreUI();
-     
-
         if (pScore >= 5) 
             PlayerWon();
     }
@@ -33,10 +38,7 @@ public class ScoreManager : MonoBehaviour
     {
         oScore++;
         UpdateScoreUI();
-       
-
-        if (oScore >= 5) 
-            
+        if (oScore >= 5)     
           PlayerLost();
     }
 
@@ -59,9 +61,7 @@ public class ScoreManager : MonoBehaviour
         
       player.AddTorque(Random.onUnitSphere * 500000000000f, ForceMode.Impulse);
 
-
-
-        Invoke(nameof(ShowLoseScreen), 3f);
+   Invoke(nameof(ShowLoseScreen), 3f);
 
 
    

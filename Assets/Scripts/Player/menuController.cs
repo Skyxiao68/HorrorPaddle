@@ -1,3 +1,7 @@
+//We wrote this ourself using the Unity Documentation on Ui for refreshers
+
+
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -12,6 +16,7 @@ public class menuController : MonoBehaviour
     public GameObject paddleBat;
     public GameObject winScreen;
     public GameObject loseScreen;
+    public GameObject storyScene;
 
    public float pause;
     private CharacterController CC;
@@ -88,6 +93,13 @@ public class menuController : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
+    }
+    public void EndStory()
+    {
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        storyScene.SetActive(false);
     }
    
 }
