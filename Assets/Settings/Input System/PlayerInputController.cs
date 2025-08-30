@@ -136,6 +136,24 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChangeLeft"",
+                    ""type"": ""Value"",
+                    ""id"": ""5f01472d-cc2e-42dd-9df7-4b423410cdb6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChangeRight"",
+                    ""type"": ""Value"",
+                    ""id"": ""6c98c888-ed3a-421b-8ace-9634b9ec9b51"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -334,6 +352,50 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7263e967-1df4-45b4-887f-cbc4d6108c7a"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""97ac9a48-c5d3-4fcd-9a97-a080b90d7249"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e2fd8103-646a-45a6-9d4f-8622a2fd0671"",
+                    ""path"": ""<Keyboard>/#(E)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0d239f25-9e77-4d65-bbe6-3153d7ac03f9"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -957,6 +1019,8 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         m_Gameplay_Fire = m_Gameplay.FindAction("Fire", throwIfNotFound: true);
         m_Gameplay_Run = m_Gameplay.FindAction("Run", throwIfNotFound: true);
         m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
+        m_Gameplay_ChangeLeft = m_Gameplay.FindAction("ChangeLeft", throwIfNotFound: true);
+        m_Gameplay_ChangeRight = m_Gameplay.FindAction("ChangeRight", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1056,6 +1120,8 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
     private readonly InputAction m_Gameplay_Fire;
     private readonly InputAction m_Gameplay_Run;
     private readonly InputAction m_Gameplay_Dash;
+    private readonly InputAction m_Gameplay_ChangeLeft;
+    private readonly InputAction m_Gameplay_ChangeRight;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -1087,6 +1153,14 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         /// Provides access to the underlying input action "Gameplay/Dash".
         /// </summary>
         public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/ChangeLeft".
+        /// </summary>
+        public InputAction @ChangeLeft => m_Wrapper.m_Gameplay_ChangeLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/ChangeRight".
+        /// </summary>
+        public InputAction @ChangeRight => m_Wrapper.m_Gameplay_ChangeRight;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1128,6 +1202,12 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
+            @ChangeLeft.started += instance.OnChangeLeft;
+            @ChangeLeft.performed += instance.OnChangeLeft;
+            @ChangeLeft.canceled += instance.OnChangeLeft;
+            @ChangeRight.started += instance.OnChangeRight;
+            @ChangeRight.performed += instance.OnChangeRight;
+            @ChangeRight.canceled += instance.OnChangeRight;
         }
 
         /// <summary>
@@ -1154,6 +1234,12 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
+            @ChangeLeft.started -= instance.OnChangeLeft;
+            @ChangeLeft.performed -= instance.OnChangeLeft;
+            @ChangeLeft.canceled -= instance.OnChangeLeft;
+            @ChangeRight.started -= instance.OnChangeRight;
+            @ChangeRight.performed -= instance.OnChangeRight;
+            @ChangeRight.canceled -= instance.OnChangeRight;
         }
 
         /// <summary>
@@ -1500,6 +1586,20 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDash(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ChangeLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnChangeLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ChangeRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnChangeRight(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
