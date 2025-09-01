@@ -11,13 +11,8 @@
 //https://youtu.be/f473C43s8nE?si=Jjp9O05Qddu9J2Hs
 
 using System.Collections;
-using System.Diagnostics.Eventing.Reader;
-
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Audio;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XR;
 using TMPro;
 
 [RequireComponent(typeof(CharacterController))]
@@ -30,11 +25,11 @@ public class PlayerController : MonoBehaviour
     public float inputRun;
     public float inputDash;
 
-
     [Header("Moving")]
     public float walkSpeed = 5f;
-    public float gravity = 0;
+    public float gravity = -9.81f; // 改为负值，模拟真实重力
     public float CurrentMovementSpeed { get; private set; }
+
     [Header("Running")]
     public float runSpeed = 8f;
     public float runStam = 100f;
@@ -42,8 +37,6 @@ public class PlayerController : MonoBehaviour
     public float stamDeplete = 20f;
     public float stamRecover = 15f;
     public bool isRunning = false;
-
-    //values for the stamina bar
 
     [Header("Dash")]
     public float dashDistance = 3f;
@@ -53,7 +46,7 @@ public class PlayerController : MonoBehaviour
     public float playerHeight = 2f;
     public LayerMask obsticaleLayers;
 
-    [Header("GroundCHeck")]
+    [Header("GroundCheck")]
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
@@ -65,8 +58,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 dir;
     private Vector3 velocity;
     private bool isGrounded;
-
-   
 
     private void Awake()
     {
@@ -83,25 +74,20 @@ public class PlayerController : MonoBehaviour
     {
         inputControl.Disable();
     }
+
     void Start()
     {
         currentSpeed = walkSpeed;
-
     }
-
 
     void Update()
     {
-
-
-
-
         CurrentMovementSpeed = dir.magnitude;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
         {
-            velocity.y = -2f;
+            velocity.y = -2f; // 轻微向下的力确保角色保持在地面上
         }
 
         inputDirection = inputControl.Gameplay.Move.ReadValue<Vector2>();
@@ -112,7 +98,6 @@ public class PlayerController : MonoBehaviour
         CC.Move(dir * Time.deltaTime);
 
         inputRun = inputControl.Gameplay.Run.ReadValue<float>();
-
 
         if (inputRun == 1 && runStam > 20f)
         {
@@ -126,7 +111,7 @@ public class PlayerController : MonoBehaviour
             currentSpeed = walkSpeed;
         }
 
-
+        // 应用重力
         velocity.y += gravity * Time.deltaTime;
         CC.Move(velocity * Time.deltaTime);
 
@@ -139,11 +124,9 @@ public class PlayerController : MonoBehaviour
         {
             runStam += stamRecover * Time.deltaTime;
             runStam = Mathf.Min(maxStam, runStam);
-
         }
 
         inputDash = inputControl.Gameplay.Dash.ReadValue<float>();
-
 
         if (inputDash == 1 && Time.time > dashTimer + dashCooldown)
         {
@@ -158,78 +141,62 @@ public class PlayerController : MonoBehaviour
                 inputDir = transform.TransformDirection(inputDir);
             }
 
-
             DashDirection(inputDir);
-
-        }
-
-        void DashDirection(Vector3 direction)
-        {
-            Vector3 dashPosition = transform.position + direction * dashDistance;
-
-            if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, direction, dashDistance, obsticaleLayers))
-            {
-
-
-                StartCoroutine(ExecuteDash(dashPosition));
-            }
-            else
-            {
-                Debug.Log("Obsticales in the way, cannot dash");
-            }       
-        }
-        
-       
-
-        IEnumerator ExecuteDash(Vector3 targetPosition)
-        {
-
-
-            yield return new WaitForSeconds(0.1f);
-
-
-            if (CC != null)
-            {
-                CC.enabled = false;
-            }
-
-
-            transform.position = targetPosition;
-
-
-            if (CC != null)
-            {
-                CC.enabled = true;
-            }
-
-
-
-
-            dashTimer = Time.time;
         }
     }
- 
+
+    void DashDirection(Vector3 direction)
+    {
+        Vector3 dashPosition = transform.position + direction * dashDistance;
+
+        if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, direction, dashDistance, obsticaleLayers))
+        {
+            StartCoroutine(ExecuteDash(dashPosition));
+        }
+        else
+        {
+            Debug.Log("Obstacles in the way, cannot dash");
+        }
+    }
+
+    IEnumerator ExecuteDash(Vector3 targetPosition)
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        if (CC != null)
+        {
+            CC.enabled = false;
+        }
+
+        transform.position = targetPosition;
+
+        if (CC != null)
+        {
+            CC.enabled = true;
+        }
+
+        dashTimer = Time.time;
+    }
 }
 
 
-        
-        
-
-        
-    
-
-
-
-
-   
-    
 
 
 
 
 
 
-  
-   
-       
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
