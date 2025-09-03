@@ -154,6 +154,15 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""TriggerAnimation"",
+                    ""type"": ""Button"",
+                    ""id"": ""881e85ca-797e-4f30-bc04-90e6d1ea1702"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -396,6 +405,28 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ChangeRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93cbc90f-a19c-4bdc-80be-d773e3d39a28"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TriggerAnimation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ad504077-32da-43a6-a77e-b2f96e8a5e5b"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TriggerAnimation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1021,6 +1052,7 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
         m_Gameplay_ChangeLeft = m_Gameplay.FindAction("ChangeLeft", throwIfNotFound: true);
         m_Gameplay_ChangeRight = m_Gameplay.FindAction("ChangeRight", throwIfNotFound: true);
+        m_Gameplay_TriggerAnimation = m_Gameplay.FindAction("TriggerAnimation", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1122,6 +1154,7 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
     private readonly InputAction m_Gameplay_Dash;
     private readonly InputAction m_Gameplay_ChangeLeft;
     private readonly InputAction m_Gameplay_ChangeRight;
+    private readonly InputAction m_Gameplay_TriggerAnimation;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -1161,6 +1194,10 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         /// Provides access to the underlying input action "Gameplay/ChangeRight".
         /// </summary>
         public InputAction @ChangeRight => m_Wrapper.m_Gameplay_ChangeRight;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/TriggerAnimation".
+        /// </summary>
+        public InputAction @TriggerAnimation => m_Wrapper.m_Gameplay_TriggerAnimation;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1208,6 +1245,9 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
             @ChangeRight.started += instance.OnChangeRight;
             @ChangeRight.performed += instance.OnChangeRight;
             @ChangeRight.canceled += instance.OnChangeRight;
+            @TriggerAnimation.started += instance.OnTriggerAnimation;
+            @TriggerAnimation.performed += instance.OnTriggerAnimation;
+            @TriggerAnimation.canceled += instance.OnTriggerAnimation;
         }
 
         /// <summary>
@@ -1240,6 +1280,9 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
             @ChangeRight.started -= instance.OnChangeRight;
             @ChangeRight.performed -= instance.OnChangeRight;
             @ChangeRight.canceled -= instance.OnChangeRight;
+            @TriggerAnimation.started -= instance.OnTriggerAnimation;
+            @TriggerAnimation.performed -= instance.OnTriggerAnimation;
+            @TriggerAnimation.canceled -= instance.OnTriggerAnimation;
         }
 
         /// <summary>
@@ -1600,6 +1643,13 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnChangeRight(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TriggerAnimation" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTriggerAnimation(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

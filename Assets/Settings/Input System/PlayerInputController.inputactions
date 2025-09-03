@@ -68,6 +68,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "TriggerAnimation",
+                    "type": "Button",
+                    "id": "881e85ca-797e-4f30-bc04-90e6d1ea1702",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -310,6 +319,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "ChangeRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "93cbc90f-a19c-4bdc-80be-d773e3d39a28",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TriggerAnimation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ad504077-32da-43a6-a77e-b2f96e8a5e5b",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TriggerAnimation",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
