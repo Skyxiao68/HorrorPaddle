@@ -2,8 +2,21 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
-  tags: []
+  serializedVersion: 3
+  tags:
+  - Ball
+  - ThrowTrigger
+  - Enemy
+  - PlayerWall
+  - OpponentWall
+  - Movement
+  - Welcome
+  - BatPickup
+  - PlayWithBall
+  - Rules
+  - NextLevel
+  - LastMin
+  - Removed
   layers:
   - Default
   - TransparentFX
@@ -11,10 +24,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Ground
+  - enviroment
+  - 'Ball '
+  - Player
   - 
   - 
   - 
@@ -50,27 +63,3 @@ TagManager:
   - Light Layer 5
   - Light Layer 6
   - Light Layer 7
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
