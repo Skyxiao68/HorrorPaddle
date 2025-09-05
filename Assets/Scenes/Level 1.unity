@@ -645,6 +645,7 @@ MonoBehaviour:
   directionSwitchLeft: 0
   directionSwitchRight: 0
   ishitting: 0
+  currentState: 0
 --- !u!1 &59121260
 GameObject:
   m_ObjectHideFlags: 0
@@ -1931,11 +1932,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4163661477548608543, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: amplitude
-      value: 1
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 4163661477548608543, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: frequency
-      value: 8.5
+      value: 22.5
       objectReference: {fileID: 0}
     - target: {fileID: 4552723571306424828, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: m_AnchoredPosition.x

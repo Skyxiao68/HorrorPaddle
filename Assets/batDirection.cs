@@ -16,7 +16,7 @@ public class batDirection : MonoBehaviour
 
     private bool leftDirectionPressed;
     private bool rightDirectionPressed;
-
+    private bool canHit;
     private enum batState { Forward, Right, Left }
 
     [SerializeField] private batState currentState = batState.Forward;
@@ -55,9 +55,11 @@ public class batDirection : MonoBehaviour
     }
     void InputHandler()
     {
-        if (directionSwitchRight == 1)
+        if (directionSwitchRight == 1 && rightDirectionPressed==false)
         {
+            rightDirectionPressed = true;
             currentState = currentState switch
+            
             {
                 batState.Forward => batState.Right,
                 batState.Right => batState.Left,
@@ -65,20 +67,30 @@ public class batDirection : MonoBehaviour
 
 
             };
+       
 
         }
+        if (directionSwitchRight == 0)
+            {
+                rightDirectionPressed = false;
+            }
 
-
-        else if (directionSwitchLeft == 1)
+        if (directionSwitchLeft == 1 && leftDirectionPressed == false)
         {
+            leftDirectionPressed = true;
             currentState = currentState switch
             {
                 batState.Forward => batState.Left,
                 batState.Left => batState.Right,
                 batState.Right => batState.Forward,
             };
-        }
 
+           
+        }
+             if (directionSwitchLeft == 0)
+            {
+                leftDirectionPressed = false;
+            }
         
     }
     void StateHandler()
@@ -87,31 +99,39 @@ public class batDirection : MonoBehaviour
         {
             case batState.Forward:
                 bat.SetColor("_BaseColor", Color.green);
-                if (ishitting == 1) 
+                if (ishitting == 1 && canHit==true) 
                 {
                     animator.SetTrigger("Forward");
+                    canHit = false;
                 }
-                animator.SetTrigger("Idle");
+              
                 break;
 
                 case batState.Right:
                 bat.SetColor("_BaseColor", Color.blue);
-                if (ishitting == 1)
+                if (ishitting == 1 && canHit == true)
                 {
                     animator.SetTrigger("Right 1");
+                    canHit=false;
                 }
-                animator.SetTrigger("Idle");
+               
                 break;
                 case batState.Left:
                 bat.SetColor("_BaseColor", Color.magenta);
-                if (ishitting == 1)
+                if (ishitting == 1 && canHit == true)
                 {
                     animator.SetTrigger("Left 1");
+                    canHit=false;
                 }
-                animator.SetTrigger("Idle");
+               
                 break;
 
 
+        }
+        if (ishitting == 0)
+        {
+            animator.SetTrigger("Idle");
+            canHit = true;
         }
     }
 }
