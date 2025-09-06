@@ -17,9 +17,9 @@ public class batDirection : MonoBehaviour
     private bool leftDirectionPressed;
     private bool rightDirectionPressed;
     private bool canHit;
-    private enum batState { Forward, Right, Left }
+    public enum batState { Forward, Right, Left }
 
-    [SerializeField] private batState currentState = batState.Forward;
+   public batState currentState = batState.Forward;
 
     void Awake()
     {

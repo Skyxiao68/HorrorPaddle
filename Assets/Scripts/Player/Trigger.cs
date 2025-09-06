@@ -21,7 +21,9 @@ public class ThrowableObject : MonoBehaviour
     public bool throwToTarget = false; //Aight gonn cook here lol this bool is always going to sit at false ma duddeeeeeeeeee 
     public ParticleSystem playerScorePar;
     public ParticleSystem enemyScorePar;
-    public Transform target;
+    public Transform greenTarget;
+    public Transform blueTarget;
+    public Transform magentaTarget;
     public Transform[] enemyTarget;
     private Rigidbody rb;
     public bool enemyCanHit;
@@ -30,6 +32,9 @@ public class ThrowableObject : MonoBehaviour
     public float launchAngle; //ignore   // ps dont ignore
     private ScoreManager scoreBoard;
     private stevePlayer steveAi;
+    private batDirection batStance;
+    private batDirection.batState currentBatState;
+    public Transform currentTarget;
     public bool onMySide;
     public float minVelocity = 0.5f;
 
@@ -73,6 +78,7 @@ public class ThrowableObject : MonoBehaviour
         steveAi = FindFirstObjectByType<stevePlayer>();
         hitAud = GetComponent<AudioSource>();
         bouceAud = GetComponent<AudioSource>();
+        batStance = FindFirstObjectByType<batDirection>();
 
     }
     private void OnTriggerEnter(Collider other)
@@ -86,7 +92,7 @@ public class ThrowableObject : MonoBehaviour
             if (throwToTarget && inputFire == 1)
             {
 
-                ThrowObjectToTarget(target.position);
+                ThrowObjectToTarget(currentTarget.position);
                 Debug.Log("Target in Aight");
             }
             else
@@ -112,13 +118,19 @@ public class ThrowableObject : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (batStance != null)
+        {
+            currentBatState = batStance.currentState;
+            PlayerBat();
+        }
+
         inputFire = inputControl.Gameplay.Fire.ReadValue<float>();
 
         if (throwToTarget && inputFire == 1)
         {
             
-
-            ThrowObjectToTarget(target.position);
+            
+            ThrowObjectToTarget(currentTarget.position);
             hitAud.PlayOneShot(hitSound);
             Debug.Log("Target in Aight");
         }
@@ -126,14 +138,21 @@ public class ThrowableObject : MonoBehaviour
         {
             StanceDetector();
         }
-        // if (rb.linearVelocity.z < 0.5)
-        //{
-        // onMySide = true;
-        // }
-        // else
-        // {
-        //    onMySide= false;
-        //}  Im working on it 
+       
+    }
+    void PlayerBat()
+    {
+        switch (currentBatState)
+        {
+            case batDirection.batState.Forward:
+                currentTarget = greenTarget; break;
+
+            case batDirection.batState.Left:
+                currentTarget = magentaTarget; break;
+
+            case batDirection.batState.Right:
+                currentTarget = blueTarget; break;
+        }
     }
 
     private void OnTriggerExit()
