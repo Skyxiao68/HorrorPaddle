@@ -16,12 +16,12 @@ public class sarahPlayer : MonoBehaviour
     public Rigidbody ball;
 
 
-
+    private bool offGround;
     public int jumpStance;
     public float stanceTimer;
     private float lastSwitch = Mathf.Infinity;
     private Vector3 ballHit;
-    //public Material aiMaterial;
+    public Material aiMaterial;
 
     private bool canSwitchStance;
     private ThrowableObject theBallStuck;
@@ -92,11 +92,6 @@ public class sarahPlayer : MonoBehaviour
 
     void Update()
     {
-        if (ball.position.y >transform.position.y +jumpCondition)
-
-        {
-            StartCoroutine(Jump());
-        }
 
         if (jumpStance == 1)
         {
@@ -118,39 +113,48 @@ public class sarahPlayer : MonoBehaviour
 
     void Aggreseive()
     {
+        jumpHeight = 7;
+        jumpTime = 7;
+        jumpCondition = 2.5f;
+        aiMaterial.SetColor("_BaseColor", Color.red);
 
-        if (isJumping == true)
-        {
-            return; //Imma make him move in the airrrrr
-        }
-       // aiMaterial.SetColor("_BaseColor", Color.red);
+       
 
         float currentPosX = transform.position.x;
         float ballPosX = ball.position.x;
-
-
         float finalX = Mathf.MoveTowards(currentPosX, ballPosX, moveSpeedA * Time.deltaTime);
 
         float currentPosZ = transform.position.z;
-
         float ballposZ = ball.position.z;
         float predictionTimeZ = apredictionZ;
         float ballVelocityZ = ball.linearVelocity.z;
         float predictedBallZ = ball.position.z + (ballVelocityZ * predictionTimeZ);
         float finalZ = Mathf.MoveTowards(currentPosZ, predictedBallZ, moveSpeedA * Time.deltaTime);
 
-        transform.position = new Vector3(finalX, 0, finalZ);
+
+        float currentY = transform.position.y + 2;
+        float targetY = ball.position.y + 4; 
+        float finalY = Mathf.MoveTowards(currentY, targetY, moveSpeedA * Time.deltaTime);
+
+        transform.position = new Vector3(finalX, finalY, finalZ);
 
     }
 
 
     void Defensive()
     {
-        if (isJumping == true)
+        jumpHeight = 2;
+        jumpTime =  2f;
+        jumpCondition = 2.5f;
+        
+
+
+        if (ball.position.y > transform.position.y + jumpCondition)
+
         {
-            return;
+            StartCoroutine(Jump());
         }
-        //aiMaterial.SetColor("_BaseColor", Color.blue);
+        aiMaterial.SetColor("_BaseColor", Color.blue);
 
         float currentPosX = transform.position.x;
         float ballPosX = ball.position.x;
@@ -172,7 +176,9 @@ public class sarahPlayer : MonoBehaviour
     }
     public IEnumerator Jump()
     {
+        
         isJumping=true;
+        offGround = true;
         float timer = 0;
         Vector3 startPosition = transform.position;
 
@@ -187,12 +193,12 @@ public class sarahPlayer : MonoBehaviour
 
             yield return null;
         }
-        transform.position = new Vector3 (transform.position.x,0,transform.position.z); // I set Y to 0 because i dont want the enemy teleporting weirdly 
+        transform.position = new Vector3 (transform.position.x,transform.position.y,transform.position.z); 
 
      
 
       
-
+        offGround = false;
         isJumping = false;
 
         

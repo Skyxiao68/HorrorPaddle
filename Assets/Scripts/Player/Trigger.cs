@@ -26,7 +26,7 @@ public class ThrowableObject : MonoBehaviour
     public Transform magentaTarget;
     public Transform[] enemyTarget;
     private Rigidbody rb;
-    public bool enemyCanHit;
+
     public float hitDistance;//enemy
     public float throwHeight;//enemy
     public float launchAngle; //ignore   // ps dont ignore
@@ -56,6 +56,7 @@ public class ThrowableObject : MonoBehaviour
     public PlayerInputController inputControl;
     public float inputFire;
 
+    public bool iWantScore;
     private void Awake()
     {
         inputControl = new PlayerInputController();
@@ -104,7 +105,18 @@ public class ThrowableObject : MonoBehaviour
         }
         if (other.CompareTag("Enemy"))
         {
-            enemyCanHit = true;
+            // Instead of just setting a bool, find out which AI script is on the enemy that hit us.
+            stevePlayer hittingSteve = other.GetComponent<stevePlayer>();
+            sarahPlayer hittingSarah = other.GetComponent<sarahPlayer>();
+
+            if (hittingSteve != null)
+            {
+                UseEnemyAi (hittingSteve.stance);
+            }
+            else if (hittingSarah != null)
+            {
+                UseEnemyAi (hittingSarah.jumpStance);
+            }
         }
 
         if (other.CompareTag("PlayerWall"))
@@ -136,10 +148,7 @@ public class ThrowableObject : MonoBehaviour
             hitAud.PlayOneShot(hitSound);
             Debug.Log("Target in Aight");
         }
-        if (enemyCanHit == true)
-        {
-            StanceDetector();
-        }
+      
        
     }
     void PlayerBat()
@@ -160,7 +169,7 @@ public class ThrowableObject : MonoBehaviour
     private void OnTriggerExit()
     {
         throwToTarget = false;
-        enemyCanHit = false;
+     
         ballCol.SetColor("_BaseColor", Color.green);
 
     }
@@ -256,44 +265,26 @@ public class ThrowableObject : MonoBehaviour
 
 
 
-    public void StanceDetector()
+   public void UseEnemyAi(int enemyStance)
     {
-        if (steveAi == null) return;
-        Debug.Log("The ball stances are working");
+        Debug.Log("An enemy hit the ball! Their stance is: " + enemyStance);
 
-        if (steveAi.stance == 1)
-        {
-            int randomTargetA = Random.Range(0, aggroTargets.Length);
-            Aggressive(aggroTargets [randomTargetA].position );
-
-            Debug.Log("Ball is Aggressive ");
-        }
-        if (steveAi.stance == 2)    
-        {
-            int randomTargetD = Random.Range(0,defTargets.Length);
-            Defensive(defTargets[randomTargetD].position);
-            Debug.Log("Ball is Defensive");
-        }
-
-        if (sarahAi == null) return;
-        Debug.Log("The ball stances are working");
-
-        if (sarahAi.jumpStance == 1)
+        if (enemyStance == 1) // Aggressive Stance
         {
             int randomTargetA = Random.Range(0, aggroTargets.Length);
             Aggressive(aggroTargets[randomTargetA].position);
-
             Debug.Log("Ball is Aggressive ");
         }
-        if (sarahAi.jumpStance == 2)
+        else if (enemyStance == 2) // Defensive Stance
         {
             int randomTargetD = Random.Range(0, defTargets.Length);
             Defensive(defTargets[randomTargetD].position);
             Debug.Log("Ball is Defensive");
         }
-
-
     }
+
+
+    
     public void EnemyHit(Vector3 enemyTarget) //yeah no sphagetti g=cooooding GGGGEZ Its not even been 2 weeks aahhhhhhhhhhhhhbhhhh scared to remove this lol
     {
         Vector3 velocity = EnemyHitVelocity(transform.position, enemyTarget,throwHeight);
@@ -323,7 +314,7 @@ public class ThrowableObject : MonoBehaviour
 
     void PlayerScored()
     {
-
+        if (iWantScore ==false) { return; }
         Instantiate(playerScorePar,transform.position,transform.rotation);
         bouceAud.PlayOneShot(bouceSound);
         ball.SetActive(false);
@@ -340,6 +331,7 @@ public class ThrowableObject : MonoBehaviour
 
     void OpponentScored()
     {
+        if (iWantScore ==false) {return; }
         Instantiate(enemyScorePar, transform.position, transform.rotation);
         bouceAud.PlayOneShot(bouceSound);
         ballCol.SetColor("_BaseColor", Color.green);
