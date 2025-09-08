@@ -32,6 +32,7 @@ public class ThrowableObject : MonoBehaviour
     public float launchAngle; //ignore   // ps dont ignore
     private ScoreManager scoreBoard;
     private stevePlayer steveAi;
+    private sarahPlayer sarahAi;
     private batDirection batStance;
     private batDirection.batState currentBatState;
     public Transform currentTarget;
@@ -76,6 +77,7 @@ public class ThrowableObject : MonoBehaviour
         scoreBoard = GameObject.FindGameObjectWithTag("Ball").GetComponent<ScoreManager>();
         rb.isKinematic = true;
         steveAi = FindFirstObjectByType<stevePlayer>();
+        sarahAi = FindFirstObjectByType<sarahPlayer>();
         hitAud = GetComponent<AudioSource>();
         bouceAud = GetComponent<AudioSource>();
         batStance = FindFirstObjectByType<batDirection>();
@@ -272,6 +274,25 @@ public class ThrowableObject : MonoBehaviour
             Defensive(defTargets[randomTargetD].position);
             Debug.Log("Ball is Defensive");
         }
+
+        if (sarahAi == null) return;
+        Debug.Log("The ball stances are working");
+
+        if (sarahAi.jumpStance == 1)
+        {
+            int randomTargetA = Random.Range(0, aggroTargets.Length);
+            Aggressive(aggroTargets[randomTargetA].position);
+
+            Debug.Log("Ball is Aggressive ");
+        }
+        if (sarahAi.jumpStance == 2)
+        {
+            int randomTargetD = Random.Range(0, defTargets.Length);
+            Defensive(defTargets[randomTargetD].position);
+            Debug.Log("Ball is Defensive");
+        }
+
+
     }
     public void EnemyHit(Vector3 enemyTarget) //yeah no sphagetti g=cooooding GGGGEZ Its not even been 2 weeks aahhhhhhhhhhhhhbhhhh scared to remove this lol
     {
