@@ -61,6 +61,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "ChangeForward",
+                    "type": "Value",
+                    "id": "3fd085d9-7ef8-4b29-8204-e14639704930",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "ChangeRight",
                     "type": "Value",
                     "id": "6c98c888-ed3a-421b-8ace-9634b9ec9b51",
@@ -281,7 +290,7 @@
                 {
                     "name": "",
                     "id": "7263e967-1df4-45b4-887f-cbc4d6108c7a",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -292,7 +301,7 @@
                 {
                     "name": "",
                     "id": "97ac9a48-c5d3-4fcd-9a97-a080b90d7249",
-                    "path": "<Gamepad>/leftShoulder",
+                    "path": "<Gamepad>/dpad/left",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -303,7 +312,7 @@
                 {
                     "name": "",
                     "id": "e2fd8103-646a-45a6-9d4f-8622a2fd0671",
-                    "path": "<Keyboard>/#(E)",
+                    "path": "<Keyboard>/3",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -314,7 +323,7 @@
                 {
                     "name": "",
                     "id": "0d239f25-9e77-4d65-bbe6-3153d7ac03f9",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/dpad/right",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -341,6 +350,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "TriggerAnimation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "077f00d2-de1c-42f2-859e-e8521688c055",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "ChangeForward",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6ef4dc72-bf47-4558-804e-69e97607230d",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "ChangeForward",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

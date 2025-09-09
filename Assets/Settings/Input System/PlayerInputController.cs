@@ -147,6 +147,15 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""ChangeForward"",
+                    ""type"": ""Value"",
+                    ""id"": ""3fd085d9-7ef8-4b29-8204-e14639704930"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""ChangeRight"",
                     ""type"": ""Value"",
                     ""id"": ""6c98c888-ed3a-421b-8ace-9634b9ec9b51"",
@@ -367,7 +376,7 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""7263e967-1df4-45b4-887f-cbc4d6108c7a"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -378,7 +387,7 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""97ac9a48-c5d3-4fcd-9a97-a080b90d7249"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""path"": ""<Gamepad>/dpad/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -389,7 +398,7 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""e2fd8103-646a-45a6-9d4f-8622a2fd0671"",
-                    ""path"": ""<Keyboard>/#(E)"",
+                    ""path"": ""<Keyboard>/3"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -400,7 +409,7 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""0d239f25-9e77-4d65-bbe6-3153d7ac03f9"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/dpad/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -427,6 +436,28 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""TriggerAnimation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""077f00d2-de1c-42f2-859e-e8521688c055"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ChangeForward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ef4dc72-bf47-4558-804e-69e97607230d"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""ChangeForward"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1051,6 +1082,7 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         m_Gameplay_Run = m_Gameplay.FindAction("Run", throwIfNotFound: true);
         m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
         m_Gameplay_ChangeLeft = m_Gameplay.FindAction("ChangeLeft", throwIfNotFound: true);
+        m_Gameplay_ChangeForward = m_Gameplay.FindAction("ChangeForward", throwIfNotFound: true);
         m_Gameplay_ChangeRight = m_Gameplay.FindAction("ChangeRight", throwIfNotFound: true);
         m_Gameplay_TriggerAnimation = m_Gameplay.FindAction("TriggerAnimation", throwIfNotFound: true);
         // UI
@@ -1153,6 +1185,7 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
     private readonly InputAction m_Gameplay_Run;
     private readonly InputAction m_Gameplay_Dash;
     private readonly InputAction m_Gameplay_ChangeLeft;
+    private readonly InputAction m_Gameplay_ChangeForward;
     private readonly InputAction m_Gameplay_ChangeRight;
     private readonly InputAction m_Gameplay_TriggerAnimation;
     /// <summary>
@@ -1190,6 +1223,10 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         /// Provides access to the underlying input action "Gameplay/ChangeLeft".
         /// </summary>
         public InputAction @ChangeLeft => m_Wrapper.m_Gameplay_ChangeLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/ChangeForward".
+        /// </summary>
+        public InputAction @ChangeForward => m_Wrapper.m_Gameplay_ChangeForward;
         /// <summary>
         /// Provides access to the underlying input action "Gameplay/ChangeRight".
         /// </summary>
@@ -1242,6 +1279,9 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
             @ChangeLeft.started += instance.OnChangeLeft;
             @ChangeLeft.performed += instance.OnChangeLeft;
             @ChangeLeft.canceled += instance.OnChangeLeft;
+            @ChangeForward.started += instance.OnChangeForward;
+            @ChangeForward.performed += instance.OnChangeForward;
+            @ChangeForward.canceled += instance.OnChangeForward;
             @ChangeRight.started += instance.OnChangeRight;
             @ChangeRight.performed += instance.OnChangeRight;
             @ChangeRight.canceled += instance.OnChangeRight;
@@ -1277,6 +1317,9 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
             @ChangeLeft.started -= instance.OnChangeLeft;
             @ChangeLeft.performed -= instance.OnChangeLeft;
             @ChangeLeft.canceled -= instance.OnChangeLeft;
+            @ChangeForward.started -= instance.OnChangeForward;
+            @ChangeForward.performed -= instance.OnChangeForward;
+            @ChangeForward.canceled -= instance.OnChangeForward;
             @ChangeRight.started -= instance.OnChangeRight;
             @ChangeRight.performed -= instance.OnChangeRight;
             @ChangeRight.canceled -= instance.OnChangeRight;
@@ -1636,6 +1679,13 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnChangeLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ChangeForward" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnChangeForward(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "ChangeRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

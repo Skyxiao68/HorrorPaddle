@@ -12,10 +12,12 @@ public class batDirection : MonoBehaviour
     public int direction;
     public float directionSwitchLeft;
     public float directionSwitchRight;
+    public float directionSwitchForward;
     public float ishitting;
 
     private bool leftDirectionPressed;
     private bool rightDirectionPressed;
+    private bool forwardDirectionPressed;
     private bool canHit;
     public enum batState { Forward, Right, Left }
 
@@ -51,6 +53,7 @@ public class batDirection : MonoBehaviour
 
         directionSwitchLeft = directionControl.Gameplay.ChangeLeft.ReadValue<float>();
         directionSwitchRight = directionControl.Gameplay.ChangeRight.ReadValue<float>();
+        directionSwitchForward =directionControl.Gameplay.ChangeForward.ReadValue<float>();
 
     }
     void InputHandler()
@@ -58,17 +61,7 @@ public class batDirection : MonoBehaviour
         if (directionSwitchRight == 1 && rightDirectionPressed==false)
         {
             rightDirectionPressed = true;
-            currentState = currentState switch
-            
-            {
-                batState.Forward => batState.Right,
-                batState.Right => batState.Left,
-                batState.Left => batState.Forward,
-
-
-            };
-       
-
+            currentState = batState.Right;
         }
         if (directionSwitchRight == 0)
             {
@@ -78,19 +71,24 @@ public class batDirection : MonoBehaviour
         if (directionSwitchLeft == 1 && leftDirectionPressed == false)
         {
             leftDirectionPressed = true;
-            currentState = currentState switch
-            {
-                batState.Forward => batState.Left,
-                batState.Left => batState.Right,
-                batState.Right => batState.Forward,
-            };
-
+            currentState = batState.Left;
            
         }
-             if (directionSwitchLeft == 0)
-            {
+        if (directionSwitchLeft == 0)
+        {
                 leftDirectionPressed = false;
-            }
+        }
+
+
+        if (directionSwitchForward == 1 && forwardDirectionPressed == false)
+        {
+            forwardDirectionPressed = true;
+            currentState = batState.Forward;
+        }
+        if (directionSwitchForward == 0)
+        {
+            forwardDirectionPressed = false;
+        }
         
     }
     void StateHandler()
