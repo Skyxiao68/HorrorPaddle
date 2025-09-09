@@ -57,8 +57,13 @@ public class PlayerController : MonoBehaviour
     private float xMove, yMove;
     private Vector3 dir;
     private Vector3 velocity;
-    private bool isGrounded;
+    public bool isGrounded;
 
+    [Header("Jump")]
+    public float jumpHieght = 0.5f;
+    public float buttonHoldThreshold = 0.5f;
+    private float buttonHoldTimer = 0f;
+    private bool dashButtonHeld = false;
     private void Awake()
     {
         inputControl = new PlayerInputController();
@@ -126,23 +131,48 @@ public class PlayerController : MonoBehaviour
             runStam = Mathf.Min(maxStam, runStam);
         }
 
-        inputDash = inputControl.Gameplay.Dash.ReadValue<float>();
+        //inputDash = inputControl.Gameplay.Dash.ReadValue<float>();
+        float currentDashInput = inputControl.Gameplay.Dash.ReadValue<float>();
 
-        if (inputDash == 1 && Time.time > dashTimer + dashCooldown)
-        {
-            Vector3 inputDir = new Vector3((xMove), 0f, yMove).normalized;
+        if (currentDashInput == 1 && dashButtonHeld == false)
+        
+        { dashButtonHeld = true;
+            buttonHoldTimer = 0f;
 
-            if (inputDir == Vector3.zero)
-            {
-                inputDir = transform.forward;
-            }
-            else
-            {
-                inputDir = transform.TransformDirection(inputDir);
-            }
-
-            DashDirection(inputDir);
         }
+
+            if (dashButtonHeld) {buttonHoldTimer += Time.deltaTime;}
+
+            if (currentDashInput == 0 && dashButtonHeld == true)
+            {
+                dashButtonHeld = false;
+                if (buttonHoldTimer < buttonHoldThreshold)
+                {
+                    Dash();
+                }
+                else
+                {
+                    Jump();
+                }
+            }
+
+       
+
+       // if (inputDash == 1 && Time.time > dashTimer + dashCooldown)
+       // {
+         //   Vector3 inputDir = new Vector3((xMove), 0f, yMove).normalized;
+
+           // if (inputDir == Vector3.zero)
+            //{
+             //   inputDir = transform.forward;
+         //   }
+         //   else                                                      OLD Dash code combining to make a jump
+          //  {
+          //      inputDir = transform.TransformDirection(inputDir);
+          //  }
+
+          //  DashDirection(inputDir);
+       // }
     }
 
     void DashDirection(Vector3 direction)
@@ -161,27 +191,50 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator ExecuteDash(Vector3 targetPosition)
     {
-        yield return new WaitForSeconds(0.1f);
+        float dashDuration= 0.2f;
+        float elapsedTime = 0f;
+        Vector3 startPosition = transform.position;
 
-        if (CC != null)
-        {
-            CC.enabled = false;
+
+        while (elapsedTime < dashDuration)
+
+        { 
+        elapsedTime += Time.deltaTime;
+
+            float fraction = elapsedTime / dashDuration;
+
+            transform.position = Vector3.Lerp(startPosition, targetPosition, fraction);
+            yield return null;
+
+        
         }
 
         transform.position = targetPosition;
-
-        if (CC != null)
-        {
-            CC.enabled = true;
-        }
-
         dashTimer = Time.time;
     }
+    void Jump()
+        {
+            if (isGrounded)
+            {
+                velocity.y = Mathf.Sqrt(2 * Mathf.Abs(gravity) * jumpHieght);
+            }
+        }
+        void Dash()
+        {
+            if (Time.time > dashTimer + dashCooldown)
+            {
+                Vector3 inputDir = new Vector3((xMove), 0, yMove).normalized;
+                if (inputDir==Vector3.zero)inputDir = transform.forward;
+                else inputDir = transform.TransformDirection(inputDir);
+
+                DashDirection(inputDir);
+            }
+        }
+
 }
 
 
-
-
+ 
 
 
 

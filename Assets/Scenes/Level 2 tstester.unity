@@ -4710,6 +4710,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 414509916}
     - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: gravity
+      value: -7.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: amplitude
       value: 22.8
       objectReference: {fileID: 0}
@@ -4722,9 +4726,21 @@ PrefabInstance:
       value: 62.9
       objectReference: {fileID: 0}
     - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: jumpHieght
+      value: 10.83
+      objectReference: {fileID: 0}
+    - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: groundCheck
       value: 
       objectReference: {fileID: 339600375}
+    - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: groundMask.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: buttonHoldThreshold
+      value: 0.62
+      objectReference: {fileID: 0}
     - target: {fileID: 4692609479142496533, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: rb
       value: 
