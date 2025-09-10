@@ -19,17 +19,15 @@ using TMPro;
 public class PlayerController : MonoBehaviour
 {
     public PlayerInputController inputControl;
-    public GameObject ball; 
 
     [Header("Debug")]
     public Vector2 inputDirection;
     public float inputRun;
     public float inputDash;
-    public float inputSkill; 
 
     [Header("Moving")]
     public float walkSpeed = 5f;
-    public float gravity = -9.81f; 
+    public float gravity = -9.81f; // ¸ÄÎª¸ºÖµ£¬Ä£ÄâÕæÊµÖØÁ¦
     public float CurrentMovementSpeed { get; private set; }
 
     [Header("Running")]
@@ -47,11 +45,6 @@ public class PlayerController : MonoBehaviour
     private float dashTimer;
     public float playerHeight = 2f;
     public LayerMask obsticaleLayers;
-
-    [Header("Skill")]
-    public float skillCooldown = 5f;
-    public float skillDistance = 2f;
-    private float skillTimer;
 
     [Header("GroundCheck")]
     public Transform groundCheck;
@@ -71,6 +64,14 @@ public class PlayerController : MonoBehaviour
     public float buttonHoldThreshold = 0.5f;
     private float buttonHoldTimer = 0f;
     private bool dashButtonHeld = false;
+
+    [Header("Dash to Ball")]
+    public Transform ball;
+    public float skillDistance;
+    public float skillCooldown;
+    private float skillTimer;
+    private float lastTapTime;
+  
     private void Awake()
     {
         inputControl = new PlayerInputController();
@@ -92,14 +93,14 @@ public class PlayerController : MonoBehaviour
         currentSpeed = walkSpeed;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         CurrentMovementSpeed = dir.magnitude;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
         {
-            velocity.y = -10f; 
+            velocity.y = -2f; // ÇáÎ¢ÏòÏÂµÄÁ¦È·±£½ÇÉ«±£³ÖÔÚµØÃæÉÏ
         }
 
         inputDirection = inputControl.Gameplay.Move.ReadValue<Vector2>();
@@ -123,7 +124,7 @@ public class PlayerController : MonoBehaviour
             currentSpeed = walkSpeed;
         }
 
-        
+        // Ó¦ÓÃÖØÁ¦
         velocity.y += gravity * Time.deltaTime;
         CC.Move(velocity * Time.deltaTime);
 
@@ -146,59 +147,90 @@ public class PlayerController : MonoBehaviour
         { dashButtonHeld = true;
             buttonHoldTimer = 0f;
 
+            if (Time.time - lastTapTime < 0.3f) 
+            {
+                DashToBall();
+                lastTapTime = 0;
+            }
+            else
+            {
+                lastTapTime = Time.time;    
+            }
         }
 
             if (dashButtonHeld) {buttonHoldTimer += Time.deltaTime;}
 
-            if (currentDashInput == 0 && dashButtonHeld == true)
+            if (currentDashInput == 0 && dashButtonHeld == true) { 
+            
+              dashButtonHeld = false;
+            
+                if (buttonHoldTimer >= buttonHoldThreshold)
             {
-                dashButtonHeld = false;
-                if (buttonHoldTimer < buttonHoldThreshold)
-                {
+                Jump();
+            }
+            else
+            { if (Time.time - lastTapTime <= 0.3f)
                     Dash();
-                }
-                else
-                {
-                    Jump();
-                }
             }
 
-            DashDirection(inputDir);
-        }
-        inputSkill = inputControl.Gameplay.Skill.ReadValue<float>();
-        if ((inputSkill == 1  && Time.time > skillTimer + skillCooldown))
-        {
-            Skill();
-        }
-
-
+            }
 
        
 
-       // if (inputDash == 1 && Time.time > dashTimer + dashCooldown)
-       // {
-         //   Vector3 inputDir = new Vector3((xMove), 0f, yMove).normalized;
-
-           // if (inputDir == Vector3.zero)
-            //{
-             //   inputDir = transform.forward;
-         //   }
-         //   else                                                      OLD Dash code combining to make a jump
-          //  {
-          //      inputDir = transform.TransformDirection(inputDir);
-          //  }
-
-          //  DashDirection(inputDir);
-       // }
+      
     }
+    void DashToBall()
+    {
+       
+        if (Time.time < skillTimer + skillCooldown) return;
+            
+        
 
+        if (ball == null)
+        {
+            Debug.LogError("Ball reference is not set for Skill!");
+            return;
+        }
+
+       
+        Vector3 ballForward = ball.transform.forward;
+        Vector3 targetPosition = ball.transform.position + ballForward * skillDistance;
+
+        
+        if (Physics.Raycast(targetPosition + Vector3.up * 2f, Vector3.down, out RaycastHit hit, 3f, groundMask))
+        {
+            targetPosition = hit.point;
+            targetPosition.y += playerHeight / 2f;
+        }
+        else
+        {
+            Debug.Log("Skill target not on ground. Aborting.");
+            return;
+        }
+
+      
+        Vector3 dashDirection = (targetPosition - transform.position).normalized;
+        float dashDistanceToTarget = Vector3.Distance(transform.position, targetPosition);
+
+        if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, dashDirection, dashDistanceToTarget, obsticaleLayers))
+        {
+          
+            StartCoroutine(ExecuteDash(targetPosition));
+            skillTimer = Time.time; // Start the cooldown
+            
+        }
+        else
+        {
+            Debug.Log("Obstacles in the way, cannot use Skill");
+        }
+    }
     void DashDirection(Vector3 direction)
     {
         Vector3 dashPosition = transform.position + direction * dashDistance;
 
         if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, direction, dashDistance, obsticaleLayers))
         {
-            StartCoroutine(ExecuteDash(dashPosition, true));
+            StartCoroutine(ExecuteDash(dashPosition));
         }
         else
         {
@@ -206,48 +238,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Skill()
+    IEnumerator ExecuteDash(Vector3 targetPosition)
     {
-        if (ball == null)
-        {
-            Debug.LogError("Ball reference is not set!");
-            return;
-        
-    
-        }
-
-        Vector3 ballForward = ball.transform.forward;
-        Vector3 targetPosition = ball.transform.position + ballForward * skillDistance;
-
-        // ȷ��Ŀ��λ���ڵ�����
-        if (Physics.Raycast(targetPosition + Vector3.up * 2f, Vector3.down, out RaycastHit hit, 3f, groundMask))
-        {
-            targetPosition = hit.point;
-            targetPosition.y += playerHeight / 2f; // ȷ�����վ�ڵ�����
-        }
-
-        // ���·�����Ƿ����ϰ���
-        Vector3 dashDirection = (targetPosition - transform.position).normalized;
-        float dashDistance = Vector3.Distance(transform.position, targetPosition);
-
-        if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, dashDirection, dashDistance, obsticaleLayers))
-        {
-            StartCoroutine(ExecuteDash(targetPosition, false));
-        }
-        else
-        {
-            Debug.Log("Obstacles in the way, cannot dash to ball");
-        }
-    }
-
-
-
-
-
-
-    IEnumerator ExecuteDash(Vector3 targetPosition, bool isNormalDash)
-    {
-        yield return new WaitForSeconds(0.1f);
         float dashDuration= 0.2f;
         float elapsedTime = 0f;
         Vector3 startPosition = transform.position;
@@ -266,14 +258,6 @@ public class PlayerController : MonoBehaviour
         
         }
 
-        if (isNormalDash)
-        {
-            dashTimer = Time.time;
-        }
-        else
-        {
-            skillTimer = Time.time;
-        }
         transform.position = targetPosition;
         dashTimer = Time.time;
     }
@@ -300,7 +284,6 @@ public class PlayerController : MonoBehaviour
 
 
  
-
 
 
 

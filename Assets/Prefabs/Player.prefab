@@ -2196,7 +2196,7 @@ MonoBehaviour:
   inputRun: 0
   inputDash: 0
   walkSpeed: 5
-  gravity: 0
+  gravity: -6.83
   runSpeed: 8
   runStam: 100
   maxStam: 413.2
@@ -2214,8 +2214,14 @@ MonoBehaviour:
   groundDistance: 0.4
   groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   groundCheckDistance: 0.05
+  isGrounded: 0
+  jumpHieght: 5
+  buttonHoldThreshold: 0.64
+  ball: {fileID: 0}
+  skillDistance: 5
+  skillCooldown: 5
 --- !u!114 &4163661477548608543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4144,6 +4150,7 @@ MonoBehaviour:
   direction: 0
   directionSwitchLeft: 0
   directionSwitchRight: 0
+  directionSwitchForward: 0
   ishitting: 0
   currentState: 0
 --- !u!95 &7200795716634897281
