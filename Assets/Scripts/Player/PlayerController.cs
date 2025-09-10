@@ -19,15 +19,17 @@ using TMPro;
 public class PlayerController : MonoBehaviour
 {
     public PlayerInputController inputControl;
+    public GameObject ball; 
 
     [Header("Debug")]
     public Vector2 inputDirection;
     public float inputRun;
     public float inputDash;
+    public float inputSkill; 
 
     [Header("Moving")]
     public float walkSpeed = 5f;
-    public float gravity = -9.81f; // ¸ÄÎª¸ºÖµ£¬Ä£ÄâÕæÊµÖØÁ¦
+    public float gravity = -9.81f; 
     public float CurrentMovementSpeed { get; private set; }
 
     [Header("Running")]
@@ -45,6 +47,11 @@ public class PlayerController : MonoBehaviour
     private float dashTimer;
     public float playerHeight = 2f;
     public LayerMask obsticaleLayers;
+
+    [Header("Skill")]
+    public float skillCooldown = 5f;
+    public float skillDistance = 2f;
+    private float skillTimer;
 
     [Header("GroundCheck")]
     public Transform groundCheck;
@@ -85,14 +92,14 @@ public class PlayerController : MonoBehaviour
         currentSpeed = walkSpeed;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         CurrentMovementSpeed = dir.magnitude;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
         {
-            velocity.y = -2f; // ÇáÎ¢ÏòÏÂµÄÁ¦È·±£½ÇÉ«±£³ÖÔÚµØÃæÉÏ
+            velocity.y = -10f; 
         }
 
         inputDirection = inputControl.Gameplay.Move.ReadValue<Vector2>();
@@ -116,7 +123,7 @@ public class PlayerController : MonoBehaviour
             currentSpeed = walkSpeed;
         }
 
-        // Ó¦ÓÃÖØÁ¦
+        
         velocity.y += gravity * Time.deltaTime;
         CC.Move(velocity * Time.deltaTime);
 
@@ -156,6 +163,16 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
+            DashDirection(inputDir);
+        }
+        inputSkill = inputControl.Gameplay.Skill.ReadValue<float>();
+        if ((inputSkill == 1  && Time.time > skillTimer + skillCooldown))
+        {
+            Skill();
+        }
+
+
+
        
 
        // if (inputDash == 1 && Time.time > dashTimer + dashCooldown)
@@ -181,7 +198,7 @@ public class PlayerController : MonoBehaviour
 
         if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, direction, dashDistance, obsticaleLayers))
         {
-            StartCoroutine(ExecuteDash(dashPosition));
+            StartCoroutine(ExecuteDash(dashPosition, true));
         }
         else
         {
@@ -189,8 +206,48 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator ExecuteDash(Vector3 targetPosition)
+    void Skill()
     {
+        if (ball == null)
+        {
+            Debug.LogError("Ball reference is not set!");
+            return;
+        
+    
+        }
+
+        Vector3 ballForward = ball.transform.forward;
+        Vector3 targetPosition = ball.transform.position + ballForward * skillDistance;
+
+        // È·ï¿½ï¿½Ä¿ï¿½ï¿½Î»ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½
+        if (Physics.Raycast(targetPosition + Vector3.up * 2f, Vector3.down, out RaycastHit hit, 3f, groundMask))
+        {
+            targetPosition = hit.point;
+            targetPosition.y += playerHeight / 2f; // È·ï¿½ï¿½ï¿½ï¿½ï¿½Õ¾ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½
+        }
+
+        // ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ï¿½ï¿½
+        Vector3 dashDirection = (targetPosition - transform.position).normalized;
+        float dashDistance = Vector3.Distance(transform.position, targetPosition);
+
+        if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, dashDirection, dashDistance, obsticaleLayers))
+        {
+            StartCoroutine(ExecuteDash(targetPosition, false));
+        }
+        else
+        {
+            Debug.Log("Obstacles in the way, cannot dash to ball");
+        }
+    }
+
+
+
+
+
+
+    IEnumerator ExecuteDash(Vector3 targetPosition, bool isNormalDash)
+    {
+        yield return new WaitForSeconds(0.1f);
         float dashDuration= 0.2f;
         float elapsedTime = 0f;
         Vector3 startPosition = transform.position;
@@ -209,6 +266,14 @@ public class PlayerController : MonoBehaviour
         
         }
 
+        if (isNormalDash)
+        {
+            dashTimer = Time.time;
+        }
+        else
+        {
+            skillTimer = Time.time;
+        }
         transform.position = targetPosition;
         dashTimer = Time.time;
     }
@@ -235,6 +300,7 @@ public class PlayerController : MonoBehaviour
 
 
  
+
 
 
 
