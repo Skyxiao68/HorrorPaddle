@@ -138,15 +138,6 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Skill"",
-                    ""type"": ""Button"",
-                    ""id"": ""6edc91cf-051b-4a90-be96-606884bbf1a8"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""ChangeLeft"",
                     ""type"": ""Value"",
                     ""id"": ""5f01472d-cc2e-42dd-9df7-4b423410cdb6"",
@@ -181,6 +172,15 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ZaWorldo"",
+                    ""type"": ""Button"",
+                    ""id"": ""7911f531-c22b-4abf-a4c4-c363e3c3941b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -384,28 +384,6 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                 },
                 {
                     ""name"": """",
-                    ""id"": ""4c9890f0-4636-4294-b9b6-38ca0858f6b1"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Skill"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""bc2fba21-0420-4e52-bad1-1230b29857fb"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Skill"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""7263e967-1df4-45b4-887f-cbc4d6108c7a"",
                     ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
@@ -489,6 +467,28 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""ChangeForward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b09173d-0cd4-4e1c-b204-77beb304c958"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ZaWorldo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7b6abfec-64c8-4b6b-89a9-04aab657dbb7"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""ZaWorldo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1112,11 +1112,11 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         m_Gameplay_Fire = m_Gameplay.FindAction("Fire", throwIfNotFound: true);
         m_Gameplay_Run = m_Gameplay.FindAction("Run", throwIfNotFound: true);
         m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
-        m_Gameplay_Skill = m_Gameplay.FindAction("Skill", throwIfNotFound: true);
         m_Gameplay_ChangeLeft = m_Gameplay.FindAction("ChangeLeft", throwIfNotFound: true);
         m_Gameplay_ChangeForward = m_Gameplay.FindAction("ChangeForward", throwIfNotFound: true);
         m_Gameplay_ChangeRight = m_Gameplay.FindAction("ChangeRight", throwIfNotFound: true);
         m_Gameplay_TriggerAnimation = m_Gameplay.FindAction("TriggerAnimation", throwIfNotFound: true);
+        m_Gameplay_ZaWorldo = m_Gameplay.FindAction("ZaWorldo", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1216,11 +1216,11 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
     private readonly InputAction m_Gameplay_Fire;
     private readonly InputAction m_Gameplay_Run;
     private readonly InputAction m_Gameplay_Dash;
-    private readonly InputAction m_Gameplay_Skill;
     private readonly InputAction m_Gameplay_ChangeLeft;
     private readonly InputAction m_Gameplay_ChangeForward;
     private readonly InputAction m_Gameplay_ChangeRight;
     private readonly InputAction m_Gameplay_TriggerAnimation;
+    private readonly InputAction m_Gameplay_ZaWorldo;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -1253,10 +1253,6 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         /// </summary>
         public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
         /// <summary>
-        /// Provides access to the underlying input action "Gameplay/Skill".
-        /// </summary>
-        public InputAction @Skill => m_Wrapper.m_Gameplay_Skill;
-        /// <summary>
         /// Provides access to the underlying input action "Gameplay/ChangeLeft".
         /// </summary>
         public InputAction @ChangeLeft => m_Wrapper.m_Gameplay_ChangeLeft;
@@ -1272,6 +1268,10 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         /// Provides access to the underlying input action "Gameplay/TriggerAnimation".
         /// </summary>
         public InputAction @TriggerAnimation => m_Wrapper.m_Gameplay_TriggerAnimation;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/ZaWorldo".
+        /// </summary>
+        public InputAction @ZaWorldo => m_Wrapper.m_Gameplay_ZaWorldo;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1313,9 +1313,6 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
-            @Skill.started += instance.OnSkill;
-            @Skill.performed += instance.OnSkill;
-            @Skill.canceled += instance.OnSkill;
             @ChangeLeft.started += instance.OnChangeLeft;
             @ChangeLeft.performed += instance.OnChangeLeft;
             @ChangeLeft.canceled += instance.OnChangeLeft;
@@ -1328,6 +1325,9 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
             @TriggerAnimation.started += instance.OnTriggerAnimation;
             @TriggerAnimation.performed += instance.OnTriggerAnimation;
             @TriggerAnimation.canceled += instance.OnTriggerAnimation;
+            @ZaWorldo.started += instance.OnZaWorldo;
+            @ZaWorldo.performed += instance.OnZaWorldo;
+            @ZaWorldo.canceled += instance.OnZaWorldo;
         }
 
         /// <summary>
@@ -1354,9 +1354,6 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
-            @Skill.started -= instance.OnSkill;
-            @Skill.performed -= instance.OnSkill;
-            @Skill.canceled -= instance.OnSkill;
             @ChangeLeft.started -= instance.OnChangeLeft;
             @ChangeLeft.performed -= instance.OnChangeLeft;
             @ChangeLeft.canceled -= instance.OnChangeLeft;
@@ -1369,6 +1366,9 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
             @TriggerAnimation.started -= instance.OnTriggerAnimation;
             @TriggerAnimation.performed -= instance.OnTriggerAnimation;
             @TriggerAnimation.canceled -= instance.OnTriggerAnimation;
+            @ZaWorldo.started -= instance.OnZaWorldo;
+            @ZaWorldo.performed -= instance.OnZaWorldo;
+            @ZaWorldo.canceled -= instance.OnZaWorldo;
         }
 
         /// <summary>
@@ -1716,13 +1716,6 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDash(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Skill" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSkill(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "ChangeLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -1750,6 +1743,13 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTriggerAnimation(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ZaWorldo" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnZaWorldo(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

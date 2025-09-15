@@ -24,10 +24,11 @@ public class PlayerController : MonoBehaviour
     public Vector2 inputDirection;
     public float inputRun;
     public float inputDash;
+    public float inputDio;
 
     [Header("Moving")]
     public float walkSpeed = 5f;
-    public float gravity = -9.81f; // ¸ÄÎª¸ºÖµ£¬Ä£ÄâÕæÊµÖØÁ¦
+    public float gravity = -9.81f; 
     public float CurrentMovementSpeed { get; private set; }
 
     [Header("Running")]
@@ -71,11 +72,27 @@ public class PlayerController : MonoBehaviour
     public float skillCooldown;
     private float skillTimer;
     private float lastTapTime;
+
+    [Header("ZaWorldo Lite")]
+    public float dioTimeScale = 0.2f;
+    public float dioTimeDuration = 3f; 
+    private bool isDioActive = false;
+    private float dioTimer = 0f;
+    private float originalFixedDeltaTime;
+    public AudioClip zaWorldo;
+    public AudioClip timeMove;
+    private AudioSource audioSource;  
+    
   
     private void Awake()
     {
         inputControl = new PlayerInputController();
         CC = gameObject.GetComponent<CharacterController>();
+        originalFixedDeltaTime = Time.fixedDeltaTime; 
+
+        audioSource = GetComponent<AudioSource>();
+      
+
     }
 
     private void OnEnable()
@@ -95,12 +112,14 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        HandleZaWorld();
+
         CurrentMovementSpeed = dir.magnitude;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
         {
-            velocity.y = -2f; // ÇáÎ¢ÏòÏÂµÄÁ¦È·±£½ÇÉ«±£³ÖÔÚµØÃæÉÏ
+            velocity.y = -2f; 
         }
 
         inputDirection = inputControl.Gameplay.Move.ReadValue<Vector2>();
@@ -108,9 +127,11 @@ public class PlayerController : MonoBehaviour
         yMove = inputDirection.y * currentSpeed;
         dir = transform.forward * yMove + transform.right * xMove;
 
-        CC.Move(dir * Time.deltaTime);
+        CC.Move(dir * Time.unscaledDeltaTime);
 
         inputRun = inputControl.Gameplay.Run.ReadValue<float>();
+
+        inputDio = inputControl.Gameplay.ZaWorldo.ReadValue<float>();
 
         if (inputRun == 1 && runStam > 20f)
         {
@@ -124,18 +145,18 @@ public class PlayerController : MonoBehaviour
             currentSpeed = walkSpeed;
         }
 
-        // Ó¦ÓÃÖØÁ¦
+       
         velocity.y += gravity * Time.deltaTime;
         CC.Move(velocity * Time.deltaTime);
 
         if (isRunning)
         {
-            runStam -= stamDeplete * Time.deltaTime;
+            runStam -= stamDeplete * Time.unscaledDeltaTime;
             runStam = Mathf.Max(0, runStam);
         }
         else
         {
-            runStam += stamRecover * Time.deltaTime;
+            runStam += stamRecover * Time.unscaledDeltaTime;
             runStam = Mathf.Min(maxStam, runStam);
         }
 
@@ -158,7 +179,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-            if (dashButtonHeld) {buttonHoldTimer += Time.deltaTime;}
+            if (dashButtonHeld) {buttonHoldTimer += Time.unscaledDeltaTime; }
 
             if (currentDashInput == 0 && dashButtonHeld == true) { 
             
@@ -175,10 +196,80 @@ public class PlayerController : MonoBehaviour
 
             }
 
-       
-
-      
     }
+
+    void HandleZaWorld()
+    {
+        if (inputDio == 1 && !isDioActive)
+        {
+            StartZaWorldo();
+        }
+
+        if (isDioActive)
+        {
+            dioTimer += Time.unscaledDeltaTime;
+
+            if (dioTimer >= dioTimeDuration)
+            {
+                EndZaWorldo(); 
+
+            }
+
+        }
+
+    }
+
+    void StartZaWorldo()
+    { 
+        isDioActive = true;
+        dioTimer = 0f;
+        Time.timeScale = dioTimeScale;
+        Time.fixedDeltaTime = originalFixedDeltaTime * dioTimeScale;
+
+
+        if (zaWorldo != null)
+        {
+            audioSource.pitch = 1f; 
+            audioSource.PlayOneShot(zaWorldo);
+
+            StartCoroutine(FadeAudioIn(audioSource, 0.5f));
+        }
+
+
+        Debug.Log("ZAAA WORLDOOOOOOOO "); 
+    }
+
+    void EndZaWorldo()
+    { 
+        isDioActive = false;
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = originalFixedDeltaTime;
+
+        if (timeMove != null)
+        {
+            audioSource.pitch = 1f; 
+            audioSource.PlayOneShot(timeMove);
+        }
+
+        Debug.Log(" Time Begins to Run"); 
+
+    }
+
+    IEnumerator FadeAudioIn(AudioSource audioSource, float fadeTime)
+    {
+        float startVolume = 0.2f;
+        audioSource.volume = startVolume;
+
+        while (audioSource.volume < 1.0f)
+        {
+            audioSource.volume += startVolume * Time.unscaledDeltaTime / fadeTime;
+            yield return null;
+        }
+
+        audioSource.volume = 1f;
+    }
+
+
     void DashToBall()
     {
        
@@ -248,7 +339,7 @@ public class PlayerController : MonoBehaviour
         while (elapsedTime < dashDuration)
 
         { 
-        elapsedTime += Time.deltaTime;
+        elapsedTime += Time.unscaledDeltaTime;
 
             float fraction = elapsedTime / dashDuration;
 
