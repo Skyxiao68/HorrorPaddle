@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &232343115 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5435780035392691766, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+  m_PrefabInstance: {fileID: 6922950370699762812}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &267318622 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4512523904049804326, guid: f3cc5446063920f49b714f8ab87c54c3, type: 3}
@@ -1514,6 +1519,11 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!4 &1653727039 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4289754745906156732, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+  m_PrefabInstance: {fileID: 6922950370699762812}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1712525221 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9111320248896486825, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
@@ -1583,6 +1593,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1812347623 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8009416086499065234, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+  m_PrefabInstance: {fileID: 6922950370699762812}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1818956078 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9178185762478205357, guid: 834509610d6fb0146ae5b3bbce1345eb, type: 3}
@@ -2154,6 +2169,18 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 2031043298}
+    - target: {fileID: 739567413521615913, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: blueTarget
+      value: 
+      objectReference: {fileID: 1812347623}
+    - target: {fileID: 739567413521615913, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: greenTarget
+      value: 
+      objectReference: {fileID: 1653727039}
+    - target: {fileID: 739567413521615913, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: magentaTarget
+      value: 
+      objectReference: {fileID: 232343115}
     - target: {fileID: 739567413521615913, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
       propertyPath: 'defTargets.Array.data[0]'
       value: 

@@ -15,6 +15,7 @@ public class ScoreManager : MonoBehaviour
     public GameObject winScreen;
     public GameObject loseScreen;
     public Rigidbody player;
+    public ScoreBoard scoreBoard;
    
     public int pScore = 0;
     public int oScore = 0;
@@ -30,6 +31,10 @@ public class ScoreManager : MonoBehaviour
     {
         pScore++;
         UpdateScoreUI();
+        if (scoreBoard != null)
+        { 
+        scoreBoard.ShowPlayerNumber(pScore);
+        }
         if (pScore >= 5) 
             PlayerWon();
     }
@@ -38,6 +43,11 @@ public class ScoreManager : MonoBehaviour
     {
         oScore++;
         UpdateScoreUI();
+        if (scoreBoard != null)
+        {
+         scoreBoard.ShowEnemyNumber(oScore);
+        }
+
         if (oScore >= 5)     
           PlayerLost();
     }

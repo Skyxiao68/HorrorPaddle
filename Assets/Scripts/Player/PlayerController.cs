@@ -19,13 +19,12 @@ using TMPro;
 public class PlayerController : MonoBehaviour
 {
     public PlayerInputController inputControl;
-    public GameObject ball; 
 
     [Header("Debug")]
     public Vector2 inputDirection;
     public float inputRun;
     public float inputDash;
-    public float inputSkill; 
+    public float inputDio;
 
     [Header("Moving")]
     public float walkSpeed = 5f;
@@ -48,11 +47,6 @@ public class PlayerController : MonoBehaviour
     public float playerHeight = 2f;
     public LayerMask obsticaleLayers;
 
-    [Header("Skill")]
-    public float skillCooldown = 5f;
-    public float skillDistance = 2f;
-    private float skillTimer;
-
     [Header("GroundCheck")]
     public Transform groundCheck;
     public float groundDistance = 0.4f;
@@ -64,12 +58,41 @@ public class PlayerController : MonoBehaviour
     private float xMove, yMove;
     private Vector3 dir;
     private Vector3 velocity;
-    private bool isGrounded;
+    public bool isGrounded;
 
+    [Header("Jump")]
+    public float jumpHieght = 0.5f;
+    public float buttonHoldThreshold = 0.5f;
+    private float buttonHoldTimer = 0f;
+    private bool dashButtonHeld = false;
+
+    [Header("Dash to Ball")]
+    public Transform ball;
+    public float skillDistance;
+    public float skillCooldown;
+    private float skillTimer;
+    private float lastTapTime;
+
+    [Header("ZaWorldo Lite")]
+    public float dioTimeScale = 0.2f;
+    public float dioTimeDuration = 3f; 
+    private bool isDioActive = false;
+    private float dioTimer = 0f;
+    private float originalFixedDeltaTime;
+    public AudioClip zaWorldo;
+    public AudioClip timeMove;
+    private AudioSource audioSource;  
+    
+  
     private void Awake()
     {
         inputControl = new PlayerInputController();
         CC = gameObject.GetComponent<CharacterController>();
+        originalFixedDeltaTime = Time.fixedDeltaTime; 
+
+        audioSource = GetComponent<AudioSource>();
+      
+
     }
 
     private void OnEnable()
@@ -87,14 +110,16 @@ public class PlayerController : MonoBehaviour
         currentSpeed = walkSpeed;
     }
 
-    void FixedUpdate()
+    void Update()
     {
+        HandleZaWorld();
+
         CurrentMovementSpeed = dir.magnitude;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
         {
-            velocity.y = -10f; 
+            velocity.y = -2f; 
         }
 
         inputDirection = inputControl.Gameplay.Move.ReadValue<Vector2>();
@@ -102,9 +127,11 @@ public class PlayerController : MonoBehaviour
         yMove = inputDirection.y * currentSpeed;
         dir = transform.forward * yMove + transform.right * xMove;
 
-        CC.Move(dir * Time.deltaTime);
+        CC.Move(dir * Time.unscaledDeltaTime);
 
         inputRun = inputControl.Gameplay.Run.ReadValue<float>();
+
+        inputDio = inputControl.Gameplay.ZaWorldo.ReadValue<float>();
 
         if (inputRun == 1 && runStam > 20f)
         {
@@ -118,55 +145,183 @@ public class PlayerController : MonoBehaviour
             currentSpeed = walkSpeed;
         }
 
-        
+       
         velocity.y += gravity * Time.deltaTime;
         CC.Move(velocity * Time.deltaTime);
 
         if (isRunning)
         {
-            runStam -= stamDeplete * Time.deltaTime;
+            runStam -= stamDeplete * Time.unscaledDeltaTime;
             runStam = Mathf.Max(0, runStam);
         }
         else
         {
-            runStam += stamRecover * Time.deltaTime;
+            runStam += stamRecover * Time.unscaledDeltaTime;
             runStam = Mathf.Min(maxStam, runStam);
         }
 
-        inputDash = inputControl.Gameplay.Dash.ReadValue<float>();
+        //inputDash = inputControl.Gameplay.Dash.ReadValue<float>();
+        float currentDashInput = inputControl.Gameplay.Dash.ReadValue<float>();
 
-        if (inputDash == 1 && Time.time > dashTimer + dashCooldown)
-        {
-            Vector3 inputDir = new Vector3((xMove), 0f, yMove).normalized;
+        if (currentDashInput == 1 && dashButtonHeld == false)
+        
+        { dashButtonHeld = true;
+            buttonHoldTimer = 0f;
 
-            if (inputDir == Vector3.zero)
+            if (Time.time - lastTapTime < 0.3f) 
             {
-                inputDir = transform.forward;
+                DashToBall();
+                lastTapTime = 0;
             }
             else
             {
-                inputDir = transform.TransformDirection(inputDir);
+                lastTapTime = Time.time;    
+            }
+        }
+
+            if (dashButtonHeld) {buttonHoldTimer += Time.unscaledDeltaTime; }
+
+            if (currentDashInput == 0 && dashButtonHeld == true) { 
+            
+              dashButtonHeld = false;
+            
+                if (buttonHoldTimer >= buttonHoldThreshold)
+            {
+                Jump();
+            }
+            else
+            { if (Time.time - lastTapTime <= 0.3f)
+                    Dash();
             }
 
-            DashDirection(inputDir);
-        }
-        inputSkill = inputControl.Gameplay.Skill.ReadValue<float>();
-        if ((inputSkill == 1  && Time.time > skillTimer + skillCooldown))
-        {
-            Skill();
-        }
-
-
+            }
 
     }
 
+    void HandleZaWorld()
+    {
+        if (inputDio == 1 && !isDioActive)
+        {
+            StartZaWorldo();
+        }
+
+        if (isDioActive)
+        {
+            dioTimer += Time.unscaledDeltaTime;
+
+            if (dioTimer >= dioTimeDuration)
+            {
+                EndZaWorldo(); 
+
+            }
+
+        }
+
+    }
+
+    void StartZaWorldo()
+    { 
+        isDioActive = true;
+        dioTimer = 0f;
+        Time.timeScale = dioTimeScale;
+        Time.fixedDeltaTime = originalFixedDeltaTime * dioTimeScale;
+
+
+        if (zaWorldo != null)
+        {
+            audioSource.pitch = 1f; 
+            audioSource.PlayOneShot(zaWorldo);
+
+            StartCoroutine(FadeAudioIn(audioSource, 0.5f));
+        }
+
+
+        Debug.Log("ZAAA WORLDOOOOOOOO "); 
+    }
+
+    void EndZaWorldo()
+    { 
+        isDioActive = false;
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = originalFixedDeltaTime;
+
+        if (timeMove != null)
+        {
+            audioSource.pitch = 1f; 
+            audioSource.PlayOneShot(timeMove);
+        }
+
+        Debug.Log(" Time Begins to Run"); 
+
+    }
+
+    IEnumerator FadeAudioIn(AudioSource audioSource, float fadeTime)
+    {
+        float startVolume = 0.2f;
+        audioSource.volume = startVolume;
+
+        while (audioSource.volume < 1.0f)
+        {
+            audioSource.volume += startVolume * Time.unscaledDeltaTime / fadeTime;
+            yield return null;
+        }
+
+        audioSource.volume = 1f;
+    }
+
+
+    void DashToBall()
+    {
+       
+        if (Time.time < skillTimer + skillCooldown) return;
+            
+        
+
+        if (ball == null)
+        {
+            Debug.LogError("Ball reference is not set for Skill!");
+            return;
+        }
+
+       
+        Vector3 ballForward = ball.transform.forward;
+        Vector3 targetPosition = ball.transform.position + ballForward * skillDistance;
+
+        
+        if (Physics.Raycast(targetPosition + Vector3.up * 2f, Vector3.down, out RaycastHit hit, 3f, groundMask))
+        {
+            targetPosition = hit.point;
+            targetPosition.y += playerHeight / 2f;
+        }
+        else
+        {
+            Debug.Log("Skill target not on ground. Aborting.");
+            return;
+        }
+
+      
+        Vector3 dashDirection = (targetPosition - transform.position).normalized;
+        float dashDistanceToTarget = Vector3.Distance(transform.position, targetPosition);
+
+        if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, dashDirection, dashDistanceToTarget, obsticaleLayers))
+        {
+          
+            StartCoroutine(ExecuteDash(targetPosition));
+            skillTimer = Time.time; // Start the cooldown
+            
+        }
+        else
+        {
+            Debug.Log("Obstacles in the way, cannot use Skill");
+        }
+    }
     void DashDirection(Vector3 direction)
     {
         Vector3 dashPosition = transform.position + direction * dashDistance;
 
         if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, direction, dashDistance, obsticaleLayers))
         {
-            StartCoroutine(ExecuteDash(dashPosition, true));
+            StartCoroutine(ExecuteDash(dashPosition));
         }
         else
         {
@@ -174,76 +329,52 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Skill()
+    IEnumerator ExecuteDash(Vector3 targetPosition)
     {
-        if (ball == null)
-        {
-            Debug.LogError("Ball reference is not set!");
-            return;
+        float dashDuration= 0.2f;
+        float elapsedTime = 0f;
+        Vector3 startPosition = transform.position;
+
+
+        while (elapsedTime < dashDuration)
+
+        { 
+        elapsedTime += Time.unscaledDeltaTime;
+
+            float fraction = elapsedTime / dashDuration;
+
+            transform.position = Vector3.Lerp(startPosition, targetPosition, fraction);
+            yield return null;
+
         
-    
-        }
-
-        Vector3 ballForward = ball.transform.forward;
-        Vector3 targetPosition = ball.transform.position + ballForward * skillDistance;
-
-        // 确保目标位置在地面上
-        if (Physics.Raycast(targetPosition + Vector3.up * 2f, Vector3.down, out RaycastHit hit, 3f, groundMask))
-        {
-            targetPosition = hit.point;
-            targetPosition.y += playerHeight / 2f; // 确保玩家站在地面上
-        }
-
-        // 检查路径上是否有障碍物
-        Vector3 dashDirection = (targetPosition - transform.position).normalized;
-        float dashDistance = Vector3.Distance(transform.position, targetPosition);
-
-        if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, dashDirection, dashDistance, obsticaleLayers))
-        {
-            StartCoroutine(ExecuteDash(targetPosition, false));
-        }
-        else
-        {
-            Debug.Log("Obstacles in the way, cannot dash to ball");
-        }
-    }
-
-
-
-
-
-
-    IEnumerator ExecuteDash(Vector3 targetPosition, bool isNormalDash)
-    {
-        yield return new WaitForSeconds(0.1f);
-
-        if (CC != null)
-        {
-            CC.enabled = false;
         }
 
         transform.position = targetPosition;
-
-        if (CC != null)
-        {
-            CC.enabled = true;
-        }
-
-        if (isNormalDash)
-        {
-            dashTimer = Time.time;
-        }
-        else
-        {
-            skillTimer = Time.time;
-        }
+        dashTimer = Time.time;
     }
+    void Jump()
+        {
+            if (isGrounded)
+            {
+                velocity.y = Mathf.Sqrt(2 * Mathf.Abs(gravity) * jumpHieght);
+            }
+        }
+        void Dash()
+        {
+            if (Time.time > dashTimer + dashCooldown)
+            {
+                Vector3 inputDir = new Vector3((xMove), 0, yMove).normalized;
+                if (inputDir==Vector3.zero)inputDir = transform.forward;
+                else inputDir = transform.TransformDirection(inputDir);
+
+                DashDirection(inputDir);
+            }
+        }
+
 }
 
 
-
-
-
+ 
 
 
 
