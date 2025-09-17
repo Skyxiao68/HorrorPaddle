@@ -321,7 +321,7 @@ public class ThrowableObject : MonoBehaviour
         scoreBoard.AddScoreP();
      
 
-        ball.transform.position = new Vector3 (10,1,-21);
+        ball.transform.position = new Vector3 (9, -2, -70);
         rb.isKinematic =true;
         throwToTarget = false;
         ball.SetActive (true);
@@ -338,7 +338,7 @@ public class ThrowableObject : MonoBehaviour
         ball.SetActive(false);
         scoreBoard.AddScoreO();
 
-        ball.transform.position = new Vector3(9, 1, -21);
+        ball.transform.position = new Vector3(9, -2, -70);
         rb.isKinematic = true;
         throwToTarget = false;
         ball.SetActive(true);
