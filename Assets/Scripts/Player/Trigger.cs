@@ -15,6 +15,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Collider))]
 public class ThrowableObject : MonoBehaviour
 {
+    
     public GameObject ball;
     public float throwForce;//player
     public Material ballCol;
@@ -76,6 +77,7 @@ public class ThrowableObject : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         Physics.gravity = new Vector3(0, -14f, 0);
         scoreBoard = GameObject.FindGameObjectWithTag("Ball").GetComponent<ScoreManager>();
+       
         rb.isKinematic = true;
         steveAi = FindFirstObjectByType<stevePlayer>();
         sarahAi = FindFirstObjectByType<sarahPlayer>();
@@ -321,7 +323,7 @@ public class ThrowableObject : MonoBehaviour
         scoreBoard.AddScoreP();
      
 
-        ball.transform.position = new Vector3 (9, -2, -70);
+        ball.transform.position = new Vector3 (7.49f, 1.12f, -70);
         rb.isKinematic =true;
         throwToTarget = false;
         ball.SetActive (true);
@@ -338,7 +340,7 @@ public class ThrowableObject : MonoBehaviour
         ball.SetActive(false);
         scoreBoard.AddScoreO();
 
-        ball.transform.position = new Vector3(9, -2, -70);
+        ball.transform.position = new Vector3(7.49f, 1.12f, -70);
         rb.isKinematic = true;
         throwToTarget = false;
         ball.SetActive(true);
