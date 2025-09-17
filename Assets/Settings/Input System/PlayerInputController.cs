@@ -181,6 +181,15 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Wall"",
+                    ""type"": ""Button"",
+                    ""id"": ""88ac372a-ebc3-4e4f-b394-71a17dd46f32"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -484,11 +493,33 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""7b6abfec-64c8-4b6b-89a9-04aab657dbb7"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""ZaWorldo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""04313040-4439-4e83-bba5-5b31a1afea47"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Wall"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93986000-9592-4543-8ec2-09a8d5e0d4b6"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Wall"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1117,6 +1148,7 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         m_Gameplay_ChangeRight = m_Gameplay.FindAction("ChangeRight", throwIfNotFound: true);
         m_Gameplay_TriggerAnimation = m_Gameplay.FindAction("TriggerAnimation", throwIfNotFound: true);
         m_Gameplay_ZaWorldo = m_Gameplay.FindAction("ZaWorldo", throwIfNotFound: true);
+        m_Gameplay_Wall = m_Gameplay.FindAction("Wall", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1221,6 +1253,7 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
     private readonly InputAction m_Gameplay_ChangeRight;
     private readonly InputAction m_Gameplay_TriggerAnimation;
     private readonly InputAction m_Gameplay_ZaWorldo;
+    private readonly InputAction m_Gameplay_Wall;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -1272,6 +1305,10 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         /// Provides access to the underlying input action "Gameplay/ZaWorldo".
         /// </summary>
         public InputAction @ZaWorldo => m_Wrapper.m_Gameplay_ZaWorldo;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/Wall".
+        /// </summary>
+        public InputAction @Wall => m_Wrapper.m_Gameplay_Wall;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1328,6 +1365,9 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
             @ZaWorldo.started += instance.OnZaWorldo;
             @ZaWorldo.performed += instance.OnZaWorldo;
             @ZaWorldo.canceled += instance.OnZaWorldo;
+            @Wall.started += instance.OnWall;
+            @Wall.performed += instance.OnWall;
+            @Wall.canceled += instance.OnWall;
         }
 
         /// <summary>
@@ -1369,6 +1409,9 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
             @ZaWorldo.started -= instance.OnZaWorldo;
             @ZaWorldo.performed -= instance.OnZaWorldo;
             @ZaWorldo.canceled -= instance.OnZaWorldo;
+            @Wall.started -= instance.OnWall;
+            @Wall.performed -= instance.OnWall;
+            @Wall.canceled -= instance.OnWall;
         }
 
         /// <summary>
@@ -1750,6 +1793,13 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnZaWorldo(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Wall" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWall(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
