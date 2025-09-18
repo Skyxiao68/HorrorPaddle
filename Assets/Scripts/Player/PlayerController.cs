@@ -76,23 +76,36 @@ public class PlayerController : MonoBehaviour
 
     [Header("ZaWorldo Lite")]
     public float dioTimeScale = 0.2f;
-    public float dioTimeDuration = 3f; 
+    public float dioTimeDuration = 3f;
     private bool isDioActive = false;
     private float dioTimer = 0f;
     private float originalFixedDeltaTime;
     public AudioClip zaWorldo;
     public AudioClip timeMove;
-    private AudioSource audioSource;  
-    
-  
+    private AudioSource audioSource;
+
+    [Header("Wall")]
+    public float inputWall;
+    public GameObject Wall;
+    public Transform WallSpawn;
+    public float wallCoolDown = 20f;
+    public float wallDuration = 5f;
+    private float wallTimer;
+    private bool isWallActive = false;
+    private GameObject wallInstance;
+
+
+
+
     private void Awake()
     {
         inputControl = new PlayerInputController();
         CC = gameObject.GetComponent<CharacterController>();
-        originalFixedDeltaTime = Time.fixedDeltaTime; 
+        originalFixedDeltaTime = Time.fixedDeltaTime;
 
         audioSource = GetComponent<AudioSource>();
-      
+   
+
 
     }
 
@@ -113,6 +126,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        inputWall = inputControl.Gameplay.Wall.ReadValue<float>();
+
+        HandleWall();
+
         HandleZaWorld();
 
         CurrentMovementSpeed = dir.magnitude;
@@ -120,7 +137,7 @@ public class PlayerController : MonoBehaviour
 
         if (isGrounded && velocity.y < 0)
         {
-            velocity.y = -2f; 
+            velocity.y = -2f;
         }
 
         inputDirection = inputControl.Gameplay.Move.ReadValue<Vector2>();
@@ -146,7 +163,7 @@ public class PlayerController : MonoBehaviour
             currentSpeed = walkSpeed;
         }
 
-       
+
         velocity.y += gravity * Time.deltaTime;
         CC.Move(velocity * Time.deltaTime);
 
@@ -165,28 +182,28 @@ public class PlayerController : MonoBehaviour
         float currentDashInput = inputControl.Gameplay.Dash.ReadValue<float>();
 
         if (currentDashInput == 1 && dashButtonHeld == false)
-        
+
         { dashButtonHeld = true;
             buttonHoldTimer = 0f;
 
-            if (Time.time - lastTapTime < 0.3f) 
+            if (Time.time - lastTapTime < 0.3f)
             {
                 DashToBall();
                 lastTapTime = 0;
             }
             else
             {
-                lastTapTime = Time.time;    
+                lastTapTime = Time.time;
             }
         }
 
-            if (dashButtonHeld) {buttonHoldTimer += Time.unscaledDeltaTime; }
+        if (dashButtonHeld) { buttonHoldTimer += Time.unscaledDeltaTime; }
 
-            if (currentDashInput == 0 && dashButtonHeld == true) { 
-            
-              dashButtonHeld = false;
-            
-                if (buttonHoldTimer >= buttonHoldThreshold)
+        if (currentDashInput == 0 && dashButtonHeld == true) {
+
+            dashButtonHeld = false;
+
+            if (buttonHoldTimer >= buttonHoldThreshold)
             {
                 Jump();
             }
@@ -195,9 +212,69 @@ public class PlayerController : MonoBehaviour
                     Dash();
             }
 
-            }
+        }
 
     }
+
+
+
+    void HandleWall()
+    {
+
+        
+
+        if (inputWall == 1 && !isWallActive && wallCoolDown == 20f)
+        {
+            PutWall();
+        }
+
+        if (isWallActive)
+        {
+            wallTimer += Time.deltaTime;
+
+            if (wallTimer >= wallDuration )
+            {
+                WallDisable();
+
+
+        }   }
+
+    }
+
+    void PutWall()
+    {
+       if (WallSpawn == null)
+        {
+            Debug.Log("Wall Spawn not Assigned");
+        }
+
+        wallInstance = Instantiate(Wall, WallSpawn.position, WallSpawn.rotation);
+
+        isWallActive = true;
+        wallTimer = 0f;
+        wallCoolDown = 0f;
+
+        Debug.Log("Wall Up");
+    }
+    
+    void WallDisable()
+    {
+        isWallActive = false;
+        if (wallCoolDown < 20f)
+        {
+            wallCoolDown += Time.deltaTime;
+        }
+
+        if (wallInstance != null)
+        {
+            Destroy(wallInstance); 
+        }
+
+        Debug.Log("Wall Down"); 
+
+    }
+
+    
 
     void HandleZaWorld()
     {
