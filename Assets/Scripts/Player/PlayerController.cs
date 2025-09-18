@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     [Header("Moving")]
     public float walkSpeed = 5f;
     public float gravity = -9.81f; 
+    public float gravityMultiplier;
     public float CurrentMovementSpeed { get; private set; }
 
     [Header("Running")]
@@ -357,6 +358,12 @@ public class PlayerController : MonoBehaviour
             if (isGrounded)
             {
                 velocity.y = Mathf.Sqrt(2 * Mathf.Abs(gravity) * jumpHieght);
+                     gravity =-7f;
+            }
+
+            if (isRunning)
+            {
+            gravity = gravityMultiplier;
             }
         }
         void Dash()
