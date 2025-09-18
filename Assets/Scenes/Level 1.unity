@@ -32483,18 +32483,18 @@ MonoBehaviour:
   voiceOn: 1
   letMeOut: {fileID: 8300000, guid: c16e6b268ef55914aafd6127d605c061, type: 3}
   letMeOutB: 1
-  greeting: {fileID: 0}
+  greeting: {fileID: 8300000, guid: c16e6b268ef55914aafd6127d605c061, type: 3}
   greetingB: 1
-  pickMeUp: {fileID: 8300000, guid: 1bc4b567aca3c11478e4fcaee015abf2, type: 3}
+  pickMeUp: {fileID: 8300000, guid: c16e6b268ef55914aafd6127d605c061, type: 3}
   iAmPickedUp: {fileID: 8300000, guid: c16e6b268ef55914aafd6127d605c061, type: 3}
   pickMeUpB: 1
-  playWithBall: {fileID: 0}
+  playWithBall: {fileID: 8300000, guid: c16e6b268ef55914aafd6127d605c061, type: 3}
   playWithBallB: 1
-  rules: {fileID: 0}
+  rules: {fileID: 8300000, guid: c16e6b268ef55914aafd6127d605c061, type: 3}
   rulesB: 1
-  haruUrara: {fileID: 0}
+  haruUrara: {fileID: 8300000, guid: c16e6b268ef55914aafd6127d605c061, type: 3}
   haruUraraB: 1
-  batOldFriend: {fileID: 0}
+  batOldFriend: {fileID: 8300000, guid: c16e6b268ef55914aafd6127d605c061, type: 3}
 --- !u!54 &1557971833
 Rigidbody:
   m_ObjectHideFlags: 0
