@@ -36,7 +36,7 @@ public class TargetManager : MonoBehaviour
     {
       
         Color originalColor = highLight.color; 
-
+        highLight.color = color;
         highLight.enabled = true;
 
         yield return new WaitForSeconds(flashDuration);

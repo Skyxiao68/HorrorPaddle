@@ -67,8 +67,8 @@ public class ScoreManager : MonoBehaviour
 
    Invoke(nameof(ShowLoseScreen), 3f);
 
+        
 
-   
     }
     private void ShowLoseScreen()
     {

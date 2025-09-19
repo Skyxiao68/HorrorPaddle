@@ -23,6 +23,7 @@ public class BallShooter : MonoBehaviour
         {
             GameObject newBall = Instantiate(ball, firePoint.position, firePoint.rotation);
             Rigidbody rb = newBall.GetComponent<Rigidbody>();
+            rb.isKinematic = false; 
             rb.AddForce(firePoint.forward * throwForce, ForceMode.Impulse);
             Destroy(newBall, ballLifeTime);
 

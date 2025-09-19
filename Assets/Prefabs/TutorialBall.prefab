@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4752458707457376234}
   - component: {fileID: 8671774534184450517}
   - component: {fileID: 3987091244654840381}
+  - component: {fileID: 7535992521866494029}
   m_Layer: 7
   m_Name: TutorialBall
   m_TagString: Ball
@@ -234,3 +235,41 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7535992521866494029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2339092957302770716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c0f762f91336fc4685ea4e9fa5ff6da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ball: {fileID: 0}
+  throwForce: 3
+  ballCol: {fileID: 2100000, guid: 961ccee7828ba6440a80699794ea2c63, type: 2}
+  throwToTarget: 0
+  playerScorePar: {fileID: 5865594945906694870, guid: 9d21ad0e322856c4b91d30987eed2613, type: 3}
+  enemyScorePar: {fileID: 0}
+  greenTarget: {fileID: 0}
+  blueTarget: {fileID: 0}
+  magentaTarget: {fileID: 0}
+  enemyTarget: []
+  hitDistance: 1000
+  throwHeight: 20
+  launchAngle: 20
+  currentTarget: {fileID: 0}
+  onMySide: 0
+  minVelocity: 0.5
+  hitSound: {fileID: 0}
+  bouceSound: {fileID: 0}
+  hitForceAggressive: 0
+  aggressiveArc: 0
+  aggroTargets: []
+  hitForceDefensive: 0
+  defensiveArc: 0
+  defTargets: []
+  inputFire: 0
+  iWantScore: 0

@@ -2198,6 +2198,7 @@ MonoBehaviour:
   inputDio: 0
   walkSpeed: 5
   gravity: -6.83
+  gravityMultiplier: 117.8
   runSpeed: 8
   runStam: 100
   maxStam: 413.2
@@ -2219,7 +2220,7 @@ MonoBehaviour:
   groundCheckDistance: 0.05
   isGrounded: 0
   jumpHieght: 5
-  buttonHoldThreshold: 0.64
+  buttonHoldThreshold: 0.3
   ball: {fileID: 0}
   skillDistance: 5
   skillCooldown: 5
@@ -2227,6 +2228,11 @@ MonoBehaviour:
   dioTimeDuration: 3
   zaWorldo: {fileID: 0}
   timeMove: {fileID: 0}
+  inputWall: 0
+  Wall: {fileID: 0}
+  WallSpawn: {fileID: 0}
+  wallCoolDown: 20
+  wallDuration: 5
 --- !u!114 &4163661477548608543
 MonoBehaviour:
   m_ObjectHideFlags: 0

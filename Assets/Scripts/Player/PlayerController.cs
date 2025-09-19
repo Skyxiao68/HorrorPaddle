@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour
     public float inputWall;
     public GameObject Wall;
     public Transform WallSpawn;
-    public float wallCoolDown = 20f;
+    public float wallCoolDown;
     public float wallDuration = 5f;
     private float wallTimer;
     private bool isWallActive = false;
@@ -221,10 +221,11 @@ public class PlayerController : MonoBehaviour
     void HandleWall()
     {
 
-        
 
-        if (inputWall == 1 && !isWallActive && wallCoolDown == 20f)
+
+        if (inputWall == 1 && !isWallActive) 
         {
+            Debug.Log("The button for wall is pressing");
             PutWall();
         }
 

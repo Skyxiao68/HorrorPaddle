@@ -2042,22 +2042,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "This is the lose screen \nPlease tell use why you have lost was it because
-    of :\nA) Your oppenent raged and decided to end the game early by super scoring(I
-    am working to solve this and if this happens alot pls note it down and maybe
-    if you have a solution let us know)  \nB) The opponent is a bit too diffucult
-    \nC) You felt that you did not have enough tools to combat the opponent\nD) Something
-    else....\n\nAlso please tell us how much points you were at when you see this
-    screen for the first time.\n\nBefore you get back: \n    *  Space/A on Controller
-    can be used to teleport a very short distance this will give you an edge\n   
-    *   Play safe when the opponent turns red, he will punish you if you play aggressive
-    try to defend and score a point when he turns blue by either forcing him back
-    into his wall or by bouncing off the wall (Thats his weakness)\n     * IF your
-    sensitivity is too high or low you can change it in the settings.\n    * Lastly
-    try to time your shot because the ball output is weaker if you dont press it
-    at the right time and use your position and aim to control the ball do not worry
-    about getting it over the barrier, your arc is predetermined.\n\n\t\t\t\t\t\tNow
-    Get Back Out There\n"
+  m_text: "In the previous assignment we were not given clear feedback as to why
+    our controls felt awkward, so we:\nMade the window for hitting the ball bigger.\nMade
+    directional bat states so you do not have to aim manually.\nImproved dashing\nMade
+    the Ai enemy easier. \n\nIf there is a reason why the controls still feel awkward
+    than please elaborate on why you feel this way \n\nI have not given the net of
+    the court cloth physics yet so feel free to cheat if you are struggling.\n\nif
+    you feel your camera is a bit too fast than you can tweak your sensitivity in
+    the settings menu \n\nP= Pause  \n\nPlease try to beat this level because there
+    is another level with abilities. \n\nYou can do this \n\n\n\t\t\t\t\t\tNow Get
+    Back Out There\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2920,7 +2914,7 @@ PrefabInstance:
       objectReference: {fileID: 854293622}
     - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: gravityMultiplier
-      value: -366.7
+      value: 30.9
       objectReference: {fileID: 0}
     - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: groundMask.m_Bits
