@@ -11,32 +11,15 @@ public class BallShooter : MonoBehaviour
   private bool canSpawnBall;
     private bool isShooting;
 
-    private void OnTriggerEnter(Collider other)
+    private void Start()
     {
-        if (other.CompareTag("Player"))
-        {
-            canSpawnBall = true;
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        canSpawnBall = false;   
+        StartCoroutine(SpawningBall());
     }
 
-    private void Update()
+    private IEnumerator SpawningBall()
     {
-        if (canSpawnBall == true && isShooting == false)
-        {
-            StartCoroutine(SpawningBall());
-        }
-    }
-
-   private IEnumerator SpawningBall()
-    {
-        isShooting = true;
-
-        // This loop will run as long as canShoot is true
-        while (canSpawnBall)
+       
+        while (true)
         {
             GameObject newBall = Instantiate(ball, firePoint.position, firePoint.rotation);
             Rigidbody rb = newBall.GetComponent<Rigidbody>();
@@ -49,7 +32,7 @@ public class BallShooter : MonoBehaviour
 
         }
 
-        isShooting = false;
+       
 
     }
 
