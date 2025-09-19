@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        velocity.y += gravity * Time.deltaTime;
+        velocity.y += GetCurrentGravity() * Time.deltaTime;
         CC.Move(velocity * Time.deltaTime);
 
         if (isRunning)
@@ -438,10 +438,7 @@ public class PlayerController : MonoBehaviour
                      gravity =-7f;
             }
 
-            if (isRunning)
-            {
-            gravity = gravityMultiplier;
-            }
+          
         }
         void Dash()
         {
@@ -454,6 +451,17 @@ public class PlayerController : MonoBehaviour
                 DashDirection(inputDir);
             }
         }
+    float GetCurrentGravity()
+    {
+       float currentGravity = gravity;
+        if ( isRunning)
+        {
+            currentGravity *= gravityMultiplier;
+
+
+        }
+        return currentGravity;
+    }
 
 }
 

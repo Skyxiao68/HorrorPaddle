@@ -5256,6 +5256,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5447479533512628407, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 6263994366745139677, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: winScreen
       value: 

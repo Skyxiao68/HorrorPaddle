@@ -10,8 +10,7 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    public TextMeshProUGUI playerScore;
-    public TextMeshProUGUI opponentScore;
+    
     public GameObject winScreen;
     public GameObject loseScreen;
     public Rigidbody player;
@@ -24,13 +23,13 @@ public class ScoreManager : MonoBehaviour
     {
         winScreen.SetActive(false);
         loseScreen.SetActive(false);
-        UpdateScoreUI();
+   
     }
 
     public void AddScoreP()
     {
         pScore++;
-        UpdateScoreUI();
+     
         if (scoreBoard != null)
         { 
         scoreBoard.ShowPlayerNumber(pScore);
@@ -42,7 +41,7 @@ public class ScoreManager : MonoBehaviour
     public void AddScoreO()
     {
         oScore++;
-        UpdateScoreUI();
+ 
         if (scoreBoard != null)
         {
          scoreBoard.ShowEnemyNumber(oScore);
@@ -52,18 +51,13 @@ public class ScoreManager : MonoBehaviour
           PlayerLost();
     }
 
-    private void UpdateScoreUI()
-    {
-        playerScore.text = "Your Score: " + pScore;
-        opponentScore.text = "Opponent Score: " + oScore;
-    }
+  
 
     public void PlayerWon()
     {
         winScreen.SetActive(true);
-        Time.timeScale = 0;
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
+      
+     
     }
 
     public void PlayerLost()
