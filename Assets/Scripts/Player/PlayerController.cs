@@ -88,14 +88,14 @@ public class PlayerController : MonoBehaviour
     public float inputWall;
     public GameObject Wall;
     public Transform WallSpawn;
-    public float wallCoolDown;
+    public float wallCoolDown = 5f;
     public float wallDuration = 5f;
-    private float wallTimer;
+    public float wallMoveDuration;
+    private float wallTimer =0;
+    private float wallCoolDownTimer =0; 
     private bool isWallActive = false;
     private GameObject wallInstance;
-
-
-
+    private float wallCooldownTimer;
 
     private void Awake()
     {
@@ -221,50 +221,69 @@ public class PlayerController : MonoBehaviour
     void HandleWall()
     {
 
-
-
-        if (inputWall == 1 && !isWallActive) 
+        if (wallCooldownTimer < wallCoolDown)
+        {
+            wallCoolDownTimer += Time.unscaledDeltaTime;
+        }
+        
+        
+        
+            
+        if (inputWall == 1 && !isWallActive && wallCoolDownTimer >= wallCoolDown)
         {
             Debug.Log("The button for wall is pressing");
             PutWall();
         }
-
-        if (isWallActive)
-        {
-            wallTimer += Time.deltaTime;
-
-            if (wallTimer >= wallDuration )
-            {
-                WallDisable();
-
-
-        }   }
-
     }
 
     void PutWall()
     {
        if (WallSpawn == null)
-        {
+       {
             Debug.Log("Wall Spawn not Assigned");
-        }
+       }
 
-        wallInstance = Instantiate(Wall, WallSpawn.position, WallSpawn.rotation);
+
+        Vector3 startPosition = transform.position + transform.forward * 2f;
+        wallInstance = Instantiate(Wall, startPosition, Quaternion.identity);
+
+        StartCoroutine(MoveWallToSpawnPoint());
 
         isWallActive = true;
-        wallTimer = 0f;
-        wallCoolDown = 0f;
+        
+        wallCoolDownTimer = 0f;
 
         Debug.Log("Wall Up");
+    }
+
+
+    IEnumerator MoveWallToSpawnPoint()
+    {
+        float elapsedTime = 0f;
+        Vector3 startPos = wallInstance.transform.position;
+
+        while (elapsedTime < wallMoveDuration)
+        { 
+            wallInstance.transform.position = Vector3.Lerp(startPos, WallSpawn.position, elapsedTime / wallMoveDuration);
+
+            elapsedTime += Time.deltaTime;
+
+            yield return null;
+        }
+
+       wallInstance.transform.position = WallSpawn.position;
+
+        yield return new WaitForSeconds(wallDuration);
+
+        WallDisable();
     }
     
     void WallDisable()
     {
         isWallActive = false;
-        if (wallCoolDown < 20f)
-        {
-            wallCoolDown += Time.deltaTime;
-        }
+
+        
+        
 
         if (wallInstance != null)
         {
