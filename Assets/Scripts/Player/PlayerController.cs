@@ -6,14 +6,21 @@
 
 //FIRST PERSON MOVEMENT in 10 MINUTES - Unity Tutorial
 // Dave /GameDevelopement
-// 23 July 2035
+// 23 July 2025
 // Version 4
 //https://youtu.be/f473C43s8nE?si=Jjp9O05Qddu9J2Hs
+
+//EVENT SYSTEM TUTORIAL 
+//ҹӰUnien 
+// 19 September 2025
+//Version 2
+//https://www.bilibili.com/video/BV1sc41197YZ/?spm_id_from=333.337.search-card.all.click&vd_source=735fcdc7dec66ac9bffaf8eac1a52072
 
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using System;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -74,8 +81,8 @@ public class PlayerController : MonoBehaviour
     private float lastTapTime;
 
     [Header("ZaWorldo Lite")]
-    public float dioTimeScale = 0.2f;
-    public float dioTimeDuration = 3f;
+    //public float dioTimeScale = 0.2f;
+   // public float dioTimeDuration = 3f;
     private bool isDioActive = false;
     private float dioTimer = 0f;
     private float originalFixedDeltaTime;
@@ -305,7 +312,7 @@ public class PlayerController : MonoBehaviour
         {
             dioTimer += Time.unscaledDeltaTime;
 
-            if (dioTimer >= dioTimeDuration)
+            if (dioTimer >= TimeManage.Instance.dioTimeDuration)
             {
                 EndZaWorldo(); 
 
@@ -319,8 +326,8 @@ public class PlayerController : MonoBehaviour
     { 
         isDioActive = true;
         dioTimer = 0f;
-        Time.timeScale = dioTimeScale;
-        Time.fixedDeltaTime = originalFixedDeltaTime * dioTimeScale;
+        Time.timeScale = TimeManage.Instance.dioTimeScale;
+        Time.fixedDeltaTime = originalFixedDeltaTime * TimeManage.Instance.dioTimeScale;
 
 
         if (zaWorldo != null)
@@ -331,8 +338,22 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(FadeAudioIn(audioSource, 0.5f));
         }
 
+        EventManage.TriggerEvent("DioTimeStarted");
+
 
         Debug.Log("ZAAA WORLDOOOOOOOO "); 
+    }
+
+    public void ChangeDioTimeScale(float newScale)
+    {
+        TimeManage.Instance.SetDioTimeScale(newScale);
+
+       
+        if (isDioActive)
+        {
+            Time.timeScale = TimeManage.Instance.dioTimeScale;
+            Time.fixedDeltaTime = originalFixedDeltaTime * TimeManage.Instance.dioTimeScale;
+        }
     }
 
     void EndZaWorldo()
@@ -346,6 +367,8 @@ public class PlayerController : MonoBehaviour
             audioSource.pitch = 1f; 
             audioSource.PlayOneShot(timeMove);
         }
+
+        EventManage.TriggerEvent("DioTimeEnded");
 
         Debug.Log(" Time Begins to Run"); 
 

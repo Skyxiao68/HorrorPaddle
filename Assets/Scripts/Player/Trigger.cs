@@ -57,6 +57,14 @@ public class ThrowableObject : MonoBehaviour
     public PlayerInputController inputControl;
     public float inputFire;
 
+    [Header ("ZaWorldo Ball")]
+    //public float DioTimeScale = 0.2f;
+    public float hitSpeedMulti = 1.2f; 
+    private bool isInDioTime = false;
+    private Vector3 originalVelocity;
+    private Vector3 originalAngularVelocity;
+    private bool ballWashit = false;
+
     public bool iWantScore;
     private void Awake()
     {
@@ -66,11 +74,24 @@ public class ThrowableObject : MonoBehaviour
     private void OnEnable()
     {
         inputControl.Enable();
+        
+        EventManage.AddListener("DioTimeStarted", StartDioTime);
+        EventManage.AddListener("DioTimeEnded", EndDioTime);
+
+        TimeManage.Instance.OnDioTimeScaleChanged += OnDioTimeScaleChanged;
     }
 
     private void OnDisable()
     {
         inputControl.Disable();
+
+        EventManage.RemoveListener("DioTimeStarted", StartDioTime);
+        EventManage.RemoveListener("DioTimeEnded", EndDioTime);
+
+        if (TimeManage.Instance != null)
+        {
+            TimeManage.Instance.OnDioTimeScaleChanged -= OnDioTimeScaleChanged;
+        }
     }
     private void Start()
     {
@@ -86,6 +107,75 @@ public class ThrowableObject : MonoBehaviour
         batStance = FindFirstObjectByType<batDirection>();
 
     }
+    private void OnDioTimeScaleChanged(float newScale)
+    {
+        if (isInDioTime)
+        {
+            
+            rb.linearVelocity = originalVelocity * newScale;
+            rb.angularVelocity = originalAngularVelocity * newScale;
+        }
+    }
+
+    private void StartDioTime()
+    {
+        if (isInDioTime ) return;
+
+        isInDioTime = true;
+        ballWashit = false;
+      
+
+        originalVelocity = rb.linearVelocity;
+        originalAngularVelocity = rb.angularVelocity;
+
+        rb.linearVelocity *= TimeManage.Instance.dioTimeScale;
+        rb.angularVelocity *= TimeManage.Instance.dioTimeScale;
+
+
+        Debug.Log("Ball entered Zaworldo");
+
+    
+    }
+
+    private void EndDioTime()
+    {
+        if (!isInDioTime) return; 
+
+        isInDioTime = false;
+        
+
+        
+
+
+        if (!ballWashit) 
+        {
+            rb.linearVelocity = originalVelocity;
+            rb.angularVelocity = originalAngularVelocity;
+        }
+
+      
+        
+
+        Debug.Log("Ball exited Zaworldo "); 
+    }
+
+ 
+
+    public void OnBallHit()
+    {
+        if (isInDioTime)
+        {
+            ballWashit = true;
+
+            rb.linearVelocity = originalVelocity * hitSpeedMulti;
+            rb.angularVelocity = originalAngularVelocity;
+
+
+
+            Debug.Log("Ball was hit,it got STANDO POWER!! ");
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("ThrowTrigger"))
@@ -113,12 +203,14 @@ public class ThrowableObject : MonoBehaviour
 
             if (hittingSteve != null)
             {
-                UseEnemyAi (hittingSteve.stance);
+                UseEnemyAi(hittingSteve.stance);
             }
             else if (hittingSarah != null)
             {
-                UseEnemyAi (hittingSarah.jumpStance);
+                UseEnemyAi(hittingSarah.jumpStance);
             }
+
+            
         }
 
         if (other.CompareTag("PlayerWall"))
@@ -149,7 +241,12 @@ public class ThrowableObject : MonoBehaviour
             ThrowObjectToTarget(currentTarget.position);
             hitAud.PlayOneShot(hitSound);
             Debug.Log("Target in Aight");
+
+           
         }
+
+      
+        
       
        
     }
@@ -181,6 +278,13 @@ public class ThrowableObject : MonoBehaviour
         //make a bounce meethod
         PlayBouceSound(collision.relativeVelocity.magnitude);
 
+        if (collision.gameObject.CompareTag("Player") && isInDioTime)
+        {
+            OnBallHit(); 
+        }
+
+
+
     }
 
     void PlayBouceSound(float impactVelocity)
@@ -196,7 +300,7 @@ public class ThrowableObject : MonoBehaviour
 
     public void ThrowObject()
     {
-
+        OnBallHit();
 
         Rigidbody rb = GetComponent<Rigidbody>();
         GetComponent<Collider>().isTrigger = false;
@@ -208,10 +312,15 @@ public class ThrowableObject : MonoBehaviour
         rb.linearVelocity = throwVelocity;
         rb.isKinematic = false;
         rb.useGravity = true;
+
+        
+
     }
 
     public void ThrowObjectToTarget(Vector3 targetPosition)
     {
+        OnBallHit();
+
         Rigidbody rb = GetComponent<Rigidbody>();
         GetComponent<Collider>().isTrigger = false;
         Vector3 idkTarget = (rb.position - targetPosition).normalized;
@@ -220,6 +329,8 @@ public class ThrowableObject : MonoBehaviour
         rb.linearVelocity = velocity;
         rb.isKinematic = false;
         rb.useGravity = true;
+        
+        
     }
 
     private Vector3 CalculateLaunchVelocity(Vector3 start, Vector3 end, float angle)
@@ -283,34 +394,65 @@ public class ThrowableObject : MonoBehaviour
             Defensive(defTargets[randomTargetD].position);
             Debug.Log("Ball is Defensive");
         }
+
+        if (isInDioTime)
+        {
+            rb.linearVelocity = originalVelocity;
+            rb.angularVelocity = originalAngularVelocity;
+        }
     }
 
 
     
     public void EnemyHit(Vector3 enemyTarget) //yeah no sphagetti g=cooooding GGGGEZ Its not even been 2 weeks aahhhhhhhhhhhhhbhhhh scared to remove this lol
     {
+        
+        
         Vector3 velocity = EnemyHitVelocity(transform.position, enemyTarget,throwHeight);
         rb.linearVelocity = velocity;
         rb.isKinematic = false;
         rb.useGravity = true;
+
+
+        if (isInDioTime)
+        {
+            rb.linearVelocity = originalVelocity;
+            rb.angularVelocity = originalAngularVelocity;
+        }
     }
 
     public void Aggressive(Vector3 aggroTarget)
     {
+    
+
         hitDistance = hitForceAggressive;
         Vector3 velocity = EnemyHitVelocity(transform.position, aggroTarget, aggressiveArc);
         rb.linearVelocity = velocity;
         rb.isKinematic = false;
         rb.useGravity = true;
+
+        if (isInDioTime)
+        {
+            rb.linearVelocity = originalVelocity;
+            rb.angularVelocity = originalAngularVelocity;
+        }
     }
 
     public void Defensive(Vector3 defTarget)
     {
+        
+
         hitDistance = hitForceDefensive;
         Vector3 velocity = EnemyHitVelocity(transform.position, defTarget, defensiveArc);
         rb.linearVelocity = velocity;
         rb.isKinematic = false;
         rb.useGravity = true;
+
+        if (isInDioTime)
+        {
+            rb.linearVelocity = originalVelocity;
+            rb.angularVelocity = originalAngularVelocity;
+        }
     }
 
 
@@ -327,6 +469,7 @@ public class ThrowableObject : MonoBehaviour
         rb.isKinematic =true;
         throwToTarget = false;
         ball.SetActive (true);
+
         
         
     }
@@ -344,6 +487,8 @@ public class ThrowableObject : MonoBehaviour
         rb.isKinematic = true;
         throwToTarget = false;
         ball.SetActive(true);
+
+        
 
     }
 }
