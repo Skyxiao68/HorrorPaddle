@@ -4,7 +4,7 @@ using UnityEngine;
 public class TargetManager : MonoBehaviour
 {
     public GameObject target;
-    public Light highLight; // Your variable is named 'highLight' (capital L)
+    public Light highLight;
     public Color coreectColor = Color.green;
     public Color wrongColor = Color.red;
     public float flashDuration = 2f;
@@ -22,34 +22,26 @@ public class TargetManager : MonoBehaviour
             {
                 wasCorrectHit = manager.RegisterBall(target);
 
-                if (highLight != null) // Use 'highLight' (matches your public variable)
+                if (highLight != null)
                 {
                     Color flashColor = wasCorrectHit ? coreectColor : wrongColor;
                     StartCoroutine(FlashLight(flashColor));
                 }
             }
-            else // This else should be for when manager is null, not part of the tag check
-            {
-                if (highLight != null)
-                {
-                    StartCoroutine(FlashLight(Color.white));
-                }
-            }
+          
         }
     }
 
-    IEnumerator FlashLight(Color color) // Fixed parameter syntax: 'Color color' not 'Color.color'
+    IEnumerator FlashLight(Color color) 
     {
-        // Store original color
-        Color originalColor = highLight.color; // Use 'highLight' (your variable name)
+      
+        Color originalColor = highLight.color; 
 
-        // Set new color and enable light
-        highLight.color = color;
         highLight.enabled = true;
 
         yield return new WaitForSeconds(flashDuration);
 
-        // Revert to original color and disable light
+      
         highLight.enabled = false;
         highLight.color = originalColor;
     }
