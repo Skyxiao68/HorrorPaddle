@@ -90,6 +90,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip zaWorldo;
     public AudioClip timeMove;
     private AudioSource audioSource;
+    public bool tutorial=false;
 
     [Header("Wall")]
     public float inputWall;
@@ -227,7 +228,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleWall()
     {
-
+        if (tutorial == true) { return; }
 
 
         if (inputWall == 1 && !isWallActive) 
@@ -251,7 +252,9 @@ public class PlayerController : MonoBehaviour
 
     void PutWall()
     {
-       if (WallSpawn == null)
+        if (tutorial == true) { return; }
+
+        if (WallSpawn == null)
         {
             Debug.Log("Wall Spawn not Assigned");
         }
@@ -267,6 +270,7 @@ public class PlayerController : MonoBehaviour
     
     void WallDisable()
     {
+        if (tutorial == true) { return; }
         isWallActive = false;
         if (wallCoolDown < 20f)
         {
@@ -286,6 +290,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleZaWorld()
     {
+        if (tutorial == true) { return; }
         if (inputDio == 1 && !isDioActive)
         {
             StartZaWorldo();
@@ -306,7 +311,8 @@ public class PlayerController : MonoBehaviour
     }
 
     void StartZaWorldo()
-    { 
+    {
+        if (tutorial == true) { return; }
         isDioActive = true;
         dioTimer = 0f;
         Time.timeScale = TimeManage.Instance.dioTimeScale;
@@ -329,6 +335,7 @@ public class PlayerController : MonoBehaviour
 
     public void ChangeDioTimeScale(float newScale)
     {
+        if (tutorial == true) { return; }
         TimeManage.Instance.SetDioTimeScale(newScale);
 
        
@@ -340,7 +347,8 @@ public class PlayerController : MonoBehaviour
     }
 
     void EndZaWorldo()
-    { 
+    {
+        if (tutorial == true) { return; }
         isDioActive = false;
         Time.timeScale = 1f;
         Time.fixedDeltaTime = originalFixedDeltaTime;

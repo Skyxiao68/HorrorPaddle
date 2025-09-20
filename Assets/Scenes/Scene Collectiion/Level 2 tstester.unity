@@ -3203,6 +3203,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 2811b0cbd5dea3c4da31c2e0e18e1f7c, type: 3}
     - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: tutorial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: zaWorldo
       value: 
       objectReference: {fileID: 8300000, guid: 4a054e7c11477c8478d9a7790cd59e71, type: 3}

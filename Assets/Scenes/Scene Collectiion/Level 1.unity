@@ -5137,6 +5137,18 @@ PrefabInstance:
       value: 3.13
       objectReference: {fileID: 0}
     - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: inputDio
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: tutorial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: isGrounded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: jumpHieght
       value: 0.17
       objectReference: {fileID: 0}
@@ -5150,15 +5162,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: dashDistance
-      value: 0.28
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: skillCooldown
-      value: 1.47
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: skillDistance
-      value: 0.14
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: buttonHoldThreshold
@@ -40314,8 +40326,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 14.972653, z: 1}
+  m_Center: {x: 0, y: -6.9863257, z: 0}
 --- !u!23 &1835342689
 MeshRenderer:
   m_ObjectHideFlags: 0
