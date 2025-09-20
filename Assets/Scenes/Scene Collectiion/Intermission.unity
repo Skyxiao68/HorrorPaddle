@@ -2249,6 +2249,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: tutorial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3888444153035488909, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: groundCheck
       value: 
       objectReference: {fileID: 339600375}

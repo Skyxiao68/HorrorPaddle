@@ -5004,6 +5004,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 84419795809684719, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: m_MaxValue
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 191384530205306199, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: m_CameraType
       value: 0

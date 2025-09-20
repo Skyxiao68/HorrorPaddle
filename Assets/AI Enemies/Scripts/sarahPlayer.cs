@@ -76,7 +76,7 @@ public class sarahPlayer : MonoBehaviour
         EventManage.AddListener("DioTimeStarted", StartDioTime);
         EventManage.AddListener("DioTimeEnded", EndDioTime);
 
-        TimeManage.Instance.OnDioTimeScaleChanged += OnDioTimeScaleChanged;
+      //  TimeManage.Instance.OnDioTimeScaleChanged += OnDioTimeScaleChanged;
     }
 
     private void OnDestroy()
@@ -86,7 +86,7 @@ public class sarahPlayer : MonoBehaviour
 
         if (TimeManage.Instance != null)
         {
-            TimeManage.Instance.OnDioTimeScaleChanged -= OnDioTimeScaleChanged;
+           // TimeManage.Instance.OnDioTimeScaleChanged -= OnDioTimeScaleChanged;
         }   
 
     }
