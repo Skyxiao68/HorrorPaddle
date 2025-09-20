@@ -3,7 +3,22 @@ guid: 4a1a045a0b743de4d8f7123732bdedd1
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: 2283c2bcb77e2754d8fcce8043e3bf54, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: b7ac413f7cab8f2439cfc91574a275d1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rolaivimiyoohaxes_
+    second: {fileID: 2100000, guid: 412d89cb93a44844f9c00af8a1dbce0d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
