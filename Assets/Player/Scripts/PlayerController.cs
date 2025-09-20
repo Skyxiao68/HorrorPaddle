@@ -102,6 +102,8 @@ public class PlayerController : MonoBehaviour
     private bool isWallActive = false;
     private GameObject wallInstance;
     private float wallCooldownTimer;
+    public AudioClip wallUpSound;
+    public AudioClip wallDownSound; 
 
     private void Awake()
     {
@@ -259,6 +261,14 @@ public class PlayerController : MonoBehaviour
 
         isWallActive = true;
 
+        if (wallUpSound != null)
+        {
+            audioSource.pitch = 1f;
+            audioSource.PlayOneShot(wallUpSound);
+
+            StartCoroutine(FadeAudioIn(audioSource, 0.5f));
+        }
+
         wallCoolDownTimer = 0f;
 
         Debug.Log("Wall Up");
@@ -290,12 +300,20 @@ public class PlayerController : MonoBehaviour
     {
         isWallActive = false;
 
-
-
-
         if (wallInstance != null)
         {
             Destroy(wallInstance);
+
+           
+        }
+
+
+        if (wallDownSound != null)
+        {
+            audioSource.pitch = 1f;
+            audioSource.PlayOneShot(wallDownSound);
+
+            StartCoroutine(FadeAudioIn(audioSource, 0.5f));
         }
 
         Debug.Log("Wall Down");
