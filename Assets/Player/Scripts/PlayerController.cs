@@ -35,8 +35,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Moving")]
     public float walkSpeed = 5f;
-    public float gravity = -9.81f; 
-    public float gravityMultiplier;
+    public float gravity = -9.81f;
     public float CurrentMovementSpeed { get; private set; }
 
     [Header("Running")]
@@ -83,27 +82,26 @@ public class PlayerController : MonoBehaviour
 
     [Header("ZaWorldo Lite")]
     //public float dioTimeScale = 0.2f;
-   // public float dioTimeDuration = 3f;
+    // public float dioTimeDuration = 3f;
     private bool isDioActive = false;
     private float dioTimer = 0f;
     private float originalFixedDeltaTime;
     public AudioClip zaWorldo;
     public AudioClip timeMove;
     private AudioSource audioSource;
-    public bool tutorial=false;
 
     [Header("Wall")]
     public float inputWall;
     public GameObject Wall;
     public Transform WallSpawn;
-    public float wallCoolDown;
+    public float wallCoolDown = 5f;
     public float wallDuration = 5f;
-    private float wallTimer;
+    public float wallMoveDuration;
+    private float wallTimer = 0;
+    private float wallCoolDownTimer = 0;
     private bool isWallActive = false;
     private GameObject wallInstance;
-
-
-
+    private float wallCooldownTimer;
 
     private void Awake()
     {
@@ -112,7 +110,7 @@ public class PlayerController : MonoBehaviour
         originalFixedDeltaTime = Time.fixedDeltaTime;
 
         audioSource = GetComponent<AudioSource>();
-   
+
 
 
     }
@@ -172,7 +170,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        velocity.y += GetCurrentGravity() * Time.deltaTime;
+        velocity.y += gravity * Time.deltaTime;
         CC.Move(velocity * Time.deltaTime);
 
         if (isRunning)
@@ -191,7 +189,8 @@ public class PlayerController : MonoBehaviour
 
         if (currentDashInput == 1 && dashButtonHeld == false)
 
-        { dashButtonHeld = true;
+        {
+            dashButtonHeld = true;
             buttonHoldTimer = 0f;
 
             if (Time.time - lastTapTime < 0.3f)
@@ -207,7 +206,8 @@ public class PlayerController : MonoBehaviour
 
         if (dashButtonHeld) { buttonHoldTimer += Time.unscaledDeltaTime; }
 
-        if (currentDashInput == 0 && dashButtonHeld == true) {
+        if (currentDashInput == 0 && dashButtonHeld == true)
+        {
 
             dashButtonHeld = false;
 
@@ -216,7 +216,8 @@ public class PlayerController : MonoBehaviour
                 Jump();
             }
             else
-            { if (Time.time - lastTapTime <= 0.3f)
+            {
+                if (Time.time - lastTapTime <= 0.3f)
                     Dash();
             }
 
@@ -228,69 +229,83 @@ public class PlayerController : MonoBehaviour
 
     void HandleWall()
     {
-        if (tutorial == true) { return; }
 
-
-        if (inputWall == 1 && !isWallActive) 
+        if (wallCooldownTimer < wallCoolDown)
         {
-            Debug.Log("The button for wall is pressing");
-            PutWall();
+            wallCoolDownTimer += Time.unscaledDeltaTime;
         }
 
-        if (isWallActive)
+
+
+
+        if (inputWall == 1 && !isWallActive && wallCoolDownTimer >= wallCoolDown)
         {
-            wallTimer += Time.deltaTime;
-
-            if (wallTimer >= wallDuration )
-            {
-                WallDisable();
-
-
-        }   }
-
+            PutWall();
+        }
     }
 
     void PutWall()
     {
-        if (tutorial == true) { return; }
-
         if (WallSpawn == null)
         {
             Debug.Log("Wall Spawn not Assigned");
         }
 
-        wallInstance = Instantiate(Wall, WallSpawn.position, WallSpawn.rotation);
+
+        Vector3 startPosition = transform.position + transform.forward * 2f;
+        wallInstance = Instantiate(Wall, startPosition, Quaternion.identity);
+
+        StartCoroutine(MoveWallToSpawnPoint());
 
         isWallActive = true;
-        wallTimer = 0f;
-        wallCoolDown = 0f;
+
+        wallCoolDownTimer = 0f;
 
         Debug.Log("Wall Up");
     }
-    
+
+
+    IEnumerator MoveWallToSpawnPoint()
+    {
+        float elapsedTime = 0f;
+        Vector3 startPos = wallInstance.transform.position;
+
+        while (elapsedTime < wallMoveDuration)
+        {
+            wallInstance.transform.position = Vector3.Lerp(startPos, WallSpawn.position, elapsedTime / wallMoveDuration);
+
+            elapsedTime += Time.deltaTime;
+
+            yield return null;
+        }
+
+        wallInstance.transform.position = WallSpawn.position;
+
+        yield return new WaitForSeconds(wallDuration);
+
+        WallDisable();
+    }
+
     void WallDisable()
     {
-        if (tutorial == true) { return; }
         isWallActive = false;
-        if (wallCoolDown < 20f)
-        {
-            wallCoolDown += Time.deltaTime;
-        }
+
+
+
 
         if (wallInstance != null)
         {
-            Destroy(wallInstance); 
+            Destroy(wallInstance);
         }
 
-        Debug.Log("Wall Down"); 
+        Debug.Log("Wall Down");
 
     }
 
-    
+
 
     void HandleZaWorld()
     {
-        if (tutorial == true) { return; }
         if (inputDio == 1 && !isDioActive)
         {
             StartZaWorldo();
@@ -302,7 +317,7 @@ public class PlayerController : MonoBehaviour
 
             if (dioTimer >= TimeManage.Instance.dioTimeDuration)
             {
-                EndZaWorldo(); 
+                EndZaWorldo();
 
             }
 
@@ -312,7 +327,6 @@ public class PlayerController : MonoBehaviour
 
     void StartZaWorldo()
     {
-        if (tutorial == true) { return; }
         isDioActive = true;
         dioTimer = 0f;
         Time.timeScale = TimeManage.Instance.dioTimeScale;
@@ -321,7 +335,7 @@ public class PlayerController : MonoBehaviour
 
         if (zaWorldo != null)
         {
-            audioSource.pitch = 1f; 
+            audioSource.pitch = 1f;
             audioSource.PlayOneShot(zaWorldo);
 
             StartCoroutine(FadeAudioIn(audioSource, 0.5f));
@@ -330,15 +344,14 @@ public class PlayerController : MonoBehaviour
         EventManage.TriggerEvent("DioTimeStarted");
 
 
-        Debug.Log("ZAAA WORLDOOOOOOOO "); 
+        Debug.Log("ZAAA WORLDOOOOOOOO ");
     }
 
     public void ChangeDioTimeScale(float newScale)
     {
-        if (tutorial == true) { return; }
         TimeManage.Instance.SetDioTimeScale(newScale);
 
-       
+
         if (isDioActive)
         {
             Time.timeScale = TimeManage.Instance.dioTimeScale;
@@ -348,20 +361,19 @@ public class PlayerController : MonoBehaviour
 
     void EndZaWorldo()
     {
-        if (tutorial == true) { return; }
         isDioActive = false;
         Time.timeScale = 1f;
         Time.fixedDeltaTime = originalFixedDeltaTime;
 
         if (timeMove != null)
         {
-            audioSource.pitch = 1f; 
+            audioSource.pitch = 1f;
             audioSource.PlayOneShot(timeMove);
         }
 
         EventManage.TriggerEvent("DioTimeEnded");
 
-        Debug.Log(" Time Begins to Run"); 
+        Debug.Log(" Time Begins to Run");
 
     }
 
@@ -382,10 +394,10 @@ public class PlayerController : MonoBehaviour
 
     void DashToBall()
     {
-       
+
         if (Time.time < skillTimer + skillCooldown) return;
-            
-        
+
+
 
         if (ball == null)
         {
@@ -393,11 +405,11 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-       
+
         Vector3 ballForward = ball.transform.forward;
         Vector3 targetPosition = ball.transform.position + ballForward * skillDistance;
 
-        
+
         if (Physics.Raycast(targetPosition + Vector3.up * 2f, Vector3.down, out RaycastHit hit, 3f, groundMask))
         {
             targetPosition = hit.point;
@@ -409,16 +421,16 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-      
+
         Vector3 dashDirection = (targetPosition - transform.position).normalized;
         float dashDistanceToTarget = Vector3.Distance(transform.position, targetPosition);
 
         if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, dashDirection, dashDistanceToTarget, obsticaleLayers))
         {
-          
+
             StartCoroutine(ExecuteDash(targetPosition));
             skillTimer = Time.time; // Start the cooldown
-            
+
         }
         else
         {
@@ -441,64 +453,50 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator ExecuteDash(Vector3 targetPosition)
     {
-        float dashDuration= 0.2f;
+        float dashDuration = 0.2f;
         float elapsedTime = 0f;
         Vector3 startPosition = transform.position;
 
 
         while (elapsedTime < dashDuration)
 
-        { 
-        elapsedTime += Time.unscaledDeltaTime;
+        {
+            elapsedTime += Time.unscaledDeltaTime;
 
             float fraction = elapsedTime / dashDuration;
 
             transform.position = Vector3.Lerp(startPosition, targetPosition, fraction);
             yield return null;
 
-        
+
         }
 
         transform.position = targetPosition;
         dashTimer = Time.time;
     }
     void Jump()
-        {
-            if (isGrounded)
-            {
-                velocity.y = Mathf.Sqrt(2 * Mathf.Abs(gravity) * jumpHieght);
-                     gravity =-7f;
-            }
-
-          
-        }
-        void Dash()
-        {
-            if (Time.time > dashTimer + dashCooldown)
-            {
-                Vector3 inputDir = new Vector3((xMove), 0, yMove).normalized;
-                if (inputDir==Vector3.zero)inputDir = transform.forward;
-                else inputDir = transform.TransformDirection(inputDir);
-
-                DashDirection(inputDir);
-            }
-        }
-    float GetCurrentGravity()
     {
-       float currentGravity = gravity;
-        if ( isRunning)
+        if (isGrounded)
         {
-            currentGravity *= gravityMultiplier;
-
-
+            velocity.y = Mathf.Sqrt(2 * Mathf.Abs(gravity) * jumpHieght);
         }
-        return currentGravity;
+    }
+    void Dash()
+    {
+        if (Time.time > dashTimer + dashCooldown)
+        {
+            Vector3 inputDir = new Vector3((xMove), 0, yMove).normalized;
+            if (inputDir == Vector3.zero) inputDir = transform.forward;
+            else inputDir = transform.TransformDirection(inputDir);
+
+            DashDirection(inputDir);
+        }
     }
 
 }
 
 
- 
+
 
 
 
