@@ -1,9 +1,9 @@
 using System.Security.AccessControl;
 using UnityEngine;
 
-public class TimeManage : MonoBehaviour
+public class TimeManager : MonoBehaviour
 {
-    public static TimeManage instance;
+    public static TimeManager instance;
 
 
     [Header("Time Setting")]
