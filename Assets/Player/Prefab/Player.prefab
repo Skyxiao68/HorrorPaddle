@@ -2224,14 +2224,18 @@ MonoBehaviour:
   ball: {fileID: 0}
   skillDistance: 5
   skillCooldown: 5
-  zaWorldo: {fileID: 0}
-  timeMove: {fileID: 0}
-  tutorial: 0
+  dashTp: {fileID: 8300000, guid: d8a83c2f1203bed43acfad58bf0fbc35, type: 3}
+  zaWorldo: {fileID: 8300000, guid: 4a054e7c11477c8478d9a7790cd59e71, type: 3}
+  timeMove: {fileID: 8300000, guid: 2811b0cbd5dea3c4da31c2e0e18e1f7c, type: 3}
+  tutorial: 1
   inputWall: 0
   Wall: {fileID: 0}
   WallSpawn: {fileID: 0}
-  wallCoolDown: 20
+  wallCoolDown: 2
   wallDuration: 5
+  wallMoveDuration: 1.3
+  wallUpSound: {fileID: 8300000, guid: 18dc795dbca9b714bbf9652756996956, type: 3}
+  wallDownSound: {fileID: 8300000, guid: dac1a8cd9ab2d5643855779183811cf6, type: 3}
 --- !u!114 &4163661477548608543
 MonoBehaviour:
   m_ObjectHideFlags: 0

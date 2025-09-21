@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     [Header("Moving")]
     public float walkSpeed = 5f;
     public float gravity = -9.81f;
+    public float gravityMultiplier = 20f;
     public float CurrentMovementSpeed { get; private set; }
 
     [Header("Running")]
@@ -91,6 +92,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip zaWorldo;
     public AudioClip timeMove;
     private AudioSource audioSource;
+    public bool tutorial= true;
 
     [Header("Wall")]
     public float inputWall;
@@ -174,7 +176,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        velocity.y += gravity * Time.deltaTime;
+        velocity.y += GetCurrentGravity() * Time.deltaTime;
         CC.Move(velocity * Time.deltaTime);
 
         if (isRunning)
@@ -233,6 +235,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleWall()
     {
+        if (tutorial ==true) { return; }
 
         if (wallCooldownTimer < wallCoolDown)
         {
@@ -326,6 +329,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleZaWorld()
     {
+        if (tutorial == true) { return; }
         if (inputDio == 1 && !isDioActive)
         {
             StartZaWorldo();
@@ -414,6 +418,7 @@ public class PlayerController : MonoBehaviour
 
     void DashToBall()
     {
+        if (tutorial == true) { return; }
 
         if (Time.time < skillTimer + skillCooldown) return;
 
@@ -502,6 +507,18 @@ public class PlayerController : MonoBehaviour
 
         transform.position = targetPosition;
         dashTimer = Time.time;
+    }
+    float GetCurrentGravity()
+    {
+        float currentGravity = gravity;
+
+      
+        if ( isRunning)
+        {
+            currentGravity *= gravityMultiplier;
+        }
+
+        return currentGravity;
     }
     void Jump()
     {
