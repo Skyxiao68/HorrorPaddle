@@ -431,48 +431,83 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        UnityEngine.Debug.DrawLine(ball.transform.position, ball.transform.position + ball.transform.forward * 5f, Color.blue, 2f);
+        
 
         Vector3 ballForward = ball.transform.forward;
         Vector3 targetPosition = ball.transform.position + ballForward * skillDistance;
+
+        UnityEngine.Debug.DrawLine(ball.transform.position, targetPosition, Color.blue, 2f);
 
         GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         marker.transform.position = targetPosition;
         marker.transform.localScale = Vector3.one * 0.5f;
         Destroy(marker, 2f);
 
-        float rayStartHeight = 5f; // 从更高的位置开始检测
-        float rayLength = 10f; // 增加射线长度
+        float playerRadius = 0.5f;
+        Vector3 checkPosition = targetPosition;
+        checkPosition.y += playerHeight / 2f;
 
-        UnityEngine.Debug.DrawRay(targetPosition + Vector3.up * rayStartHeight, Vector3.down * rayLength, Color.red, 2f);
-
-        if (Physics.Raycast(targetPosition + Vector3.up * 2f, Vector3.down, out RaycastHit hit, 3f, groundMask))
+       
+        if (!Physics.CheckSphere(checkPosition, playerRadius, obsticaleLayers))
         {
-            targetPosition = hit.point;
-            targetPosition.y += playerHeight / 2f;
-        }
-        else
-        {
-            UnityEngine.Debug.Log("Skill target not on ground. Aborting.");
-            return;
-        }
-
-
-        Vector3 dashDirection = (targetPosition - transform.position).normalized;
-        float dashDistanceToTarget = Vector3.Distance(transform.position, targetPosition);
-
-        if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, dashDirection, dashDistanceToTarget, obsticaleLayers))
-        {
-
+           
             StartCoroutine(ExecuteDash(targetPosition));
-            skillTimer = Time.time; // Start the cooldown
-
+            skillTimer = Time.time;
+            UnityEngine.Debug.Log("DashToBall activated! Player will appear in front of the ball.");
         }
         else
         {
-            UnityEngine.Debug.Log("Obstacles in the way, cannot use Skill");
+           
+            if (FindValidPositionAlongBallDirection(ballForward, out Vector3 validPosition))
+            {
+                StartCoroutine(ExecuteDash(validPosition));
+                skillTimer = Time.time;
+                UnityEngine.Debug.Log("DashToBall activated at adjusted position in front of the ball!");
+            }
+            else
+            {
+                UnityEngine.Debug.Log("No valid position found in front of the ball. Cannot use Skill");
+            }
         }
     }
+
+    
+    bool FindValidPositionAlongBallDirection(Vector3 ballDirection, out Vector3 validPosition)
+    {
+        validPosition = ball.transform.position;
+        float maxDistance = 5f; 
+        float stepSize = 0.5f; 
+        int maxSteps = (int)(maxDistance / stepSize);
+
+        
+        for (int i = 1; i <= maxSteps; i++)
+        {
+            float distance = stepSize * i;
+            Vector3 testPosition = ball.transform.position + ballDirection * distance;
+            testPosition.y = ball.transform.position.y; 
+
+           
+            Vector3 checkPos = testPosition;
+            checkPos.y += playerHeight / 2f;
+
+            if (!Physics.CheckSphere(checkPos, 0.5f, obsticaleLayers))
+            {
+                validPosition = testPosition;
+
+                
+                GameObject validMarker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                validMarker.transform.position = validPosition;
+                validMarker.transform.localScale = Vector3.one * 0.3f;
+                validMarker.GetComponent<Renderer>().material.color = Color.green;
+                Destroy(validMarker, 2f);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     void DashDirection(Vector3 direction)
     {
         Vector3 dashPosition = transform.position + direction * dashDistance;
@@ -493,30 +528,34 @@ public class PlayerController : MonoBehaviour
         float elapsedTime = 0f;
         Vector3 startPosition = transform.position;
 
+        
+        Vector3 lookDirection = (ball.transform.position - targetPosition).normalized;
+        lookDirection.y = 0; 
+        Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+        Quaternion startRotation = transform.rotation;
 
         while (elapsedTime < dashDuration)
-
         {
             elapsedTime += Time.unscaledDeltaTime;
-
             float fraction = elapsedTime / dashDuration;
 
+           
             transform.position = Vector3.Lerp(startPosition, targetPosition, fraction);
 
-            if (dashTp  != null)
+           
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, fraction);
+
+            if (dashTp != null && elapsedTime < 0.1f)
             {
                 audioSource.pitch = 1.2f;
-                
                 audioSource.PlayOneShot(dashTp);
-
-                StartCoroutine(FadeAudioIn(audioSource, 0.5f));
             }
+
             yield return null;
-
-
         }
 
         transform.position = targetPosition;
+        transform.rotation = targetRotation; 
         dashTimer = Time.time;
     }
     float GetCurrentGravity()
