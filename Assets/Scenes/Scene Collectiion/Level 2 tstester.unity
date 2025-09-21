@@ -3254,9 +3254,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2031043298}
     - target: {fileID: 739567413521615913, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: winSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 85fe20cdd510b6943967d955ce8335a2, type: 3}
+    - target: {fileID: 739567413521615913, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: lossSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 1bc4b567aca3c11478e4fcaee015abf2, type: 3}
+    - target: {fileID: 739567413521615913, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
       propertyPath: blueTarget
       value: 
       objectReference: {fileID: 1356381439}
+    - target: {fileID: 739567413521615913, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
+      propertyPath: bouceSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 01bf2a6f6ec55f54295626fb1db71d7a, type: 3}
     - target: {fileID: 739567413521615913, guid: 33caf404212b63a4b864a50d79931dd4, type: 3}
       propertyPath: iWantScore
       value: 1
@@ -3528,8 +3540,12 @@ PrefabInstance:
       value: 345
       objectReference: {fileID: 0}
     - target: {fileID: 2125959468946202103, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 153.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2125959468946202103, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -61
+      value: -39
       objectReference: {fileID: 0}
     - target: {fileID: 2853000277463969228, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: m_IsActive
