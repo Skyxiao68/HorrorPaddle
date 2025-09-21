@@ -21,6 +21,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using System;
+using System.Diagnostics;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -252,7 +253,7 @@ public class PlayerController : MonoBehaviour
     {
         if (WallSpawn == null)
         {
-            Debug.Log("Wall Spawn not Assigned");
+            UnityEngine.Debug.Log("Wall Spawn not Assigned");
         }
 
 
@@ -273,7 +274,7 @@ public class PlayerController : MonoBehaviour
 
         wallCoolDownTimer = 0f;
 
-        Debug.Log("Wall Up");
+        UnityEngine.Debug.Log("Wall Up");
     }
 
 
@@ -318,7 +319,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(FadeAudioIn(audioSource, 0.5f));
         }
 
-        Debug.Log("Wall Down");
+        UnityEngine.Debug.Log("Wall Down");
 
     }
 
@@ -364,7 +365,7 @@ public class PlayerController : MonoBehaviour
         EventManage.TriggerEvent("DioTimeStarted");
 
 
-        Debug.Log("ZAAA WORLDOOOOOOOO ");
+        UnityEngine.Debug.Log("ZAAA WORLDOOOOOOOO ");
     }
 
     public void ChangeDioTimeScale(float newScale)
@@ -393,7 +394,7 @@ public class PlayerController : MonoBehaviour
 
         EventManage.TriggerEvent("DioTimeEnded");
 
-        Debug.Log(" Time Begins to Run");
+        UnityEngine.Debug.Log(" Time Begins to Run");
 
     }
 
@@ -421,14 +422,24 @@ public class PlayerController : MonoBehaviour
 
         if (ball == null)
         {
-            Debug.LogError("Ball reference is not set for Skill!");
+            UnityEngine.Debug.LogError("Ball reference is not set for Skill!");
             return;
         }
 
+        UnityEngine.Debug.DrawLine(ball.transform.position, ball.transform.position + ball.transform.forward * 5f, Color.blue, 2f);
 
         Vector3 ballForward = ball.transform.forward;
         Vector3 targetPosition = ball.transform.position + ballForward * skillDistance;
 
+        GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        marker.transform.position = targetPosition;
+        marker.transform.localScale = Vector3.one * 0.5f;
+        Destroy(marker, 2f);
+
+        float rayStartHeight = 5f; // 从更高的位置开始检测
+        float rayLength = 10f; // 增加射线长度
+
+        UnityEngine.Debug.DrawRay(targetPosition + Vector3.up * rayStartHeight, Vector3.down * rayLength, Color.red, 2f);
 
         if (Physics.Raycast(targetPosition + Vector3.up * 2f, Vector3.down, out RaycastHit hit, 3f, groundMask))
         {
@@ -437,7 +448,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Skill target not on ground. Aborting.");
+            UnityEngine.Debug.Log("Skill target not on ground. Aborting.");
             return;
         }
 
@@ -454,7 +465,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Obstacles in the way, cannot use Skill");
+            UnityEngine.Debug.Log("Obstacles in the way, cannot use Skill");
         }
     }
     void DashDirection(Vector3 direction)
@@ -467,7 +478,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Obstacles in the way, cannot dash");
+            UnityEngine.Debug.Log("Obstacles in the way, cannot dash");
         }
     }
 
