@@ -47,6 +47,15 @@ public class sarahPlayer : MonoBehaviour
     public float minZ;
     public float maxZ;
 
+    [Header("ZaWorldo Debuff")]
+    //public float dioTimeScale = 0.2f;
+    private bool isInDioTime = false;
+    private float originalMoveSpeedA;
+    private float originalMoveSpeedD;
+    private float originalJumpHeight;
+    private float originalJumpTime;
+
+
 
 
 
@@ -58,6 +67,40 @@ public class sarahPlayer : MonoBehaviour
         jumpStance = 1;
         canSwitchStance = false;
         lastSwitch = Time.time;
+
+        originalMoveSpeedA = moveSpeedA;
+        originalMoveSpeedD = moveSpeedD;
+        originalJumpHeight = jumpHeight;
+        originalJumpTime = jumpTime;
+
+        EventManage.AddListener("DioTimeStarted", StartDioTime);
+        EventManage.AddListener("DioTimeEnded", EndDioTime);
+
+        TimeManage.Instance.OnDioTimeScaleChanged += OnDioTimeScaleChanged;
+    }
+
+    private void OnDestroy()
+    {
+        EventManage.RemoveListener("DioTimeStarted", StartDioTime);
+        EventManage.RemoveListener("DioTimeEnded", EndDioTime);
+
+        if (TimeManage.Instance != null)
+        {
+            TimeManage.Instance.OnDioTimeScaleChanged -= OnDioTimeScaleChanged;
+        }   
+
+    }
+
+    private void OnDioTimeScaleChanged(float newScale)
+    {
+        if (isInDioTime)
+        {
+            
+            moveSpeedA = originalMoveSpeedA * newScale;
+            moveSpeedD = originalMoveSpeedD * newScale;
+            jumpHeight = originalJumpHeight * newScale;
+            jumpTime = originalJumpTime * newScale;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -111,6 +154,32 @@ public class sarahPlayer : MonoBehaviour
         }
     }
 
+    private void StartDioTime()  //YEAAAAA DIO IS EVERYWHEREEEEE
+    {
+        if (isInDioTime) return; 
+
+        isInDioTime = true;
+
+        moveSpeedA *= TimeManage.Instance.dioTimeScale;
+        moveSpeedD *= TimeManage.Instance.dioTimeScale;
+        jumpHeight *= TimeManage.Instance.dioTimeScale;
+        jumpTime *= TimeManage.Instance.dioTimeScale;
+
+        Debug.Log("DIOOOO!!! U BASTARD!!!!!!!!!"); 
+
+    }
+
+    private void EndDioTime()
+    { 
+        if(!isInDioTime) return;
+
+        moveSpeedA = originalMoveSpeedA;
+        moveSpeedD = originalMoveSpeedD;
+        jumpHeight = originalJumpHeight;
+        jumpTime = originalJumpTime;
+
+        Debug.Log("DIOOOOOO!!! LETTING ME FREE IS YOUR MISTAKE !!!!!! "); 
+    }
     void Aggreseive()
     {
         jumpHeight = 7;
@@ -181,6 +250,8 @@ public class sarahPlayer : MonoBehaviour
         offGround = true;
         float timer = 0;
         Vector3 startPosition = transform.position;
+
+        
 
         while (timer < jumpTime)
         {
