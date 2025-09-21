@@ -79,10 +79,12 @@ public class PlayerController : MonoBehaviour
     public float skillCooldown;
     private float skillTimer;
     private float lastTapTime;
+    public AudioClip dashTp;
 
-    [Header("ZaWorldo Lite")]
     //public float dioTimeScale = 0.2f;
     // public float dioTimeDuration = 3f;
+
+    [Header("ZaWorldo Lite")]
     private bool isDioActive = false;
     private float dioTimer = 0f;
     private float originalFixedDeltaTime;
@@ -284,7 +286,7 @@ public class PlayerController : MonoBehaviour
         {
             wallInstance.transform.position = Vector3.Lerp(startPos, WallSpawn.position, elapsedTime / wallMoveDuration);
 
-            elapsedTime += Time.deltaTime;
+            elapsedTime += Time.unscaledDeltaTime;
 
             yield return null;
         }
@@ -484,6 +486,15 @@ public class PlayerController : MonoBehaviour
             float fraction = elapsedTime / dashDuration;
 
             transform.position = Vector3.Lerp(startPosition, targetPosition, fraction);
+
+            if (dashTp  != null)
+            {
+                audioSource.pitch = 1.2f;
+                
+                audioSource.PlayOneShot(dashTp);
+
+                StartCoroutine(FadeAudioIn(audioSource, 0.5f));
+            }
             yield return null;
 
 

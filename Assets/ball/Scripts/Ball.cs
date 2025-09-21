@@ -10,6 +10,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
+using System;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
@@ -42,9 +43,11 @@ public class ThrowableObject : MonoBehaviour
 
     [Header("Sounds")]
     public AudioClip hitSound;
-    private AudioSource hitAud;
     public AudioClip bouceSound;
-    private AudioSource bouceAud;
+    public AudioClip winSound;
+    public AudioClip lossSound;
+    private AudioSource audioSource;
+    
 
     [Header("Aggressive")]
     public float hitForceAggressive;
@@ -69,6 +72,8 @@ public class ThrowableObject : MonoBehaviour
     private void Awake()
     {
         inputControl = new PlayerInputController();
+        audioSource = GetComponent<AudioSource>();
+
     }
 
     private void OnEnable()
@@ -102,8 +107,6 @@ public class ThrowableObject : MonoBehaviour
         rb.isKinematic = true;
         steveAi = FindFirstObjectByType<stevePlayer>();
         sarahAi = FindFirstObjectByType<sarahPlayer>();
-        hitAud = GetComponent<AudioSource>();
-        bouceAud = GetComponent<AudioSource>();
         batStance = FindFirstObjectByType<batDirection>();
 
     }
@@ -216,11 +219,13 @@ public class ThrowableObject : MonoBehaviour
         if (other.CompareTag("PlayerWall"))
         {
             OpponentScored();
+            audioSource.PlayOneShot(lossSound);
         }
 
         if (other.CompareTag("OpponentWall"))
         {
             PlayerScored();
+            audioSource.PlayOneShot(winSound);
         }
     }
 
@@ -239,7 +244,14 @@ public class ThrowableObject : MonoBehaviour
             
             
             ThrowObjectToTarget(currentTarget.position);
-            hitAud.PlayOneShot(hitSound);
+            if (hitSound != null)
+            {
+                audioSource.pitch = 1f;
+                audioSource.PlayOneShot(hitSound );
+
+                
+            }
+
             Debug.Log("Target in Aight");
 
            
@@ -292,7 +304,13 @@ public class ThrowableObject : MonoBehaviour
 
         if (impactVelocity > minVelocity && bouceSound != null)
         {
-            bouceAud.PlayOneShot(bouceSound);
+            if (bouceSound != null)
+            {
+                audioSource.pitch = 1f;
+                audioSource.PlayOneShot(bouceSound);
+
+                
+            }
         }
 
 
@@ -384,13 +402,13 @@ public class ThrowableObject : MonoBehaviour
 
         if (enemyStance == 1) // Aggressive Stance
         {
-            int randomTargetA = Random.Range(0, aggroTargets.Length);
+            int randomTargetA = UnityEngine.Random.Range(0, aggroTargets.Length);
             Aggressive(aggroTargets[randomTargetA].position);
             Debug.Log("Ball is Aggressive ");
         }
         else if (enemyStance == 2) // Defensive Stance
         {
-            int randomTargetD = Random.Range(0, defTargets.Length);
+            int randomTargetD = UnityEngine.Random.Range(0, defTargets.Length);
             Defensive(defTargets[randomTargetD].position);
             Debug.Log("Ball is Defensive");
         }
@@ -460,10 +478,17 @@ public class ThrowableObject : MonoBehaviour
     {
         if (iWantScore ==false) { return; }
         Instantiate(playerScorePar,transform.position,transform.rotation);
-        bouceAud.PlayOneShot(bouceSound);
+
+        
+
         ball.SetActive(false);
         scoreBoard.AddScoreP();
-     
+
+        
+        
+
+
+        
 
         ball.transform.position = new Vector3 (7.49f, 1.12f, -80);
         rb.isKinematic =true;
@@ -471,18 +496,27 @@ public class ThrowableObject : MonoBehaviour
         ball.SetActive (true);
 
         
-        
+
     }
 
     void OpponentScored()
     {
         if (iWantScore ==false) {return; }
         Instantiate(enemyScorePar, transform.position, transform.rotation);
-        bouceAud.PlayOneShot(bouceSound);
+
+        
+
         ballCol.SetColor("_BaseColor", Color.green);
         ball.SetActive(false);
         scoreBoard.AddScoreO();
 
+       
+        
+            
+      ;
+
+            
+        
         ball.transform.position = new Vector3(7.49f, 1.12f, -80);
         rb.isKinematic = true;
         throwToTarget = false;
@@ -490,5 +524,19 @@ public class ThrowableObject : MonoBehaviour
 
         
 
+    }
+
+    IEnumerator FadeAudioIn(AudioSource audioSource, float fadeTime)
+    {
+        float startVolume = 0.2f;
+        audioSource.volume = startVolume;
+
+        while (audioSource.volume < 1.0f)
+        {
+            audioSource.volume += startVolume * Time.unscaledDeltaTime / fadeTime;
+            yield return null;
+        }
+
+        audioSource.volume = 1f;
     }
 }

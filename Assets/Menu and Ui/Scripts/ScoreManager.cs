@@ -15,15 +15,27 @@ public class ScoreManager : MonoBehaviour
     public GameObject loseScreen;
     public Rigidbody player;
     public ScoreBoard scoreBoard;
+    public AudioClip loseSound;
+    public AudioClip wonSound;
+    private AudioSource wonSource;
+    private AudioSource loseSource;
    
     public int pScore = 0;
     public int oScore = 0;
 
+     void Awake()
+    {
+            
+           
+    }
     void Start()
     {
         winScreen.SetActive(false);
         loseScreen.SetActive(false);
-   
+        wonSource = GetComponent<AudioSource>();
+        loseSource = GetComponent<AudioSource>();
+        wonSource.enabled = true;
+
     }
 
     public void AddScoreP()
@@ -34,8 +46,12 @@ public class ScoreManager : MonoBehaviour
         { 
         scoreBoard.ShowPlayerNumber(pScore);
         }
-        if (pScore >= 5) 
+        if (pScore >= 5)
+        {
             PlayerWon();
+            gameObject.SetActive(true);
+            wonSource.PlayOneShot(wonSound);
+        }
     }
 
     public void AddScoreO()
@@ -56,8 +72,9 @@ public class ScoreManager : MonoBehaviour
     public void PlayerWon()
     {
         winScreen.SetActive(true);
-      
-     
+
+       
+
     }
 
     public void PlayerLost()
@@ -65,9 +82,9 @@ public class ScoreManager : MonoBehaviour
         
       player.AddTorque(Random.onUnitSphere * 500000000000f, ForceMode.Impulse);
 
-   Invoke(nameof(ShowLoseScreen), 3f);
+      Invoke(nameof(ShowLoseScreen), 3f);
 
-        
+       
 
     }
     private void ShowLoseScreen()
@@ -76,5 +93,6 @@ public class ScoreManager : MonoBehaviour
         Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
+        loseSource.PlayOneShot(loseSound);
     }
 }
