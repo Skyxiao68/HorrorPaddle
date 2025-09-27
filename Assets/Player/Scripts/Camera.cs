@@ -9,11 +9,12 @@
 // 23 July 2035
 // Version 4
 //https://youtu.be/f473C43s8nE?si=Jjp9O05Qddu9J2Hs
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class Camera : MonoBehaviour
+public class mainCamera : MonoBehaviour
 {
     public PlayerInputController inputControl; 
 
@@ -28,6 +29,7 @@ public class Camera : MonoBehaviour
     public Vector2 inputLook;
 
     public Slider senSlider;
+    internal static object main;
 
     public void Awake()
     {
@@ -72,5 +74,9 @@ public class Camera : MonoBehaviour
         mouseSens = newSpeed * 18;
     }
 
+    internal Vector3 ScreenToWorldPoint(Vector3 vector3)
+    {
+        throw new NotImplementedException();
+    }
 }
 
