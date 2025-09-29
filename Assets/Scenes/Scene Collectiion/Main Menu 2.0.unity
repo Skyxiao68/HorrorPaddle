@@ -4402,8 +4402,8 @@ GameObject:
   - component: {fileID: 1817355869}
   - component: {fileID: 1817355868}
   - component: {fileID: 1817355875}
-  - component: {fileID: 1817355874}
   - component: {fileID: 1817355876}
+  - component: {fileID: 1817355877}
   m_Layer: 0
   m_Name: Cursor
   m_TagString: Ball
@@ -4527,62 +4527,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1817355874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1817355867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d91759641d81c9b4bb59e881c68c7eb4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputDirection: {x: 0, y: 0}
-  inputRun: 0
-  inputDash: 0
-  inputDio: 0
-  walkSpeed: 200
-  gravity: 0
-  gravityMultiplier: 0
-  runSpeed: 0
-  runStam: 0
-  maxStam: 0
-  stamDeplete: 0
-  stamRecover: 0
-  isRunning: 0
-  dashDistance: 0
-  dashCooldown: 0
-  dashSmoother: 0
-  playerHeight: 0
-  obsticaleLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  groundCheck: {fileID: 1554553519}
-  groundDistance: 0.4
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 0
-  groundCheckDistance: 0.2
-  isGrounded: 0
-  jumpHieght: 0.5
-  buttonHoldThreshold: 0.5
-  ball: {fileID: 0}
-  skillDistance: 0
-  skillCooldown: 0
-  dashTp: {fileID: 0}
-  zaWorldo: {fileID: 0}
-  timeMove: {fileID: 0}
-  tutorial: 1
-  inputWall: 0
-  Wall: {fileID: 0}
-  WallSpawn: {fileID: 0}
-  wallCoolDown: 5
-  wallDuration: 5
-  wallMoveDuration: 0
-  wallUpSound: {fileID: 0}
-  wallDownSound: {fileID: 0}
 --- !u!143 &1817355875
 CharacterController:
   m_ObjectHideFlags: 0
@@ -4629,6 +4573,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1817355877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817355867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b72a24e56245fa408525cb665424132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseSens: 20
+  cursor: {fileID: 1817355872}
+  mousePos: {x: 0, y: 0}
+  movementPlane: 0
+  cursorHeight: 0
 --- !u!1 &1823056307
 GameObject:
   m_ObjectHideFlags: 0
