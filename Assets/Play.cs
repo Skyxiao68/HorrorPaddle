@@ -7,6 +7,7 @@ public class Play : MonoBehaviour
     public Material playMaterial;
     public float click;
     private Camera mainCamera;
+    public Animator transiton;
 
     [Header("Cam transition")]
     public Transform camTarget;
@@ -21,6 +22,7 @@ public class Play : MonoBehaviour
     public void Awake()
     {
         inputControl = new PlayerInputController();
+       
         playMaterial.SetColor("_Color", Color.white);
         mainCamera = Camera.main;
     }
@@ -74,7 +76,7 @@ public class Play : MonoBehaviour
             // Store original position only once
             originalCameraPosition = mainCamera.transform.position;
             originalCameraRotation = mainCamera.transform.rotation;
-
+            transiton.SetBool("Start",true);
             isTransitioning = true;
             transitionTimer = 0f;
             canTransition = false; 
@@ -83,7 +85,9 @@ public class Play : MonoBehaviour
 
     void HandleCamTransition()
     {
+        
         transitionTimer += Time.deltaTime;
+      
         float t = Mathf.Clamp01(transitionTimer / transitionDuration);
         float smoothT = Mathf.SmoothStep(0f, 1f, t);
 

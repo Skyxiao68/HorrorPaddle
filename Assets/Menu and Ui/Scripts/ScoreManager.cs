@@ -5,6 +5,7 @@
 //https://youtu.be/TAGZxRMloyU?si=kx5MgXld_n3wJiKO
 
 
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -22,22 +23,31 @@ public class ScoreManager : MonoBehaviour
    
     public int pScore = 0;
     public int oScore = 0;
+    public Transform targetsPosition;
 
-     void Awake()
+    void Awake()
     {
             
            
     }
     void Start()
     {
-        winScreen.SetActive(false);
+      
         loseScreen.SetActive(false);
         wonSource = GetComponent<AudioSource>();
         loseSource = GetComponent<AudioSource>();
         wonSource.enabled = true;
 
     }
-
+    private void Update()
+    {
+        if (pScore >= 5)
+        {
+            PlayerWon();
+            gameObject.SetActive(true);
+            wonSource.PlayOneShot(wonSound);
+        }
+    }
     public void AddScoreP()
     {
         pScore++;
@@ -71,12 +81,32 @@ public class ScoreManager : MonoBehaviour
 
     public void PlayerWon()
     {
-        winScreen.SetActive(true);
+        Vector3 startPosition = winScreen.transform.position;
+        Vector3 targetPosition = targetsPosition.position;
 
-       
+        winScreen.transform.position = Vector3.MoveTowards(startPosition, targetPosition, 3f * Time.deltaTime);
 
     }
+    public IEnumerator MoveUp()
+    {
+        Vector3 startPosition =transform.position;
+        Vector3 targetPosition = targetsPosition.position;
 
+        float duration = 2f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime<duration)
+        {
+            float progress = elapsedTime/duration;
+
+            transform.position = Vector3.Lerp(startPosition, targetPosition, progress);
+
+            yield return null;
+
+            elapsedTime += Time.deltaTime;
+        }
+        transform.position = targetPosition;
+    }
     public void PlayerLost()
     {
         

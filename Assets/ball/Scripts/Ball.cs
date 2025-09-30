@@ -83,7 +83,7 @@ public class ThrowableObject : MonoBehaviour
         EventManage.AddListener("DioTimeStarted", StartDioTime);
         EventManage.AddListener("DioTimeEnded", EndDioTime);
 
-        TimeManage.Instance.OnDioTimeScaleChanged += OnDioTimeScaleChanged;
+        //TimeManage.Instance.OnDioTimeScaleChanged += OnDioTimeScaleChanged;
     }
 
     private void OnDisable()
@@ -510,10 +510,6 @@ public class ThrowableObject : MonoBehaviour
         ball.SetActive(false);
         scoreBoard.AddScoreO();
 
-       
-        
-            
-      ;
 
             
         

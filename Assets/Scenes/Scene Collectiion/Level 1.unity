@@ -26048,9 +26048,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7535992521866494029, guid: 063135d19f0ff8b4cac8ce63e0008cc8, type: 3}
+      propertyPath: hitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 294c7d7809e89cd4db39b3ee12b6ce37, type: 3}
+    - target: {fileID: 7535992521866494029, guid: 063135d19f0ff8b4cac8ce63e0008cc8, type: 3}
       propertyPath: blueTarget
       value: 
       objectReference: {fileID: 1656798184}
+    - target: {fileID: 7535992521866494029, guid: 063135d19f0ff8b4cac8ce63e0008cc8, type: 3}
+      propertyPath: bouceSound
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7535992521866494029, guid: 063135d19f0ff8b4cac8ce63e0008cc8, type: 3}
       propertyPath: greenTarget
       value: 
