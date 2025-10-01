@@ -41,7 +41,7 @@ public class TitleTransition : MonoBehaviour
 
     private void Update()
     {
-        click = inputControl.UI.Click.ReadValue<float>();
+        click = inputControl.UI.MenuClick.ReadValue<float>();
 
         if (canTransition && click == 1 && previousClickValue == 0 && !isTransitioning)
         {

@@ -531,12 +531,12 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
             ""actions"": [
                 {
                     ""name"": ""Navigate"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""8be9efb4-4cfa-41ce-969d-b22f30f4d217"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Menu Click"",
@@ -551,14 +551,14 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                     ""name"": ""Cancel"",
                     ""type"": ""Button"",
                     ""id"": ""1d247583-e7ad-4825-8d14-322cf1a43917"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""Point"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Value"",
                     ""id"": ""9dd8dfaa-11cb-4bf4-91fb-648b62dc2512"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
