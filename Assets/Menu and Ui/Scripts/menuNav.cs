@@ -5,6 +5,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+using System.Collections;
+
 public class menuNav : MonoBehaviour
 {
     public PlayerInputController inputControl;
@@ -12,16 +17,29 @@ public class menuNav : MonoBehaviour
     public float gamepadSens = 10f;
     public Transform cursor;
 
-    // 选择cursor移动的平面
+    
     public enum MovementPlane { XZ, XY }
     public MovementPlane movementPlane = MovementPlane.XZ;
 
     public float cursorHeight = 0f;
 
+
+    [Header("Input Detection Settings")]
+    public bool autoDetectInputDevice = true;
+    public float inputDetectionInterval = 0.5f;
+
+  
+    public enum InputDeviceType { MouseKeyboard, Gamepad }
+    [SerializeField] private InputDeviceType currentInputDevice = InputDeviceType.MouseKeyboard;
+
     private Camera mainCamera;
     private Vector2 navigateInput;
+    private Vector2 mouseInput;
     private Vector3 currentCursorPosition;
-    private bool usingMouse = true;
+
+   
+    private Vector2 virtualScreenPos;
+    private Coroutine inputDetectionCoroutine;
 
     private void Awake()
     {
@@ -32,17 +50,30 @@ public class menuNav : MonoBehaviour
     public void OnEnable()
     {
         inputControl.Enable();
+
+        
+        if (autoDetectInputDevice)
+        {
+            inputDetectionCoroutine = StartCoroutine(DetectInputDevice());
+        }
+
+       
+        UpdateCursorForCurrentDevice();
     }
 
     public void OnDisable()
     {
         inputControl.Disable();
+
+       
+        if (inputDetectionCoroutine != null)
+        {
+            StopCoroutine(inputDetectionCoroutine);
+        }
     }
 
     void Start()
     {
-        Cursor.visible = true;
-
         if (cursor == null)
         {
             Debug.LogError("Cursor transform is not assigned!");
@@ -53,69 +84,60 @@ public class menuNav : MonoBehaviour
             mainCamera = Camera.main;
         }
 
-        // 初始化光标位置
+     
         if (cursor != null)
         {
             currentCursorPosition = cursor.position;
+         
+            virtualScreenPos = mainCamera.WorldToScreenPoint(currentCursorPosition);
         }
     }
 
     private void Update()
     {
-        // 获取鼠标输入
-        Vector2 mousePos = inputControl.UI.Point.ReadValue<Vector2>();
+      
+        mouseInput = inputControl.UI.Point.ReadValue<Vector2>();
 
-        // 获取导航输入（WASD/手柄）
+      
         navigateInput = inputControl.UI.Navigate.ReadValue<Vector2>();
 
-        // 检测输入方式切换
-        if (mousePos.sqrMagnitude > 0.01f)
+        
+        if (currentInputDevice == InputDeviceType.MouseKeyboard)
         {
-            usingMouse = true;
+           
+            currentCursorPosition = ScreenToWorldPosition(mouseInput);
         }
-        else if (navigateInput.sqrMagnitude > 0.01f)
+        else 
         {
-            usingMouse = false;
-        }
-
-        // 根据输入方式更新光标位置
-        if (usingMouse)
-        {
-            // 使用鼠标控制
-            currentCursorPosition = ScreenToWorldPosition(mousePos);
-        }
-        else
-        {
-            // 使用导航输入控制（WASD/手柄）
-            if (movementPlane == MovementPlane.XZ)
-            {
-                // 在XZ平面上移动
-                currentCursorPosition.x += navigateInput.x * gamepadSens * Time.deltaTime;
-                currentCursorPosition.z += navigateInput.y * gamepadSens * Time.deltaTime;
-            }
-            else // XY平面
-            {
-                // 在XY平面上移动
-                currentCursorPosition.x += navigateInput.x * gamepadSens * Time.deltaTime;
-                currentCursorPosition.y += navigateInput.y * gamepadSens * Time.deltaTime;
-            }
-
-            // 限制光标在屏幕范围内
-            ClampCursorToScreen();
+           
+            UpdateCursorWithNavigation();
         }
 
-        // 应用光标位置
+     
         if (cursor != null)
         {
             cursor.position = currentCursorPosition;
         }
     }
 
+    private void UpdateCursorWithNavigation()
+    {
+        
+        virtualScreenPos += navigateInput * gamepadSens * Time.deltaTime;
+
+        
+        virtualScreenPos.x = Mathf.Clamp(virtualScreenPos.x, 0, Screen.width);
+        virtualScreenPos.y = Mathf.Clamp(virtualScreenPos.y, 0, Screen.height);
+
+      
+        currentCursorPosition = ScreenToWorldPosition(virtualScreenPos);
+    }
+
     private Vector3 ScreenToWorldPosition(Vector2 screenPosition)
     {
         if (movementPlane == MovementPlane.XZ)
         {
-            // 对于XZ平面，创建一个与XZ平面平行的射线检测
+           
             Plane plane = new Plane(Vector3.up, new Vector3(0, cursorHeight, 0));
             Ray ray = mainCamera.ScreenPointToRay(screenPosition);
 
@@ -124,28 +146,140 @@ public class menuNav : MonoBehaviour
                 return ray.GetPoint(distance);
             }
         }
-        else // XY平面
+        else 
         {
-            // 对于XY平面，使用固定的Z深度
-            float zDepth = cursor.position.z;
+           
+            float zDepth = cursor != null ? cursor.position.z : 0;
             Vector3 worldPos = mainCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, zDepth));
             return worldPos;
         }
 
-        // 如果射线检测失败，返回当前位置
+     
         return currentCursorPosition;
     }
 
-    private void ClampCursorToScreen()
+    
+    private IEnumerator DetectInputDevice()
     {
-        // 将世界坐标转换为屏幕坐标
-        Vector3 screenPos = mainCamera.WorldToScreenPoint(currentCursorPosition);
+        while (true)
+        {
+           
+            bool gamepadInputDetected = false;
 
-        // 限制在屏幕范围内
-        screenPos.x = Mathf.Clamp(screenPos.x, 0, Screen.width);
-        screenPos.y = Mathf.Clamp(screenPos.y, 0, Screen.height);
+           
+            foreach (var gamepad in Gamepad.all)
+            {
+                if (gamepad.leftStick.ReadValue().sqrMagnitude > 0.01f ||
+                    gamepad.rightStick.ReadValue().sqrMagnitude > 0.01f ||
+                    gamepad.dpad.ReadValue().sqrMagnitude > 0.01f ||
+                    gamepad.buttonSouth.isPressed ||
+                    gamepad.buttonEast.isPressed ||
+                    gamepad.buttonWest.isPressed ||
+                    gamepad.buttonNorth.isPressed)
+                {
+                    gamepadInputDetected = true;
+                    break;
+                }
+            }
 
-        // 转换回世界坐标
-        currentCursorPosition = ScreenToWorldPosition(new Vector2(screenPos.x, screenPos.y));
+        
+            bool keyboardInputDetected = navigateInput.sqrMagnitude > 0.01f;
+
+           
+            bool mouseInputDetected = mouseInput.sqrMagnitude > 0.01f ||
+                                     Mouse.current.delta.ReadValue().sqrMagnitude > 0.01f;
+
+            InputDeviceType newDeviceType = currentInputDevice;
+
+            if (gamepadInputDetected)
+            {
+                newDeviceType = InputDeviceType.Gamepad;
+            }
+            else if (mouseInputDetected || keyboardInputDetected)
+            {
+                newDeviceType = InputDeviceType.MouseKeyboard;
+            }
+
+            
+            if (newDeviceType != currentInputDevice)
+            {
+                currentInputDevice = newDeviceType;
+                UpdateCursorForCurrentDevice();
+            }
+
+            yield return new WaitForSeconds(inputDetectionInterval);
+        }
+    }
+
+   
+    private void UpdateCursorForCurrentDevice()
+    {
+        if (currentInputDevice == InputDeviceType.MouseKeyboard)
+        {
+          
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
+            
+            virtualScreenPos = mouseInput;
+        }
+        else 
+        {
+            
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.None;
+           
+        }
+    }
+
+   
+    public void ResetCursorPosition(Vector3 newPosition)
+    {
+        currentCursorPosition = newPosition;
+        if (cursor != null)
+        {
+            cursor.position = newPosition;
+        }
+        virtualScreenPos = mainCamera.WorldToScreenPoint(newPosition);
+    }
+
+
+    public Vector3 GetCursorPosition()
+    {
+        return currentCursorPosition;
+    }
+
+  
+    public Vector2 GetCursorScreenPosition()
+    {
+        return currentInputDevice == InputDeviceType.MouseKeyboard ? mouseInput : virtualScreenPos;
+    }
+
+    
+    public InputDeviceType GetCurrentInputDevice()
+    {
+        return currentInputDevice;
+    }
+
+    public void SetInputDeviceType(InputDeviceType deviceType)
+    {
+        currentInputDevice = deviceType;
+        UpdateCursorForCurrentDevice();
+    }
+
+    
+    public void SetAutoDetectEnabled(bool enabled)
+    {
+        autoDetectInputDevice = enabled;
+
+        if (enabled && inputDetectionCoroutine == null)
+        {
+            inputDetectionCoroutine = StartCoroutine(DetectInputDevice());
+        }
+        else if (!enabled && inputDetectionCoroutine != null)
+        {
+            StopCoroutine(inputDetectionCoroutine);
+            inputDetectionCoroutine = null;
+        }
     }
 }
