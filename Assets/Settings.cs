@@ -63,7 +63,7 @@ public class Settings : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        click = inputControl.UI.Click.ReadValue<float>();
+        click = inputControl.UI.MenuClick.ReadValue<float>();
         if (other.gameObject.CompareTag("Ball"))
         {
             settingsMaterial.SetColor("_Color", Color.red);

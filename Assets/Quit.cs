@@ -24,7 +24,7 @@ public class Quit : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        click = inputControl.UI.Click.ReadValue<float>();
+        click = inputControl.UI.MenuClick.ReadValue<float>();
         if (other.gameObject.CompareTag("Ball"))
         {
             quitMaterial.SetColor("_Color", Color.red);
