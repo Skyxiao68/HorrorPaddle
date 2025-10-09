@@ -1,12 +1,11 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class Settings : MonoBehaviour
 {
     public PlayerInputController inputControl;
     public Material settingsMaterial;
-    public float click;
     public GameObject settingsMenu;
     public Button back;
 
@@ -16,12 +15,11 @@ public class Settings : MonoBehaviour
     public bool isTransitioning = false;
 
     [Header("Main menu settings")]
-    public bool originalStored=false; 
-    private bool isAtSettingsView=false;
+    public bool originalStored = false;
+    public bool isAtSettingsView = false;
     private Vector3 originalCameraPosition;
     private Quaternion originalCameraRotation;
     private Transform originalCamPoint;
-  
     private float transitionTimer;
     private Camera mainCamera;
 
@@ -31,12 +29,10 @@ public class Settings : MonoBehaviour
         inputControl = new PlayerInputController();
         mainCamera = Camera.main;
         settingsMenu.SetActive(false);
-
-
     }
+
     private void Start()
     {
-      
         if (back != null)
         {
             back.onClick.AddListener(ReturnCameraToOriginal);
@@ -60,19 +56,32 @@ public class Settings : MonoBehaviour
             HandleCameraTransition();
         }
 
+        // SIMPLE: Left click returns from settings view
+        if (isAtSettingsView && !isTransitioning)
+        {
+            // Check for left mouse click using new input system
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                ReturnCameraToOriginal();
+            }
+        }
     }
+
     private void OnTriggerStay(Collider other)
     {
-        click = inputControl.UI.MenuClick.ReadValue<float>();
         if (other.gameObject.CompareTag("Ball"))
         {
             settingsMaterial.SetColor("_Color", Color.red);
-            if (click == 1&& !isTransitioning&& camTarget !=null&& !isAtSettingsView)
+
+            // Use your existing menu click to ENTER settings
+            float clickValue = inputControl.UI.MenuClick.ReadValue<float>();
+            if (clickValue == 1 && !isTransitioning && camTarget != null && !isAtSettingsView)
             {
                 StartCameraTransition();
             }
         }
     }
+
     private void OnTriggerExit(Collider other)
     {
         settingsMaterial.SetColor("_Color", Color.white);
@@ -83,27 +92,26 @@ public class Settings : MonoBehaviour
         if (!originalStored)
         {
             originalCameraRotation = mainCamera.transform.rotation;
-
-         originalCamPoint = mainCamera.transform.parent;
+            originalCamPoint = mainCamera.transform.parent;
             originalCameraPosition = mainCamera.transform.position;
             originalStored = true;
         }
-      
-       
 
         isTransitioning = true;
         transitionTimer = 0f;
     }
+
     private void HandleCameraTransition()
     {
         transitionTimer += Time.deltaTime;
         float t = Mathf.Clamp01(transitionTimer / transitionDuration);
-
         float smoothT = Mathf.SmoothStep(0f, 1f, t);
 
-        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position,isAtSettingsView?originalCameraPosition :camTarget.position,smoothT);
+        Vector3 targetPosition = isAtSettingsView ? originalCameraPosition : camTarget.position;
+        Quaternion targetRotation = isAtSettingsView ? originalCameraRotation : camTarget.rotation;
 
-        mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, isAtSettingsView ? originalCameraRotation : camTarget.rotation, smoothT);
+        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, targetPosition, smoothT);
+        mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, targetRotation, smoothT);
 
         if (transitionTimer >= transitionDuration)
         {
@@ -112,12 +120,12 @@ public class Settings : MonoBehaviour
             settingsMenu.SetActive(isAtSettingsView);
         }
     }
+
     public void ReturnCameraToOriginal()
     {
-      
-         if (!isTransitioning && isAtSettingsView)
-
+        if (!isTransitioning && isAtSettingsView)
+        {
             StartCameraTransition();
-            settingsMenu.SetActive(false);
+        }
     }
 }

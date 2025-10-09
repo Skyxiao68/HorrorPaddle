@@ -3470,7 +3470,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1529786317}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8aa2b9bccfefda549bd1cf67fd922ad8, type: 3}
   m_Name: 
@@ -4990,13 +4990,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settingsMaterial: {fileID: 2100000, guid: 30b5eaf4695fb7e4c9216efd32af6ad1, type: 2}
-  click: 0
   settingsMenu: {fileID: 498367324}
   back: {fileID: 483795572}
   camTarget: {fileID: 125264237}
   transitionDuration: 2
   isTransitioning: 0
   originalStored: 0
+  isAtSettingsView: 0
 --- !u!65 &1823056310
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -282,4 +282,6 @@ public class menuNav : MonoBehaviour
             inputDetectionCoroutine = null;
         }
     }
+    
+    
 }
