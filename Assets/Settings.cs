@@ -6,8 +6,8 @@ public class Settings : MonoBehaviour
 {
     public PlayerInputController inputControl;
     public Material settingsMaterial;
-    public GameObject settingsMenu;
-    public Button back;
+   
+  
 
     [Header("Cam transition")]
     public Transform camTarget;
@@ -28,15 +28,12 @@ public class Settings : MonoBehaviour
         settingsMaterial.SetColor("_Color", Color.white);
         inputControl = new PlayerInputController();
         mainCamera = Camera.main;
-        settingsMenu.SetActive(false);
+ 
     }
 
     private void Start()
     {
-        if (back != null)
-        {
-            back.onClick.AddListener(ReturnCameraToOriginal);
-        }
+
     }
 
     private void OnEnable()
@@ -117,7 +114,7 @@ public class Settings : MonoBehaviour
         {
             isTransitioning = false;
             isAtSettingsView = !isAtSettingsView;
-            settingsMenu.SetActive(isAtSettingsView);
+          
         }
     }
 
