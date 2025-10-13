@@ -1,14 +1,13 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class movement : MonoBehaviour
+public class UIFishMovement : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    private RectTransform currentTransform;
     public float minSpeed = 4;
     public float maxSpeed = 10;
     private float speed;
-    public Transform movePoint;
+    public RectTransform[] movePoint;
     public float slowDown;
     public float wiggleSpeed;
     public float wiggleAmount;
@@ -18,98 +17,151 @@ public class movement : MonoBehaviour
     public bool isStuck;
     public float launch;
     public float overShoot;
-    void Start()
+    private Vector2 currentpos;
+    private int currentTargetIndex;
+
+    void Awake()
     {
-        rb= GetComponent<Rigidbody2D>();
-        baseAngle = transform.eulerAngles.z;
+        // Get references but don't initialize movement yet
+        currentTransform = GetComponent<RectTransform>();
+    }
 
+    void OnEnable()
+    {
+        // INITIALIZE WHEN OBJECT BECOMES ACTIVE
+        StartMovement();
+    }
+
+    void OnDisable()
+    {
+        // CLEAN UP WHEN OBJECT BECOMES INACTIVE
+        StopAllCoroutines();
+        isStuck = false;
+    }
+
+    void StartMovement()
+    {
+        currentpos = currentTransform.anchoredPosition;
         speed = Random.Range(minSpeed, maxSpeed);
-
         currentSpeed = speed;
         isStuck = false;
 
-       
-        
+        if (movePoint != null && movePoint.Length > 0)
+        {
+            currentTargetIndex = Random.Range(0, movePoint.Length);
+        }
+        else
+        {
+            Debug.LogError("No move points assigned!");
+        }
     }
 
-   
-    void FixedUpdate()
+    void Update()
     {
-      
-       
-        Vector2 direction= ((Vector2)movePoint.position - rb.position).normalized; 
-        float distance = Vector2.Distance(rb.position, movePoint.position);
-
-
-        rb.linearVelocity = direction * speed;
-     
-        Vector2.MoveTowards(rb.position, direction, speed);
-      
-        float angle = Mathf.Atan2(direction.y, direction.x)*Mathf.Rad2Deg;
-        
-        baseAngle = Mathf.LerpAngle(baseAngle, angle,turnSpeed*Time.deltaTime);
-
-  float wiggle = Mathf.Sin(Time.time *wiggleSpeed)*wiggleAmount;
-
-        transform.rotation=Quaternion.Euler(0,0,baseAngle+wiggle);
-        
-        Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
-
-
-        if (direction.x < 0)
+        if (!isStuck && movePoint != null && movePoint.Length > 0)
         {
-            transform.localScale = new Vector2(1,-1); 
+            MoveFish();
         }
-        if (direction.x > 180) 
-        { 
-            transform.localScale = new Vector2 (-1,1);
-        }
-        if (direction.y > 0)
-        {
-            transform.localScale = new Vector2(-1, 1);
-        }
-        if (direction.y < 189)
-        {
-            transform.localScale = new Vector2(1, -1);
-        }
+    }
 
-        else
-        { transform.localScale = new Vector2(1, 1); }
+    void MoveFish()
+    {
+        currentpos = currentTransform.anchoredPosition;
+
+        // Get current target
+        RectTransform target = movePoint[currentTargetIndex];
+        Vector2 direction = (target.anchoredPosition - currentpos).normalized;
+        float distance = Vector2.Distance(currentpos, target.anchoredPosition);
+
+        // Move toward target
+        currentTransform.anchoredPosition += direction * currentSpeed * Time.deltaTime;
+
+        // Handle rotation and effects
+        HandleRotation(direction);
+        HandleScaling(direction);
+
+        // Slow down when close to target
         if (distance < slowDown)
         {
             currentSpeed = Mathf.Lerp(0, speed, distance / slowDown);
         }
 
-        if (distance < 0.5)
+        // Change target when reached
+        if (distance < 0.5f)
         {
-            rb.linearVelocity = Vector2.zero;
-            speed = Random.Range(minSpeed,maxSpeed);
-        }else
-        {
-            rb.linearVelocity = Vector2.Lerp (rb.linearVelocity, Vector2.zero,Time.deltaTime*5f);
+            ChooseNewTarget();
         }
 
-        if (rb.linearVelocity == Vector2.zero)
+        // Check if stuck
+        if (currentTransform.anchoredPosition == currentpos)
         {
-            StartCoroutine(Unstuck());
-            isStuck = true;
+            StartCoroutine(UnstuckRoutine(direction));
         }
-        if (Input.GetMouseButtonDown(0))
-        {  
-           
-        }
+    }
 
-        IEnumerator Unstuck()
+    void HandleRotation(Vector2 direction)
+    {
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        baseAngle = Mathf.LerpAngle(baseAngle, angle, turnSpeed * Time.deltaTime);
+
+        float wiggle = Mathf.Sin(Time.time * wiggleSpeed) * wiggleAmount;
+        transform.rotation = Quaternion.Euler(0, 0, baseAngle + wiggle);
+    }
+
+    void HandleScaling(Vector2 direction)
+    {
+        if (direction.x < 0)
         {
-            yield return new WaitForSeconds(10);
+            transform.localScale = new Vector2(1, -1);
+        }
+        else if (direction.x > 0)
+        {
+            transform.localScale = new Vector2(-1, 1);
+        }
+        else
+        {
+            transform.localScale = new Vector2(1, 1);
+        }
+    }
 
-            rb.linearVelocity = direction * currentSpeed;
-            isStuck = false;
+    void ChooseNewTarget()
+    {
+        if (movePoint.Length > 1)
+        {
+            int newTarget;
+            do
+            {
+                newTarget = Random.Range(0, movePoint.Length);
+            } while (newTarget == currentTargetIndex && movePoint.Length > 1);
+
+            currentTargetIndex = newTarget;
         }
 
+        speed = Random.Range(minSpeed, maxSpeed);
+        currentSpeed = speed;
+    }
 
-        
-    
+    IEnumerator UnstuckRoutine(Vector2 direction)
+    {
+        isStuck = true;
+        yield return new WaitForSeconds(10f);
+
+        // Give a push in the current direction
+        currentTransform.anchoredPosition += direction * currentSpeed * Time.deltaTime;
+        isStuck = false;
+    }
+
+    // Public method to manually start/stop movement if needed
+    public void SetMovementActive(bool active)
+    {
+        enabled = active;
+        if (active)
+        {
+            StartMovement();
+        }
+        else
+        {
+            StopAllCoroutines();
+        }
     }
 }

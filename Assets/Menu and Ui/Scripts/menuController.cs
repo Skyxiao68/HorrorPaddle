@@ -7,15 +7,15 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class menuController : MonoBehaviour
 {
+    public UIFishMovement fishMovement;
     public PlayerInputController inputControl;
 
     public GameObject pauseMenu;
-    public GameObject scoreBoard;
+  
     public GameObject pauseButton;
     public GameObject settingsMenu;
     public GameObject paddleBat;
-    public GameObject winScreen;
-    public GameObject loseScreen;
+
     public GameObject storyScene;
 
    public float pause;
@@ -25,11 +25,12 @@ public class menuController : MonoBehaviour
         Time.timeScale = 1f;
         
         pauseMenu.SetActive(false);
-        scoreBoard.SetActive(true);
+      
         pauseButton.SetActive(true);
         settingsMenu.SetActive(false);
         inputControl = new PlayerInputController();
         CC = gameObject.GetComponent<CharacterController>();
+        UIFishMovement fishMovement = FindAnyObjectByType<UIFishMovement>();
     }
     private void OnEnable()
     {
@@ -56,7 +57,7 @@ public class menuController : MonoBehaviour
              Cursor.visible = true;
             Debug.Log("I am pausing");
             pauseMenu.SetActive(true);
-            scoreBoard.SetActive(false);
+           
             pauseButton.SetActive(false);
             paddleBat.SetActive(false);
             Time.timeScale = 0f;
@@ -68,7 +69,7 @@ public class menuController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false; 
         pauseMenu.SetActive(false);
-        scoreBoard.SetActive(true);
+       
         pauseButton.SetActive(true);
         paddleBat.SetActive(true) ;
         Time.timeScale = 1f;
@@ -80,14 +81,18 @@ public class menuController : MonoBehaviour
     
     public void Settings()
     {
-        scoreBoard.SetActive(false);
+       
+       
+        fishMovement.SetMovementActive(true);  
+       
         pauseMenu.SetActive(false );
         settingsMenu.SetActive(true);
     }
    public void SettingsBack()
     {
         pauseMenu.SetActive(true );
-        settingsMenu.SetActive(false);
+        settingsMenu.SetActive(false); 
+        fishMovement.SetMovementActive(false); 
     }
     public void Restart()
     {
