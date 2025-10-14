@@ -130,7 +130,7 @@ public class IntermissionText : MonoBehaviour
         {
            SceneManager.LoadSceneAsync(2);
         }
-        if (collision.CompareTag("Removed") && hasBat == true)
+        if (collision.CompareTag("Finish") && hasBat == true)
         {
          //This room is so terrifying why the hell did you open it up, noo come onnnnn.... you really are an idiot please stop, lets get out of here the shwoman might catch us. 
           if (!voiceSource.isPlaying)

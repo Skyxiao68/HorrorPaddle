@@ -41,7 +41,7 @@ public class UIFishMovement : MonoBehaviour
 
     void StartMovement()
     {
-        currentpos = currentTransform.anchoredPosition;
+      
         speed = Random.Range(minSpeed, maxSpeed);
         currentSpeed = speed;
         isStuck = false;
