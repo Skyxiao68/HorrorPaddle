@@ -114,7 +114,7 @@ public class ScoreManager : MonoBehaviour
 
         ded.SetBool("Died", true);
 
-        ded.SetBool("Died", false);
+          ded.SetBool("Died", false);
 
         Invoke(nameof(ShowLoseScreen), 2f);
 
@@ -123,7 +123,7 @@ public class ScoreManager : MonoBehaviour
     }
     private void ShowLoseScreen()
     {
-        ded.SetBool("Died", false);
+      
         Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
