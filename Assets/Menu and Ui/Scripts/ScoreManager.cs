@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    
+    public Animator ded;
     public GameObject winScreen;
     public GameObject loseScreen;
     public Rigidbody player;
@@ -33,7 +33,7 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
       
-        loseScreen.SetActive(false);
+       // loseScreen.SetActive(false);
         wonSource = GetComponent<AudioSource>();
         loseSource = GetComponent<AudioSource>();
         wonSource.enabled = true;
@@ -112,17 +112,22 @@ public class ScoreManager : MonoBehaviour
         
       player.AddTorque(Random.onUnitSphere * 500000000000f, ForceMode.Impulse);
 
-      Invoke(nameof(ShowLoseScreen), 3f);
+        ded.SetBool("Died", true);
+
+        ded.SetBool("Died", false);
+
+        Invoke(nameof(ShowLoseScreen), 2f);
 
        
 
     }
     private void ShowLoseScreen()
     {
-        loseScreen.SetActive(true);
+        ded.SetBool("Died", false);
         Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
         loseSource.PlayOneShot(loseSound);
+        loseScreen.SetActive(true);
     }
 }
