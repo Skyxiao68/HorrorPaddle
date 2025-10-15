@@ -83,7 +83,7 @@ public class menuController : MonoBehaviour
     {
        
        
-        fishMovement.SetMovementActive(true);  
+     
        
         pauseMenu.SetActive(false );
         settingsMenu.SetActive(true);

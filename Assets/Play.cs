@@ -8,7 +8,9 @@ public class Play : MonoBehaviour
     public float click;
     private Camera mainCamera;
     public Animator transiton;
-
+    public ParticleSystem interactParticles;
+    public AudioSource clickAudio;
+    public AudioClip clickAudioClip; 
     [Header("Cam transition")]
     public Transform camTarget;
     public float transitionDuration = 2.0f;
@@ -17,10 +19,15 @@ public class Play : MonoBehaviour
     private float transitionTimer;
     private Vector3 originalCameraPosition;
     private Quaternion originalCameraRotation;
-    private float previousClickValue = 0f; 
+    private float previousClickValue = 0f;
+
+
+
+   
 
     public void Awake()
     {
+       
         inputControl = new PlayerInputController();
        
         playMaterial.SetColor("_Color", Color.white);
@@ -57,6 +64,8 @@ public class Play : MonoBehaviour
            
             if (click == 1 && previousClickValue == 0 && canTransition && !isTransitioning)
             {
+                Instantiate(interactParticles, transform.position, Quaternion.Euler(-90, 0, 0));
+                clickAudio.PlayOneShot(clickAudioClip);
                 StartCam();
             }
         }

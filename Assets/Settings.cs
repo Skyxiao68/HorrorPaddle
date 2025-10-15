@@ -6,8 +6,10 @@ public class Settings : MonoBehaviour
 {
     public PlayerInputController inputControl;
     public Material settingsMaterial;
-   
-  
+
+    public ParticleSystem interactParticles;
+    public AudioSource clickAudio;
+    public AudioClip clickAudioClip;
 
     [Header("Cam transition")]
     public Transform camTarget;
@@ -33,7 +35,7 @@ public class Settings : MonoBehaviour
 
     private void Start()
     {
-
+       ;
     }
 
     private void OnEnable()
@@ -74,6 +76,8 @@ public class Settings : MonoBehaviour
             float clickValue = inputControl.UI.MenuClick.ReadValue<float>();
             if (clickValue == 1 && !isTransitioning && camTarget != null && !isAtSettingsView)
             {
+                Instantiate(interactParticles, transform.position, Quaternion.Euler(-90, 0, 0));
+                clickAudio.PlayOneShot(clickAudioClip);
                 StartCameraTransition();
             }
         }
