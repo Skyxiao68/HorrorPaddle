@@ -59,7 +59,7 @@ public class Settings : MonoBehaviour
         if (isAtSettingsView && !isTransitioning)
         {
             // Check for left mouse click using new input system
-            if (Mouse.current.leftButton.wasPressedThisFrame)
+            if (Mouse.current.leftButton.wasPressedThisFrame || Gamepad.current.buttonSouth.wasPressedThisFrame)
             {
                 ReturnCameraToOriginal();
             }

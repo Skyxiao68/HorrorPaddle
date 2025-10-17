@@ -5,7 +5,7 @@ public class storyHandler : MonoBehaviour
 
     public PlayerInputController inputControl;
     public GameObject storyStuff;
-    public float inputFire;
+    public float inputClick;
 
     private void Awake()
     {
@@ -24,9 +24,9 @@ public class storyHandler : MonoBehaviour
 
     private void Update()
     {
-        inputFire = inputControl.Gameplay.Fire.ReadValue<float>();
+        inputClick = inputControl.UI.MenuClick.ReadValue<float>();
 
-        if (inputFire == 1)
+        if (inputClick == 1)
         { 
          storyStuff.SetActive(false);
         }
