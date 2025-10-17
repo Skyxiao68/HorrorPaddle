@@ -8,8 +8,7 @@ public class LoadMainMenu : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-
-            SceneManager.LoadSceneAsync(0);
+            SceneManager.LoadScene(0);
         }
     }
 }
