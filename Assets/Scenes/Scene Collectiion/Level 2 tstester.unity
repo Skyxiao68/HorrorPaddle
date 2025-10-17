@@ -1397,6 +1397,76 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9178185762478205357, guid: 834509610d6fb0146ae5b3bbce1345eb, type: 3}
   m_PrefabInstance: {fileID: 1711852495682544093}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1857994653
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1126055243531471981, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+      propertyPath: m_Name
+      value: 'Theme Song '
+      objectReference: {fileID: 0}
+    - target: {fileID: 2502638248591016868, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+      propertyPath: m_Volume
+      value: 0.109
+      objectReference: {fileID: 0}
+    - target: {fileID: 3538447958826391045, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+      propertyPath: mainMenuTheme
+      value: 
+      objectReference: {fileID: 8300000, guid: 9f599aeaacaf60c4581991d9da28d6ed, type: 3}
+    - target: {fileID: 4510896232041435879, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 486.92816
+      objectReference: {fileID: 0}
+    - target: {fileID: 4510896232041435879, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -251.13213
+      objectReference: {fileID: 0}
+    - target: {fileID: 4510896232041435879, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 67.75691
+      objectReference: {fileID: 0}
+    - target: {fileID: 4510896232041435879, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4510896232041435879, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4510896232041435879, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4510896232041435879, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4510896232041435879, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4510896232041435879, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4510896232041435879, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+--- !u!82 &1930722209 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 2502638248591016868, guid: 9030145fccfd964488d4c8e6bb3ec234, type: 3}
+  m_PrefabInstance: {fileID: 1857994653}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2031043297
 GameObject:
   m_ObjectHideFlags: 0
@@ -2933,6 +3003,14 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9022074194109024780, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1930722209}
+    - target: {fileID: 9022074194109024780, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_mute
+      objectReference: {fileID: 0}
     - target: {fileID: 9193182281157265983, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2986,3 +3064,4 @@ SceneRoots:
   - {fileID: 1069025539}
   - {fileID: 645727843}
   - {fileID: 1313070193}
+  - {fileID: 1857994653}

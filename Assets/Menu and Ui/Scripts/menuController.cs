@@ -18,7 +18,9 @@ public class menuController : MonoBehaviour
 
     public GameObject storyScene;
 
-   public float pause;
+    private bool paused;
+    private bool pauseInputProcessed = false;
+    public float pause;
     private CharacterController CC;
     private void Awake()
     {
@@ -43,10 +45,23 @@ public class menuController : MonoBehaviour
     }
     private void Update()
     {
+        float pause = inputControl.UI.Pause.ReadValue<float>();
 
-        pause = inputControl.UI.Pause.ReadValue<float>();
+        if (pause == 1 && !pauseInputProcessed)
+        {
+            paused = !paused;
 
-        if (pause == 1) { Pause(); }
+            if (paused)
+                Pause();
+            else
+                Resume();
+
+            pauseInputProcessed = true;
+        }
+        else if (pause == 0)
+        {
+            pauseInputProcessed = false;
+        }
     }
 
     public void Pause()
@@ -76,7 +91,8 @@ public class menuController : MonoBehaviour
     }
     public void MainMenu()
     {
-        SceneManager.LoadSceneAsync(0);
+        SceneManager.LoadScene(0);  
+        Time.timeScale = 1f;
     }
     
     public void Settings()
@@ -92,12 +108,13 @@ public class menuController : MonoBehaviour
     {
         pauseMenu.SetActive(true );
         settingsMenu.SetActive(false); 
-        fishMovement.SetMovementActive(false); 
+      //  fishMovement.SetMovementActive(false); 
     }
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Destroy(FindObjectOfType<UnityEngine.EventSystems.EventSystem>().gameObject);
         Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public void EndStory()
     {
