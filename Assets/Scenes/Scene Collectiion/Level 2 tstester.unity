@@ -1252,6 +1252,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1409683062 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1750350563060029344, guid: d916030cee23f2347b42540526eb597e, type: 3}
+  m_PrefabInstance: {fileID: 4704822334288874357}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1463051252 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2531316197518259666, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
@@ -2880,9 +2885,17 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5451954234614665067, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5451954234614665067, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1769596590}
+      objectReference: {fileID: 1409683062}
+    - target: {fileID: 5451954234614665067, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_mute
+      objectReference: {fileID: 0}
     - target: {fileID: 5707877152693809185, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
