@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class Quit : MonoBehaviour
 {
+  
+    public ParticleSystem interactParticles;
+    public AudioSource clickAudio;
+    public AudioClip clickAudioClip;
     public PlayerInputController inputControl;
     public Material quitMaterial;
     public float click;
@@ -9,6 +13,8 @@ public class Quit : MonoBehaviour
     {
         quitMaterial.SetColor("_Color", Color.white);
         inputControl = new PlayerInputController();
+
+    
     }
 
 
@@ -30,6 +36,8 @@ public class Quit : MonoBehaviour
             quitMaterial.SetColor("_Color", Color.red);
             if (click == 1 )
             {
+                Instantiate(interactParticles, transform.position, Quaternion.Euler(-90, 0, 0));
+                clickAudio.PlayOneShot(clickAudioClip);
                 Application.Quit();
                 Debug.Log("RageQuit");
             }

@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    
+    public Animator ded;
     public GameObject winScreen;
     public GameObject loseScreen;
     public Rigidbody player;
@@ -20,20 +20,20 @@ public class ScoreManager : MonoBehaviour
     public AudioClip wonSound;
     private AudioSource wonSource;
     private AudioSource loseSource;
-   
+
     public int pScore = 0;
     public int oScore = 0;
     public Transform targetsPosition;
 
     void Awake()
     {
-            
-           
+
+
     }
     void Start()
     {
-      
-        loseScreen.SetActive(false);
+
+        // loseScreen.SetActive(false);
         wonSource = GetComponent<AudioSource>();
         loseSource = GetComponent<AudioSource>();
         wonSource.enabled = true;
@@ -51,10 +51,10 @@ public class ScoreManager : MonoBehaviour
     public void AddScoreP()
     {
         pScore++;
-     
+
         if (scoreBoard != null)
-        { 
-        scoreBoard.ShowPlayerNumber(pScore);
+        {
+            scoreBoard.ShowPlayerNumber(pScore);
         }
         if (pScore >= 5)
         {
@@ -67,37 +67,38 @@ public class ScoreManager : MonoBehaviour
     public void AddScoreO()
     {
         oScore++;
- 
+
         if (scoreBoard != null)
         {
-         scoreBoard.ShowEnemyNumber(oScore);
+            scoreBoard.ShowEnemyNumber(oScore);
         }
 
-        if (oScore >= 5)     
-          PlayerLost();
+        if (oScore >= 5)
+            PlayerLost();
     }
 
-  
+
 
     public void PlayerWon()
     {
         Vector3 startPosition = winScreen.transform.position;
         Vector3 targetPosition = targetsPosition.position;
 
-        winScreen.transform.position = Vector3.MoveTowards(startPosition, targetPosition, 3f * Time.deltaTime);
+        EnablePlayerControls(false);
+        winScreen.transform.position = Vector3.MoveTowards(startPosition, targetPosition, 10f * Time.deltaTime);
 
     }
     public IEnumerator MoveUp()
     {
-        Vector3 startPosition =transform.position;
+        Vector3 startPosition = transform.position;
         Vector3 targetPosition = targetsPosition.position;
 
         float duration = 2f;
         float elapsedTime = 0f;
 
-        while (elapsedTime<duration)
+        while (elapsedTime < duration)
         {
-            float progress = elapsedTime/duration;
+            float progress = elapsedTime / duration;
 
             transform.position = Vector3.Lerp(startPosition, targetPosition, progress);
 
@@ -109,20 +110,49 @@ public class ScoreManager : MonoBehaviour
     }
     public void PlayerLost()
     {
-        
-      player.AddTorque(Random.onUnitSphere * 500000000000f, ForceMode.Impulse);
 
-      Invoke(nameof(ShowLoseScreen), 3f);
 
-       
+        player.AddTorque(Random.onUnitSphere * 500000000000f, ForceMode.Impulse);
+
+        ded.SetBool("Died", true);
+
+        loseScreen.SetActive(true);
+        EnablePlayerControls(false);
+
+        Invoke(nameof(ShowLoseScreen), 2f);
+
+
 
     }
     private void ShowLoseScreen()
     {
-        loseScreen.SetActive(true);
+        ded.SetBool("Died", false);
         Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
         loseSource.PlayOneShot(loseSound);
+        
+
     }
+
+
+    void EnablePlayerControls(bool enable)
+    {
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            MonoBehaviour[] scripts = player.GetComponents<MonoBehaviour>();
+            foreach (MonoBehaviour script in scripts)
+            {
+
+
+                {
+                    script.enabled = enable;
+                }
+            }
+        }
+    }
+
+
 }

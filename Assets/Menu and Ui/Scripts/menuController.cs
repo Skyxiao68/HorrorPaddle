@@ -18,7 +18,9 @@ public class menuController : MonoBehaviour
 
     public GameObject storyScene;
 
-   public float pause;
+    private bool paused;
+    private bool pauseInputProcessed = false;
+    public float pause;
     private CharacterController CC;
     private void Awake()
     {
@@ -43,10 +45,30 @@ public class menuController : MonoBehaviour
     }
     private void Update()
     {
+        float pause = inputControl.UI.Pause.ReadValue<float>();
+        float back = inputControl.UI.Cancel.ReadValue<float>();
 
-        pause = inputControl.UI.Pause.ReadValue<float>();
+        if (pause == 1 && !pauseInputProcessed)
+        {
+            paused = !paused;
 
-        if (pause == 1) { Pause(); }
+            if (paused)
+            { Pause(); }
+            else
+            {
+                Resume();
+                settingsMenu.SetActive(false);
+            }   
+
+            pauseInputProcessed = true;
+        }
+        else if (pause == 0)
+        {
+            pauseInputProcessed = false;
+        }
+
+       if (back == 1)
+        { Resume();}
     }
 
     public void Pause()
@@ -57,11 +79,13 @@ public class menuController : MonoBehaviour
              Cursor.visible = true;
             Debug.Log("I am pausing");
             pauseMenu.SetActive(true);
-           
+        settingsMenu.SetActive(false);
             pauseButton.SetActive(false);
             paddleBat.SetActive(false);
             Time.timeScale = 0f;
-        
+
+            EnablePlayerControls(false);
+
     }
 
     public void Resume()
@@ -73,31 +97,52 @@ public class menuController : MonoBehaviour
         pauseButton.SetActive(true);
         paddleBat.SetActive(true) ;
         Time.timeScale = 1f;
+        EnablePlayerControls(true);
+    }
+
+    void EnablePlayerControls(bool enable)
+    {
+        
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            MonoBehaviour[] scripts = player.GetComponents<MonoBehaviour>();
+            foreach (MonoBehaviour script in scripts)
+            {
+                
+
+                {
+                    script.enabled = enable;
+                }
+            }
+        }
     }
     public void MainMenu()
     {
-        SceneManager.LoadSceneAsync(0);
+        SceneManager.LoadScene(0);  
+        Time.timeScale = 1f;
     }
     
     public void Settings()
     {
-       
-       
-        fishMovement.SetMovementActive(true);  
-       
+   
         pauseMenu.SetActive(false );
         settingsMenu.SetActive(true);
+
+        
     }
    public void SettingsBack()
     {
         pauseMenu.SetActive(true );
         settingsMenu.SetActive(false); 
-        fishMovement.SetMovementActive(false); 
+      //  fishMovement.SetMovementActive(false); 
     }
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Destroy(FindObjectOfType<UnityEngine.EventSystems.EventSystem>().gameObject);
         Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        EnablePlayerControls(true);
     }
     public void EndStory()
     {
