@@ -84,7 +84,7 @@ public class ScoreManager : MonoBehaviour
         Vector3 startPosition = winScreen.transform.position;
         Vector3 targetPosition = targetsPosition.position;
 
-        winScreen.transform.position = Vector3.MoveTowards(startPosition, targetPosition, 3f * Time.deltaTime);
+        winScreen.transform.position = Vector3.MoveTowards(startPosition, targetPosition, 10f * Time.deltaTime);
 
     }
     public IEnumerator MoveUp()
