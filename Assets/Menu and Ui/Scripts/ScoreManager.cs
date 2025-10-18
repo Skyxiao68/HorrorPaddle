@@ -27,7 +27,7 @@ public class ScoreManager : MonoBehaviour
 
     void Awake()
     {
-
+        loseScreen.gameObject.SetActive(false); 
 
     }
     void Start()
@@ -116,8 +116,8 @@ public class ScoreManager : MonoBehaviour
 
         ded.SetBool("Died", true);
 
+        
         loseScreen.SetActive(true);
-        EnablePlayerControls(false);
 
         Invoke(nameof(ShowLoseScreen), 2f);
 
@@ -126,13 +126,16 @@ public class ScoreManager : MonoBehaviour
     }
     private void ShowLoseScreen()
     {
-        ded.SetBool("Died", false);
+        
+       
         Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
         loseSource.PlayOneShot(loseSound);
-        
 
+        EnablePlayerControls(false);
+
+        ded.SetBool("Died", false);
     }
 
 

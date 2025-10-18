@@ -7330,6 +7330,10 @@ PrefabInstance:
       propertyPath: rb
       value: 
       objectReference: {fileID: 622170778}
+    - target: {fileID: 4911148644015899496, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5439917013143435743, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -7478,6 +7482,10 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnRight
       value: 
       objectReference: {fileID: 6922950370699762818}
+    - target: {fileID: 7093359758981732577, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7323196713719270684, guid: 0ca78328c4720b149af597e37c43a691, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
