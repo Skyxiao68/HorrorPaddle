@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 'Hair texture '
-  m_Shader: {fileID: -6465566751694194690, guid: 24fe9f91482791e4eab910170e494bc4, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 8bd655714fa5d8143a4c57c4e8fc80bc, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
