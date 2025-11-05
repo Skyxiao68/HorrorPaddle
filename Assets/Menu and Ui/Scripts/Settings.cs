@@ -35,7 +35,7 @@ public class Settings : MonoBehaviour
 
     private void Start()
     {
-       ;
+       
     }
 
     private void OnEnable()
@@ -50,6 +50,7 @@ public class Settings : MonoBehaviour
 
     private void Update()
     {
+        float clickValue = inputControl.UI.MenuClick.ReadValue<float>();
         if (isTransitioning)
         {
             HandleCameraTransition();
@@ -59,7 +60,7 @@ public class Settings : MonoBehaviour
         if (isAtSettingsView && !isTransitioning)
         {
             // Check for left mouse click using new input system
-            if (Mouse.current.leftButton.wasPressedThisFrame || Gamepad.current.buttonSouth.wasPressedThisFrame)
+            if (clickValue == 1)
             {
                 ReturnCameraToOriginal();
             }

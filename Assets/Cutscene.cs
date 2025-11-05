@@ -5,6 +5,7 @@ public class CutsceneController : MonoBehaviour
 {
     public GameObject player;
     public GameObject antagonist;
+    public GameObject antagonistVoice;
     public GameObject floor;
     public GameObject bat;
     public float cutsceneDuration = 8f;
@@ -267,14 +268,14 @@ public class CutsceneController : MonoBehaviour
     void PlayAntagonistLine1()
     {
         playedAntagonistLine1 = true;
-        PlayAudioClip(antagonistLine1, antagonist.transform.position);
+        PlayAudioClip(antagonistLine1, antagonistVoice.transform.position);
       
     }
 
     void PlayTheDrums()
     {
         playedDrumRoll = true;
-        PlayAudioClip(drumRoll, player.transform.position); 
+        PlayAudioClip(drumRoll, antagonist.transform.position); 
       
     }
     void PlayAntagonistLine2()
@@ -282,7 +283,7 @@ public class CutsceneController : MonoBehaviour
         playedAntagonistLine2 = true;
 
 
-        PlayAudioClip(antagonistLine2, antagonist.transform.position);
+        PlayAudioClip(antagonistLine2, antagonistVoice.transform.position);
        
        
     }
@@ -297,7 +298,7 @@ public class CutsceneController : MonoBehaviour
     void PlayAntagonistLine3()
     {
         playedAntagonistLine3 = true;
-        PlayAudioClip(antagonistLine3, antagonist.transform.position);
+        PlayAudioClip(antagonistLine3, antagonistVoice.transform.position);
        
     }
 
@@ -311,7 +312,7 @@ public class CutsceneController : MonoBehaviour
     void PlayAntagonistLine4()
     {
         playedAntagonistLine4 = true;
-        PlayAudioClip (antagonistLine4, antagonist.transform.position);
+        PlayAudioClip (antagonistLine4, antagonistVoice.transform.position);
     }
     void PlayAudioClip(AudioClip clip, Vector3 position)
     {
@@ -324,6 +325,6 @@ public class CutsceneController : MonoBehaviour
     {
         cutscenePlaying = false;
         Debug.Log("Cutscene ended! Loading next scene...");
-        SceneManager.LoadSceneAsync(0);
+        SceneManager.LoadSceneAsync(5);
     }
 }
