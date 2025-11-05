@@ -114,10 +114,12 @@ public class ScoreManager : MonoBehaviour
 
         player.AddTorque(Random.onUnitSphere * 500000000000f, ForceMode.Impulse);
 
+ 
+        loseScreen.SetActive(true);
         ded.SetBool("Died", true);
 
         
-        loseScreen.SetActive(true);
+       
 
         Invoke(nameof(ShowLoseScreen), 2f);
 

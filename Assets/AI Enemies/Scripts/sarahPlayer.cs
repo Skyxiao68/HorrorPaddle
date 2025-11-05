@@ -56,7 +56,11 @@ public class sarahPlayer : MonoBehaviour
     private float originalJumpTime;
 
 
-
+    [Header("Whiplash Power Settings")]
+    public float whiplashActivationRange = 8f;
+    public float whiplashCooldown = 5f;
+    private float lastWhiplashTime = 0f;
+    public Transform[] whiplashTargets;
 
 
     private void Awake()
@@ -139,7 +143,7 @@ public class sarahPlayer : MonoBehaviour
         if (jumpStance == 1)
         {
             Aggreseive();
-
+            CheckWhiplashOpportunity();
         }
         if (jumpStance == 2)
         {
@@ -275,5 +279,44 @@ public class sarahPlayer : MonoBehaviour
         
     }
 
+    void CheckWhiplashOpportunity()
+    {
+        // Check if whiplash is off cooldown and ball is in range
+        if (Time.time - lastWhiplashTime < whiplashCooldown) return;
 
+        ThrowableObject ball = FindObjectOfType<ThrowableObject>();
+        if (ball == null) return;
+
+        float distanceToBall = Vector3.Distance(transform.position, ball.transform.position);
+
+        if (distanceToBall < whiplashActivationRange && !ball.isWhiplashActive)
+        {
+            ActivateWhiplash(ball);
+        }
+    }
+
+    void ActivateWhiplash(ThrowableObject ball)
+    {
+        
+        Transform target = ChooseWhiplashTarget();
+
+        if (target != null)
+        {
+            ball.StartWhiplash(target, ball.whiplashDuration);
+            lastWhiplashTime = Time.time;
+
+            Debug.Log(" Sarah uses WHIPLASH CONTROL!");
+            
+        }
+    }
+
+    Transform ChooseWhiplashTarget()
+    {
+
+        if (whiplashTargets.Length == 0) return null;
+
+        int randomIndex = Random.Range(0, whiplashTargets.Length);
+        return whiplashTargets[randomIndex];
+    }
 }
+

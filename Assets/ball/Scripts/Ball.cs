@@ -69,6 +69,15 @@ public class ThrowableObject : MonoBehaviour
     private bool ballWashit = false;
 
     public bool iWantScore;
+
+
+    [Header("Sarah Whiplash Power")]
+    public bool isWhiplashActive = false;
+    public float whiplashDuration = 2f;
+    public float whiplashForce = 15f;
+    public AnimationCurve whiplashCurve;
+    private Coroutine whiplashCoroutine;
+    private Transform whiplashTarget;
     private void Awake()
     {
         inputControl = new PlayerInputController();
@@ -534,5 +543,62 @@ public class ThrowableObject : MonoBehaviour
         }
 
         audioSource.volume = 1f;
+    }
+    public void StartWhiplash(Transform target, float duration)
+    {
+        if (whiplashCoroutine != null)
+            StopCoroutine(whiplashCoroutine);
+
+        whiplashCoroutine = StartCoroutine(WhiplashCoroutine(target, duration));
+    }
+
+    private IEnumerator WhiplashCoroutine(Transform target, float duration)
+    {
+        isWhiplashActive = true;
+        whiplashTarget = target;
+        Vector3 startPosition = transform.position;
+        float timer = 0f;
+
+     
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            float progress = timer / duration;
+            float curveValue = whiplashCurve.Evaluate(progress);
+
+            if (whiplashTarget != null)
+            {
+              
+                Vector3 direction = (whiplashTarget.position - transform.position).normalized;
+                Vector3 controlledVelocity = direction * whiplashForce * curveValue;
+
+               
+                controlledVelocity.y = Mathf.Sin(progress * Mathf.PI) * 5f;
+
+                rb.linearVelocity = controlledVelocity;
+            }
+
+            yield return null;
+        }
+
+        
+        if (whiplashTarget != null)
+        {
+            Vector3 finalDirection = (whiplashTarget.position - transform.position).normalized;
+            rb.linearVelocity = finalDirection * whiplashForce * 0.5f;
+        }
+
+        isWhiplashActive = false;
+    
+    }
+
+    public void CancelWhiplash()
+    {
+        if (whiplashCoroutine != null)
+        {
+            StopCoroutine(whiplashCoroutine);
+            isWhiplashActive = false;
+           
+        }
     }
 }
