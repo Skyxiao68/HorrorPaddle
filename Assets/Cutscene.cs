@@ -15,12 +15,15 @@ public class CutsceneController : MonoBehaviour
 
 
     [Header("Voice Dialogue Audio")]
-    public AudioClip playerLine1;        // 
-    public AudioClip antagonistLine1;    //
-    public AudioClip antagonistLine2;    // 
-    public AudioClip playerLine2;        // 
-    public AudioClip antagonistLine3;    // 
+    public AudioClip playerLine1;        // AJ- Well well well , if it isnt the showman thats the bastard who stole my body and i would like it back.
+    public AudioClip antagonistLine1;    //  Des-if you want it then you are going to have to come and take it
+    public AudioClip antagonistLine2;    //  but i dont really feel like it today
+    public AudioClip playerLine2;        // Aj - Wait what the hell do you mean you do not feel like it, you will face me you bastard we beat your deadbeat henchman
+    public AudioClip antagonistLine3;    // Des- Well you see this is my game after all , and i make the rules, or did this dumbass here not read the fineprint, speaking of which you belong to me 
+    public AudioClip playerline3;        // Aj - Nooooo you piece of shit i demand a fair match, you asshole. 
+    public AudioClip antagonistLine4;    //Des - Well you see it is technically appropriate, this asshole standing in front of me has not beat my henchman on their first try or did you think those countless retries were free and it is clear that they do not apprecitate my work nor are they a mentally viable specimen, so why should they face me. Off you go as you fall in your endless self loathing void, dont even try to escape hahahahahahahah.
 
+    public AudioClip drumRoll;
     private bool isMovingPlayer = false;
     private Vector3 playerStartPosition;
     private Vector3 playerTargetPosition;
@@ -54,6 +57,9 @@ public class CutsceneController : MonoBehaviour
     private bool playedAntagonistLine2 = false;
     private bool playedPlayerLine2 = false;
     private bool playedAntagonistLine3 = false;
+    private bool playedPlayerLine3 = false;
+    private bool playedAntagonistLine4 = false;
+    private bool playedDrumRoll = false;
     void Start()
     {
         SetupCutscenePositions();
@@ -93,7 +99,7 @@ public class CutsceneController : MonoBehaviour
             cutsceneTimer += Time.deltaTime;
             CheckCutsceneEvents();
             UpdateSmoothMovements();
-
+            CheckDialogueTiming();
             if (cutsceneTimer > cutsceneDuration)
             {
                 EndCutscene();
@@ -110,52 +116,65 @@ public class CutsceneController : MonoBehaviour
         }
 
       
-        if (cutsceneTimer > 8f && !isRotatingAntagonist)
+        if (cutsceneTimer > 10f && !isRotatingAntagonist)
         {
             StartAntagonistRotation();
         }
 
-        if (cutsceneTimer > 12f && !isBatMoving)
+        if (cutsceneTimer > 32f && !isBatMoving)
         {
             StartBatMovement();
         }
        
-        if (cutsceneTimer > 15f && !isRotatingFloor)
+        if (cutsceneTimer > 69f && !isRotatingFloor)
         {
             StartFloorRotation();
         }
     }
-    // ADD THIS NEW METHOD FOR DIALOGUE TIMING
+  
     void CheckDialogueTiming()
     {
-        // Player: "What is this place?" - as they start moving
+       
         if (cutsceneTimer > 1f && !playedPlayerLine1)
         {
             PlayPlayerLine1();
         }
 
-        // Antagonist: "Ah, our guest arrives" - during player movement
-        if (cutsceneTimer > 4f && !playedAntagonistLine1)
+      
+        if (cutsceneTimer > 8f && !playedAntagonistLine1)
         {
             PlayAntagonistLine1();
         }
-
-        // Antagonist: "Watch this!" - when bat appears
+        if (cutsceneTimer>  8F  && !playedDrumRoll)
+        {
+            PlayTheDrums();
+        }
+        
         if (cutsceneTimer > 12f && !playedAntagonistLine2)
         {
             PlayAntagonistLine2();
         }
 
-        // Player: "What are you doing?!" - reacting to bat
-        if (cutsceneTimer > 13f && !playedPlayerLine2)
+       
+        if (cutsceneTimer > 14f && !playedPlayerLine2)
         {
             PlayPlayerLine2();
         }
 
-        // Antagonist: "Time to drop in!" - before floor collapses
-        if (cutsceneTimer > 14.5f && !playedAntagonistLine3)
+     
+        if (cutsceneTimer > 22f && !playedAntagonistLine3)
         {
             PlayAntagonistLine3();
+        }
+
+        if (cutsceneTimer > 33f && ! playedPlayerLine3)
+        {
+            PlayPlayerLine3();
+        }
+
+        if (cutsceneTimer > 39f && !playedAntagonistLine4)
+        {
+           PlayAntagonistLine4();
         }
     }
 
@@ -242,37 +261,58 @@ public class CutsceneController : MonoBehaviour
     {
         playedPlayerLine1 = true;
         PlayAudioClip(playerLine1, player.transform.position);
-        Debug.Log("Player: 'What is this place?'");
+       
     }
 
     void PlayAntagonistLine1()
     {
         playedAntagonistLine1 = true;
         PlayAudioClip(antagonistLine1, antagonist.transform.position);
-        Debug.Log("Antagonist: 'Ah, our guest arrives'");
+      
     }
 
+    void PlayTheDrums()
+    {
+        playedDrumRoll = true;
+        PlayAudioClip(drumRoll, player.transform.position); 
+      
+    }
     void PlayAntagonistLine2()
     {
         playedAntagonistLine2 = true;
+
+
         PlayAudioClip(antagonistLine2, antagonist.transform.position);
-        Debug.Log("Antagonist: 'Watch this!'");
+       
+       
     }
 
     void PlayPlayerLine2()
     {
         playedPlayerLine2 = true;
         PlayAudioClip(playerLine2, player.transform.position);
-        Debug.Log("Player: 'What are you doing?!'");
+       
     }
 
     void PlayAntagonistLine3()
     {
         playedAntagonistLine3 = true;
         PlayAudioClip(antagonistLine3, antagonist.transform.position);
-        Debug.Log("Antagonist: 'Time to drop in!'");
+       
     }
 
+    void PlayPlayerLine3()
+    {
+        playedPlayerLine3 = true;
+        PlayAudioClip (playerline3 , player.transform.position);
+        
+    }
+
+    void PlayAntagonistLine4()
+    {
+        playedAntagonistLine4 = true;
+        PlayAudioClip (antagonistLine4, antagonist.transform.position);
+    }
     void PlayAudioClip(AudioClip clip, Vector3 position)
     {
         if (clip != null)
