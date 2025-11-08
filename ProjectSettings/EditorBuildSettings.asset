@@ -23,6 +23,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Scene Collectiion/After cutscene.unity
     guid: 2ebb9d19e022f7849ab6d7224f1505a6
+  - enabled: 1
+    path: Assets/Scenes/Scene Collectiion/Cutscene scene.unity
+    guid: d819b46baa777db48b233e078b7861ed
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 429988b595a429d4ea6e4eb78682c9bc, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
