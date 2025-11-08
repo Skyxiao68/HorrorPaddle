@@ -24,7 +24,7 @@ public class storyHandler : MonoBehaviour
 
     private void Update()
     {
-        inputClick = inputControl.UI.MenuClick.ReadValue<float>();
+        inputClick = inputControl.UI.Tclick.ReadValue<float>();
 
         if (inputClick == 1)
         { 

@@ -27,7 +27,7 @@ public class ScoreManager : MonoBehaviour
 
     void Awake()
     {
-
+        loseScreen.gameObject.SetActive(false); 
 
     }
     void Start()
@@ -84,7 +84,7 @@ public class ScoreManager : MonoBehaviour
         Vector3 startPosition = winScreen.transform.position;
         Vector3 targetPosition = targetsPosition.position;
 
-        EnablePlayerControls(false);
+        EnablePlayerControls(true);
         winScreen.transform.position = Vector3.MoveTowards(startPosition, targetPosition, 10f * Time.deltaTime);
 
     }
@@ -114,10 +114,12 @@ public class ScoreManager : MonoBehaviour
 
         player.AddTorque(Random.onUnitSphere * 500000000000f, ForceMode.Impulse);
 
+ 
+        loseScreen.SetActive(true);
         ded.SetBool("Died", true);
 
-        loseScreen.SetActive(true);
-        EnablePlayerControls(false);
+        
+       
 
         Invoke(nameof(ShowLoseScreen), 2f);
 
@@ -126,13 +128,16 @@ public class ScoreManager : MonoBehaviour
     }
     private void ShowLoseScreen()
     {
-        ded.SetBool("Died", false);
+        
+       
         Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
         loseSource.PlayOneShot(loseSound);
-        
 
+        EnablePlayerControls(false);
+
+        ded.SetBool("Died", false);
     }
 
 
