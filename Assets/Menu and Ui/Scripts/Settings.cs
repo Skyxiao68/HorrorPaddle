@@ -50,7 +50,7 @@ public class Settings : MonoBehaviour
 
     private void Update()
     {
-        float clickValue = inputControl.UI.MenuClick.ReadValue<float>();
+        float clickValue = inputControl.UI.Tclick.ReadValue<float>();
         if (isTransitioning)
         {
             HandleCameraTransition();

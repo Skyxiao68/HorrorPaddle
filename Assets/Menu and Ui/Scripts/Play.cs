@@ -46,7 +46,7 @@ public class Play : MonoBehaviour
 
     private void Update()
     {
-        click = inputControl.UI.MenuClick.ReadValue<float>();
+        click = inputControl.UI.Tclick.ReadValue<float>();
 
       
         if (isTransitioning)
